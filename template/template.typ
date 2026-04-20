@@ -3,9 +3,9 @@
 // as well as the main template setting function, named `project`.
 
 // Save font families.
-#let main-font = "STIX Two Text"
-#let sans-font = "Source Sans Pro"
-#let mono-font = "Inconsolata"
+#let main-font = "Noto Serif"
+#let sans-font = "Ubuntu"
+#let mono-font = "Fira Code"
 
 //Based on color scheme of the official https://hepl.be/themes/custom/hepl/css/module.css?s8sgmk
 #let HEPLColors = (
