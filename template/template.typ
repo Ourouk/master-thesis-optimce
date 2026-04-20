@@ -54,6 +54,7 @@
   fullTitlePage: false,
   abstract: none,
   authors: (),
+  thanks: (),
   date: datetime.today(),
   paper-size: "a4",
   bibliography-file: none,
