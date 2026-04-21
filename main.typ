@@ -68,7 +68,7 @@ C'est dans ce cadre que s'inscrit mon mémoire, dont l'objectif est d'aider à l
 === Entreprise
 Le CeCoTePe (Le Centre de Coopération Technique et Pédagogique) est une ASBL qui encadre des formations professionnelles continues, ainsi que de la recherche. Dans le cadre de la recherche, la HEPL et le CeCoTePe ont une collaboration étroite.#cite(<cecotepe>)
 === Projet Locomotrice
-Le projet Locomotrice est un projet de recherche financé grâce à l'appel à Projet Win2All incluant le CeCoTePe, l'équipe BEMS (Uliège) et Émission Zéro en tant que partenaire industriel.
+Le projet Locomotrice est un projet de recherche financé grâce à l'appel à Projet Win2Wal incluant le CeCoTePe, l'équipe BEMS (Uliège) et Émission Zéro en tant que partenaire industriel.
 
 Dont l'objectif est de tracer la voie vers une transition énergétique participative et efficace! En développant un logiciel open source en collaboration avec l'Université de Liège et des coopératives citoyennes, il permettra de maîtriser et d'opérationnaliser les actions des citoyens engagés dans la transition énergétique. Intégrant les communautés d'énergie, ce projet offre une plateforme novatrice pour mobiliser les citoyens et les impliquer activement dans la construction d'un avenir énergétique durable.#cite(<locomotrice>)
 
