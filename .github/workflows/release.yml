@@ -1,0 +1,41 @@
+name: Build and Release PDF
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Typst
+        run: |
+          curl -sL https://github.com/typst/typst/releases/download/v0.11.1/typst-x86_64-unknown-linux-musl.tar.gz | tar xz
+          echo "$GITHUB_WORKSPACE/typst-x86_64-unknown-linux-musl" >> $GITHUB_PATH
+
+      - name: Build PDF
+        run: typst compile main.typ TFE.pdf
+
+      - name: Upload PDF
+        uses: actions/upload-release-attachment@v1
+        with:
+          asset_path: TFE.pdf
+          asset_name: TFE.pdf
+          release_tag: ${{ github.ref_name }}
+
+  create-release:
+    needs: build-pdf
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: TFE.pdf
+          generate_release_notes: true
