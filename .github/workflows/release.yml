@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build PDF
-        run: docker run --rm -v "${{ github.workspace }}:/data" pandoc/typst typst compile /data/main.typ /data/TFE.pdf
+        run: docker run --rm -v "${{ github.workspace }}:/data" pandoc/typst:latest-ubuntu typst compile /data/main.typ /data/TFE.pdf
 
       - name: Upload PDF
         uses: softprops/action-gh-release@v3
