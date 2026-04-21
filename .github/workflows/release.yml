@@ -12,13 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Typst
-        run: |
-          curl -sL https://github.com/typst/typst/releases/download/v0.11.1/typst-x86_64-unknown-linux-musl.tar.gz | tar xz
-          echo "$GITHUB_WORKSPACE/typst-x86_64-unknown-linux-musl" >> $GITHUB_PATH
-
       - name: Build PDF
-        run: typst compile main.typ TFE.pdf
+        run: docker run --rm -v "${{ github.workspace }}:/data" pandoc/typst typst compile /data/main.typ /data/TFE.pdf
 
       - name: Upload PDF
         uses: actions/upload-release-attachment@v1
