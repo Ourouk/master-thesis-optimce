@@ -14,11 +14,11 @@ jobs:
 
       - name: Setup Typst
         run: |
-          curl -sL https://github.com/typst/typst/releases/download/v0.14.2/typst-x86_64-unknown-linux-musl.tar.gz | tar xz
-          echo "$GITHUB_WORKSPACE/typst-x86_64-unknown-linux-musl" >> $GITHUB_PATH
+          curl -sL https://github.com/typst/typst/releases/download/v0.11.1/typst-x86_64-unknown-linux-musl.tar.xz | tar xJ
+          echo "$GITHUB_WORKSPACE" >> $GITHUB_PATH
 
       - name: Build PDF
-        run: typst compile main.typ TFE.pdf
+        run: ./typst-x86_64-unknown-linux-musl/typst compile main.typ TFE.pdf
 
       - name: Upload PDF
         uses: softprops/action-gh-release@v3
