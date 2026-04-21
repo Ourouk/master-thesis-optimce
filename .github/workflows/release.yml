@@ -16,21 +16,7 @@ jobs:
         run: docker run --rm -v "${{ github.workspace }}:/data" pandoc/typst typst compile /data/main.typ /data/TFE.pdf
 
       - name: Upload PDF
-        uses: actions/upload-release-attachment@v1
-        with:
-          asset_path: TFE.pdf
-          asset_name: TFE.pdf
-          release_tag: ${{ github.ref_name }}
-
-  create-release:
-    needs: build-pdf
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    permissions:
-      contents: write
-    steps:
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: TFE.pdf
           generate_release_notes: true
