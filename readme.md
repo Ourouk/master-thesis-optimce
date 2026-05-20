@@ -1,3 +1,3 @@
-J'ai créé cette template pour rendre des rapports pour la haute école de la province de Liege.
+J'ai créé cette template pour rendre des rapports à la Haute École de la province de Liège.
 
-Elle est basée sur une Template fait par Guillain Ernotte de l'Uliège.
+Elle est basée sur une template faite par Guillain Ernotte de l'ULiège.

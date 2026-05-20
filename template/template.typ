@@ -3,9 +3,16 @@
 // as well as the main template setting function, named `project`.
 
 // Save font families.
-#let main-font = "Noto Serif"
-#let sans-font = "Ubuntu"
+// STIX Two Text: standard font for scientific/academic papers.
+#let main-font = "STIX Two Text"
+// Noto Sans: clean, professional sans-serif for headings.
+#let sans-font = "Noto Sans"
+// Fira Code: monospaced font for code blocks.
 #let mono-font = "Fira Code"
+
+// Code block styling for codly.
+#let code-stroke-color = rgb("#d0d7de")
+#let code-bg-color = rgb("#f6f8fa")
 
 //Based on color scheme of the official https://hepl.be/themes/custom/hepl/css/module.css?s8sgmk
 #let HEPLColors = (
@@ -49,7 +56,7 @@
 // The project function defines how your document looks.
 // It takes your content and some metadata and formats rest.
 #let project(
-  main-title: "This a the main title",
+  main-title: "This is the main title",
   sub-title: "Sub-Title of the document",
   fullTitlePage: false,
   abstract: none,
@@ -58,14 +65,20 @@
   date: datetime.today(),
   paper-size: "a4",
   bibliography-file: none,
+  annex: none,
   body,
 ) = {
-  //Add Suport for beautifull code block
+  //Add Support for code blocks with academic styling
   import "@preview/codly:1.3.0": *
   import "@preview/codly-languages:0.1.1": *
   show: codly-init.with()
-  //Add support for more languages
-  codly(languages: codly-languages)
+  codly(
+    languages: codly-languages,
+    stroke: 1pt + code-stroke-color,
+    radius: 4pt,
+    fill: code-bg-color,
+    display-icon: false,
+  )
   // Document's basic properties.
   set document(author: authors.map(author => author.first-name + author.last-name), title: sub-title)
 
@@ -74,7 +87,7 @@
   set page(
     paper: paper-size,
     margin:
-    (x: 2.5cm, top: 1.5cm, bottom: 1.5cm),
+    (x: 2.5cm, top: 1.5cm, bottom: 2.0cm),
     header-ascent: 35%,
     header: context {
       set text(font: sans-font, fill: Uliege.GrayDark, size: 0.9em)
@@ -125,20 +138,27 @@
     font: main-font,
     size: font-size,
     lang: "en",
-    number-type: "old-style",
-    number-width: "proportional")
+    number-type: "lining",
+    number-width: "tabular")
   show raw: set text(font: mono-font, size: code-size)
   set raw(tab-size: 4)
+
+  // Hyphenation.
+  set text(hyphenate: true)
 
   // Math settings.
   show math.equation: set text(font: "STIX Two Math")
   set math.equation(numbering: "(1.1)")
 
-  // Paragraphs.
+  // Paragraphs with character-level justification for academic typography.
   set par(
     leading: 0.8em,
     first-line-indent: 1.8em,
     justify: true,
+    justification-limits: (
+      tracking: (min: -0.012em, max: 0.012em),
+      spacing: (min: 75%, max: 120%),
+    ),
     linebreaks: "optimized",
   )
 
@@ -147,18 +167,28 @@
   show heading: set text(font: sans-font, fill: Uliege.TealDark)
   show heading: rest => {
     if rest.level == 1 {
-      text(size:1.10em, weight: "semibold")[#rest]
+      text(size: 1.10em, weight: "semibold")[#rest]
     } else if rest.level == 2 {
-      text(size:1.05em, weight: "semibold")[#rest]
+      text(size: 1.05em, weight: "semibold")[#rest]
     } else if rest.level == 3 {
-      text(size:1.03em, weight: "regular")[#rest]
-    } else if rest.level > 3 {  // Set run-in subheadings, starting at level 4.
+      text(size: 1.03em, weight: "regular")[#rest]
+    } else {
+      // Run-in subheadings for level 4+.
       parbreak()
       text(font: sans-font, fill: Uliege.TealDark, weight: "semibold")[#rest.body ---]
-    } else {
-      rest
     }
   }
+
+  // Figure and table numbering by chapter (e.g., Figure 3.2).
+  set figure(numbering: "1.1")
+
+  // Footnote styling for academic tone.
+  show footnote: set text(size: 0.85em, fill: Uliege.GrayDark)
+
+  // Bibliography styling with hanging indent and tighter spacing.
+  show bibliography: set text(0.9em)
+  show bibliography: set par(hanging-indent: 1.5em, spacing: 0.9em)
+
 // Information Parsing
   // Année académique parsing
   let school-year = if date.month() < 9 {
@@ -292,5 +322,13 @@ if fullTitlePage {
     pagebreak()
     show bibliography: set text(0.9em)
     bibliography(bibliography-file, full: false, style: "ieee",title: "Bibliographie")
+  }
+
+  // Print the annex.
+  if annex != none {
+    pagebreak()
+    counter(heading).update(0)
+    set heading(numbering: "A.1", supplement: [Annexe])
+    annex
   }
 }
