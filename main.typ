@@ -83,7 +83,7 @@ L'approche combine :
 
 == Conclusion
 
-À l'issue de ce travail, le projet OptimCE est transformé en une solution stable, modulaire et facilement réutilisable, caractérisée par une complexité technique réduite. Cette restructuration favorise son adoption par la communauté open source tout en assurant sa pérennité et en posant les bases d'une gouvernance collaborative et adaptable.
+À l'issue de ce travail, le projet OptimCE a été transformé en une solution stable, modulaire et facilement réutilisable, caractérisée par une complexité technique réduite. Cette restructuration favorise son adoption par la communauté open source tout en assurant sa pérennité et en posant les bases d'une gouvernance collaborative et adaptable.
 
 #pagebreak()
 
@@ -91,7 +91,7 @@ L'approche combine :
 = Introduction
 Ce mémoire s'inscrit dans le cadre de la mise en open source#footnote[Modèle de développement où le code source est rendu public sous une licence (ex. : Apache 2.0, MIT) permettant sa consultation, modification et redistribution.] du projet *OptimCE*, un composant clé du projet *Locomotrice*. L'objectif principal d'OptimCE est de fournir une plateforme administrative de gestion de membres et d'informations spécifiques à la gestion d'une communauté d'énergie.
 
-L'entreprise repreneuse a émis pour seules exigences techniques l'utilisation de :
+L'entreprise repreneuse a comme seules exigences techniques l'utilisation de :
 - *Node.js*
 - *Kubernetes*
 sans exprimer de préférence particulière quant au système de gestion de bases de données. Ces décisions architecturales seront détaillées ultérieurement dans ce document.
@@ -99,7 +99,7 @@ sans exprimer de préférence particulière quant au système de gestion de base
 Le projet *OptimCE* atteint un niveau de maturité technologique (TRL#footnote[Technology Readiness Level : niveau de maturité technologique (1-9) indiquant la proximité d'un déploiement en production. Le niveau 7 signifie un système déjà testé et à faible risque.]) de 7 #cite(<Horizon_Europe_2026_gouv>). Ce niveau indique que le projet est proche d'un état opérationnel, prêt à être déployé en production. Initialement, ce développement était prévu pour être réalisé par un seul développeur dans le cadre interne de la Haute École de la Province de Liège (HEPL).
 
 
-C'est dans ce cadre que s'inscrit mon mémoire, dont l'objectif est d'aider à la réalisation de ce délivrable.
+C'est dans ce cadre que s'inscrit mon mémoire, dont l'objectif est d'aider à la réalisation de ce livrable.
 
 = Présentation de l'entreprise et du stage
 == L'organisation
@@ -110,8 +110,8 @@ Le CeCoTePe (Centre de Coopération Technique et Pédagogique) est une ASBL qui 
 Le projet Locomotrice est un projet de recherche financé grâce à l'appel à projets Win2Wal incluant le CeCoTePe, l'équipe BEMS (ULiège) et Émission Zéro en tant que partenaire industriel. L'objectif est de tracer la voie vers une transition énergétique participative et efficace. En développant un logiciel open source en collaboration avec l'Université de Liège et des coopératives citoyennes, il permettra de maîtriser et d'opérationnaliser les actions des citoyens engagés dans la transition énergétique. Intégrant les communautés d'énergie, ce projet offre une plateforme novatrice pour mobiliser les citoyens et les impliquer activement dans la construction d'un avenir énergétique durable.#cite(<locomotrice>)
 
 Concrètement, le projet comporte deux parties :
-- OptimCE — sur lequel la majorité du travail a été effectué. Réalisé par le CeCoTePe avec le support de l'équipe EMS de l'université.
-- EMS (Energy Management System) — sous-projet domotique de contrôle de la consommation électrique. Géré par l'université avec le support de l'équipe « IT » du CeCoTePe.
+- OptimCE — sur lequel la majorité du travail a été effectué, réalisé par le CeCoTePe avec le support de l'équipe EMS de l'université.
+- EMS (Energy Management System) — sous-projet domotique de contrôle de la consommation électrique, géré par l'université avec le support de l'équipe « IT » du CeCoTePe.
 
 = Cadre du stage
 == Lieux
@@ -127,7 +127,7 @@ Le stage a été encadré par Eric Paques lors de communications régulières.
 
 Le projet étant réalisé en partie en collaboration avec l'Université de Liège, des réunions avec ces derniers étaient organisées hebdomadairement.
 
-Il est à noté que l'Université de Liège n'est pas réellement impliquée dans mon stage, mais que les réunions avec eux étaient nécessaires pour assurer une bonne coordination entre les différentes parties du projet, notamment pour la partie EMS qui est gérée par l'université. Cependant, mon travail se concentrait principalement sur le projet OptimCE, réalisé par le CeCoTePe.
+Il est à noter que l'Université de Liège n'est pas réellement impliquée dans mon stage, mais que les réunions avec eux étaient nécessaires pour assurer une bonne coordination entre les différentes parties du projet, notamment pour la partie EMS qui est gérée par l'université. Cependant, mon travail se concentrait principalement sur le projet OptimCE, réalisé par le CeCoTePe.
 = Problématique, objectifs et enjeux
 == Problématique
 === Problématique générale
@@ -140,23 +140,24 @@ Le projet Locomotrice, initialement développé dans un cadre de recherche, doit
 Comment choisir une licence open-source compatible avec les usages envisagés (usage communautaire, usage commercial, contributions externes) et sécuriser juridiquement la publication du code ?
 
 - Lisibilité et qualité du code / Developer Experience
-Comment rendre un code historiquement développé par une équipe de recherche, souvent hétérogène et non formaté, plus lisible, cohérent et maintenable ? Comment améliorer l'expérience développeur pour encourager les contributions externes ?
+Comment rendre un code développé initialement par une équipe de recherche, souvent hétérogène et non formaté, plus lisible, cohérent et maintenable ? Comment améliorer l'expérience développeur pour encourager les contributions externes ?
 
-En effet en Open Source, la bonne volonté des contributeurs est un facteur clé de succès. Il est donc essentiel de réduire les frictions à la contribution.
+En effet, en open source, la bonne volonté des contributeurs est un facteur clé de succès. Il est donc essentiel de réduire les frictions à la contribution.
 
 - Reproductibilité et portabilité du projet
 Comment réduire la complexité actuelle du projet pour permettre une installation simple ? 
 
-Toujours dans l'optique de réduire les frictions à l'adoption, il est essentiel de simplifier l'infrastructure nécessaire pour faire fonctionner le projet, tout en garantissant une reproductibilité complète. Les utilisateurs peuvent en effet devenir contributeurs, et il est important de leur faciliter la tâche pour qu'ils puissent tester et modifier le projet sans rencontrer de problèmes d'installation ou de configuration.
+Toujours dans l'optique de réduire les barrières à l'adoption, il est essentiel de simplifier l'infrastructure nécessaire pour faire fonctionner le projet, tout en garantissant une reproductibilité complète. Les utilisateurs peuvent en effet devenir contributeurs, et il est important de leur faciliter la tâche pour qu'ils puissent tester et modifier le projet sans rencontrer de problèmes d'installation ou de configuration.
 
-- Comment structurer l'architecture du code pour la rendre compréhensible par des développeurs externes ?
+- Architecture et compréhension du code
+Comment structurer l'architecture du code pour la rendre compréhensible par des développeurs externes ?
 Quelle infrastructure minimale de développement et de production est nécessaire pour garantir une reproductibilité complète ?
 
 - Documentation
 Comment fournir une documentation claire, complète (installation, API, architecture, exemples), et adaptée à différents publics (développeurs, chercheurs, entreprises) ?
 
 - Testing et qualité logicielle
-Comment mettre en place une stratégie de tests (unitaires, intégration) permettant d'améliorer la qualité, détecter les régressions et renforcer la confiance dans le projet ? Réduire la charge de maintenance du projet.
+Comment mettre en place une stratégie de tests (unitaires, intégration) permettant d'améliorer la qualité, détecter les régressions, renforcer la confiance dans le projet et réduire la charge de maintenance ?
 
 == Les objectifs
 En tant qu'ingénieur en informatique, mon objectif est de préparer la transition du projet Locomotrice vers une diffusion open-source. Pour cela, mon travail se concentre sur :
@@ -184,14 +185,14 @@ Un autre aspect du suivi du projet a été le processus de prise de décisions a
   image("assets/Notion02.png", height: 7.5cm),
   caption: [Documentation partiellement organisée autour des décisions prises],
 )
-Une bonne partie de ce mémoire a notamment été écrite en relisant les recherches en amont des différentes implémentations.
+Une partie significative de ce mémoire a été rédigée en se basant sur les recherches préalables aux différentes implémentations.
 
 == Analyse d'organisations open-source existantes
 Pour structurer notre mise en open-source, nous nous sommes inspirés d'autres organisations afin de ne pas nous disperser.
 
 Nous nous sommes principalement intéressés au projet *Nextcloud*#footnote[Plateforme open-source de synchronisation et partage de fichiers, auto-hébergée. Alternative à Dropbox ou Google Drive.] et à d'autres projets open-source rencontrés dans notre stack technique.
 
-La lecture de documentation relative à l'open-source nous a également permis de structurer notre approche, notamment la documentation fournie par le gouvernement francais sur les projets open-source #cite(<pocos-dinsic-stable:online>).
+La lecture de documentation relative à l'open-source nous a également permis de structurer notre approche, notamment la documentation fournie par le gouvernement français sur les projets open-source #cite(<pocos-dinsic-stable:online>).
 === Hébergement du code
 L'analyse des projets majeurs révèle une standardisation forte des outils pour l'hébergement et le versionnement :
 ==== Git
@@ -208,7 +209,7 @@ L'étude des flux de travail (workflows) open-source met en évidence l'applicat
   - L'utilisation de nomenclatures claires limite les conflits (ex. : `feature/*` pour l'ajout de fonctionnalités, `fix/*` pour la correction de bugs).
 - Suivi rigoureux des demandes de fusion (Pull Requests) :
   - L'intégration de nouveau code nécessite toujours un processus de validation itératif (code review) par les pairs ou mainteneurs.
-  - Ce processus est sécurisé par des outils automatisés (tests via CI/CD, analyseurs statiques) et complété par l'évaluation humaine et parfois artificielle de la qualité ou de la sécurité algorithmique de l'intégration.
+  - Ce processus est sécurisé par des outils automatisés (tests via CI/CD, analyseurs statiques) et complété par l'évaluation humaine et parfois par l'intelligence artificielle pour la qualité ou la sécurité algorithmique de l'intégration.
 
 === Accroche des utilisateurs finaux (Community Building)
 Le succès d'un projet open-source ne se limite pas à son code source brut, mais se révèle dans sa capacité à fédérer une communauté. Les projets ayant la meilleure pérennité disposent généralement d'une vitrine claire et accessible dédiée tant au grand public qu'aux collaborateurs potentiels :
@@ -242,7 +243,7 @@ Cela permet une communication asynchrone où les données sont partiellement ou 
   image("assets/micro-service.png"),
   caption: [Une vraie implémentation micro-services],
 )
-En pratique, cette démarche d'analyse s'avère complexe. Dans le cadre de ce projet, l'évolution continue du domaine au cours de sa réalisation et une vision initiale incomplète de son ensemble ont mené à une définition imprécise des entités, entraînant ainsi une augmentation graduelle de la complexité technique.
+En pratique, cette démarche d'analyse s'avère complexe. Dans le cadre de ce projet, l'évolution continue du domaine au fil du développement et une vision initiale incomplète de son ensemble ont mené à une définition imprécise des entités, entraînant ainsi une augmentation graduelle de la complexité technique.
 == Proposition de modifications
 Devant la complexité du projet, et dans l'objectif d'améliorer la lisibilité et l'expérience développeur, nous avons entrepris un important refactoring.
 
@@ -264,9 +265,9 @@ Nous avons également procédé à une fusion de micro-services en raison d'appe
 - Communauté
 - Membres
 Ces fonctionnalités ont été regroupées vers un service unifié : le CRM (Customer Relationship Management).
-//TODO: Will probably need improvement
+//TODO: À améliorer ultérieurement
 === Garder certains micro-services
-On pourrait se demander pourquoi ne pas simplement tout fusionner dans l'application centrale.
+On pourrait se demander pourquoi ne pas fusionner l'ensemble dans l'application centrale.
 
 L'architecture micro-services présente cependant certains avantages non négligeables dans des scénarios rencontrés au cours du projet :
 ==== Code source dans plusieurs langages
@@ -381,7 +382,7 @@ Le projet dispose désormais d'une politique de contribution concise. Les contri
 - Contributeurs externes : membres de la communauté qui proposent des contributions via des pull requests, avec des droits d'accès limités pour garantir la sécurité du projet.
 - Utilisateurs : personnes qui utilisent le projet. Ils peuvent signaler des bugs ou suggérer des améliorations via les issues, mais n'ont pas de droits d'accès au code.
 ==== Linting et formatage
-Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté sehjhblon les règles définies dans le README.md.
+Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté selon les règles définies dans le README.md.
 - Nous avons intégré des outils de linting et de formatage dans les pipelines CI/CD pour automatiser ce processus et assurer une cohérence dans le code soumis par les contributeurs.
 - Nous avons également fourni des configurations de linting et de formatage dans les dépôts, ainsi que des scripts npm pour faciliter leur utilisation en local avant de soumettre une pull request.
 - Nous encourageons l'utilisation de hooks Git (ex. : lint-staged) pour exécuter automatiquement les vérifications de linting et de formatage avant chaque commit, afin de réduire les erreurs et d'améliorer la qualité du code dès le début du processus de contribution.
@@ -390,7 +391,7 @@ Nous utilisons donc les linters/formatters suivants selon les différentes techn
 - TypeScript : ESLint et Prettier
 - SQL : SQLFluff
 - Python : ruff
-Ainsi que des configurations qui peuvent être encore plus spécifiques selon les besoins de chaque composant.
+Des configurations encore plus spécifiques peuvent être définies selon les besoins de chaque composant.
 
 Nous fournissons également un fichier agents.md pour aider les contributeurs à utiliser des agents d'IA (ex. : GitHub Copilot) pour compléter leurs relectures de code, en fournissant des conseils sur les meilleures pratiques et en suggérant des améliorations potentielles. Celui-ci contient les recommandations de linting et de formatage.
 
@@ -430,7 +431,7 @@ Chaque rapport de vulnérabilité contient une description du problème, des rec
 Le fichier *dependabot.yml* configure Dependabot, un outil de GitHub qui surveille les dépendances du projet à la recherche de vulnérabilités. Dependabot crée automatiquement des pull requests pour mettre à jour les dépendances vulnérables, ce qui nous permet de maintenir le projet à jour et sécurisé sans effort manuel. La configuration complète est disponible en annexe : @annex:dependabot-config
 
 Combiné à l'utilisation régulière de `npm audit` pour scanner les vulnérabilités de la chaîne de dépendances JavaScript, cette approche nous a permis d'identifier et de patcher plusieurs dépendances présentant de graves failles de sécurité. Ces corrections, validées automatiquement par les tests CI avant intégration, ont renforcé significativement la surface d'attaque du projet.
-Le code ci-dessus configure toutes les technologies utilisées dans le projet. Une vérification hebdomadaire est effectuée pour chaque technologie, et des pull requests sont créées automatiquement pour les mises à jour nécessaires.
+Cette configuration couvre toutes les technologies utilisées dans le projet. Une vérification hebdomadaire est effectuée pour chaque technologie, et des pull requests sont créées automatiquement pour les mises à jour nécessaires.
 #figure(
   image("assets/dependabot.png"),
   caption: [Exemple de Pull Request générée par Dependabot],
@@ -526,7 +527,7 @@ Le monorepo de staging est utilisé pour intégrer et tester les différentes pa
 
 Néanmoins, nous avons conçu un script nommé `docker-stack.sh` permettant de déployer l'intégralité des composants du projet en environnement local via un fichier Docker Compose. Le docker-compose intégrant des health checks pour chaque service, nous pouvons facilement vérifier que tous les composants fonctionnent correctement ensemble avant de publier les changements dans les dépôts respectifs.
 
-Tout en nous permettant de faire des tests manuels d'intégration, ce qui est particulièrement utile pour les nouvelles fonctionnalités ou les changements majeurs pouvant avoir des impacts importants sur l'ensemble du projet.
+Ce script permet également de réaliser des tests manuels d'intégration, ce qui est particulièrement utile pour les nouvelles fonctionnalités ou les changements majeurs pouvant avoir des impacts importants sur l'ensemble du projet.
 
 Un test complet de staging avec injection de données mockées peut en effet prendre plusieurs dizaines de minutes, car il reconstruit chaque image Docker, puis lance l'ensemble de l'infrastructure.
 
@@ -544,11 +545,9 @@ L'automatisation du déploiement est une étape cruciale pour garantir la rapidi
   - *crm-frontend-config*
 Chacun de ces services prend en entrée un template de configuration, ainsi que les variables d'environnement nécessaires, et produit un fichier de configuration prêt à être utilisé par les services correspondants (Keycloak, Nginx, CRM Frontend).
 
-Je reviendrai plus en détail sur ces services dans la section Swagger2krakend et outils pipeline docker, mais ils sont déjà utilisés dans le docker-compose de développement et de production pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
+Nous reviendrons plus en détail sur ces services dans la section Swagger2krakend et outils pipeline docker, mais ils sont déjà utilisés dans le docker-compose de développement et de production pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
 == Développement d'une version Production
-Comme vu dans la section précédente, nous avons développé un script de déploiement qui permet de lancer l'ensemble de l'infrastructure du projet 
-en local à l'aide d'un docker compose. 
-Et une série de scripts de configuration qui génèrent automatiquement les fichiers de configuration nécessaires.
+Comme vu dans la section précédente, nous avons développé un script de déploiement qui permet de lancer l'ensemble de l'infrastructure du projet en local à l'aide d'un docker compose, ainsi qu'une série de scripts de configuration qui génèrent automatiquement les fichiers de configuration nécessaires.
 
 Différence entre la version de développement et la version de production :
 - Retrait des montages de ports pour les services qui ne sont pas censés être exposés à l'extérieur du réseau Docker, afin de renforcer la sécurité et d'éviter les accès non autorisés.
@@ -587,7 +586,7 @@ Nous avons cependant gardé l'option de faire un déploiement avec un orchestrat
 Si cela devient nécessaire, nous pourrons ainsi facilement faire le pivot.
 
 == Sous-contributions
-Je vais maintenant revenir sur les différentes sous-contributions auxquelles j'ai participé durant ce projet, sachant que j'ai principalement travaillé sur des problématiques DevOps, mais aussi dans le cadre du projet sur du simple développement de fonctionnalités, de correction de bugs, etc.
+Nous allons maintenant revenir sur les différentes sous-contributions auxquelles nous avons participé durant ce projet, sachant que nous avons principalement travaillé sur des problématiques DevOps, mais aussi dans le cadre du projet sur du simple développement de fonctionnalités, de correction de bugs, etc.
 === Swagger2Krakend
 Swagger2Krakend est un outil que nous avons développé pour automatiser la génération des configurations de l'API gateway Krakend à partir de spécifications OpenAPI.
 
@@ -629,7 +628,7 @@ L'algorithme de distribution implémenté dans EcoArbiter suit le workflow suiva
   image("assets/emsg-logic.png", height: 20cm),
   caption: [Workflow de l'algorithme de distribution d'EcoArbiter],
 )
-L'algorithme est fait pour être être très rapide et capable de recevoir une grande quantité d'update. Avec une préférence pour une latence faible à une réponse toujours correcte, ce qui est essentiel pour une logique de distribution mise à jour à haute fréquence.
+L'algorithme est fait pour être très rapide et capable de recevoir une grande quantité d'update. Avec une préférence pour une latence faible à une réponse toujours correcte, ce qui est essentiel pour une logique de distribution mise à jour à haute fréquence.
 = Résultats et analyse
 == Expérience développeur
 
