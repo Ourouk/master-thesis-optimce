@@ -202,9 +202,9 @@
     } else if rest.level == 3 {
       text(size: 1.03em, weight: "regular")[#rest]
     } else {
-      // Level 4+ headings are inline (run-in).
-      parbreak()
-      text(font: sans-font, fill: Uliege.TealDark, weight: "semibold")[#rest.body ---]
+      // Level 4: small standalone heading
+      text(font: sans-font, fill: Uliege.TealDark, weight: "semibold", size: 0.9em)[#rest]
+      v(0.2em)
     }
   }
 
@@ -214,6 +214,12 @@
 
   // ── Footnotes ─────────────────────────────────────────────
   show footnote: set text(size: 0.85em, fill: Uliege.GrayDark)
+
+  // ── Hyperlinks ────────────────────────────────────────────
+  show link: it => {
+    set text(fill: Uliege.BlueDark)
+    it
+  }
 
   // ── Bibliography ──────────────────────────────────────────
   // Hanging indent with compact line spacing.
@@ -326,7 +332,7 @@
   v(1cm)
   outline(indent: auto, title: "Table des matières", depth: 3)
   pagebreak()
-  
+
   // Re-enable page numbering and reset the counter for main content.
   counter(page).update(1)
   set page(numbering: "1", footer: none)

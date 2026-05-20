@@ -430,7 +430,469 @@ jobs:
 	path = keycloak/optimce-keycloak-theme
 	url = ../optimce-keycloak-theme.git
 ```
+== Docker Compose pour développement local <annex:docker-compose-dev>
+```yaml
+services:
+  crm-database:
+    profiles: ["dev"]
+    image: postgres:18-alpine@sha256:4da1a4828be12604092fa55311276f08f9224a74a62dcb4708bd7439e2a03911
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=crm_db
+      - POSTGRES_PASSWORD=${CRM_DB_PASSWORD}
+    volumes:
+      - ./crm-backend/tests/sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "8080:5432"
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
+  keycloak-db:
+    profiles: ["dev"]
+    image: postgres:18-alpine@sha256:4da1a4828be12604092fa55311276f08f9224a74a62dcb4708bd7439e2a03911
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=keycloak
+      - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+    ports:
+      - "8081:5432"
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  allocation-key-db:
+    profiles: ["dev"]
+    image: postgres:18-alpine@sha256:4da1a4828be12604092fa55311276f08f9224a74a62dcb4708bd7439e2a03911
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=allocation_key_local
+      - POSTGRES_PASSWORD=${ALLOCATION_KEY_DB_PASSWORD}
+    volumes:
+      - ./allocation-key-generation/scripts/sql/schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "8093:5432"
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  keycloak:
+    profiles: ["dev"]
+    build:
+      context: keycloak
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command:
+      [
+        "start-dev",
+        "--import-realm",
+        "--verbose",
+        "--proxy-headers=xforwarded",
+        "--http-relative-path=/keycloak",
+      ]
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm-config.json
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://keycloak-db:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - KC_HOSTNAME=${KEYCLOAK_HOSTNAME}
+      - KC_HOSTNAME_PORT=8087
+      - KC_HTTP_ENABLED=true
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
+    ports:
+      - "8082:8080"
+    networks:
+      - backend
+      - reverse-proxy
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+      keycloak-config:
+        condition: service_completed_successfully
+    volumes:
+      - ./keycloak/realm/dev-config.json:/opt/keycloak/data/import/realm-config.json
+
+  minio:
+    profiles: ["dev"]
+    image: pgsty/minio:latest
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "8091:9000"
+      - "8092:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - backend
+      - reverse-proxy
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  minio-init:
+    profiles: ["dev"]
+    image: pgsty/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - STORAGE_BUCKET=${STORAGE_BUCKET:-crm-files}
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set local ${STORAGE_API_URL} $${MINIO_ROOT_USER:-minioadmin} $${MINIO_ROOT_PASSWORD:-minioadmin};
+      mc mb --ignore-existing local/$${STORAGE_BUCKET:-crm-files};
+      exit 0;
+      "
+    networks:
+      - backend
+
+  nats:
+    profiles: ["dev"]
+    image: nats:2.10-alpine
+    restart: unless-stopped
+    command: ["-js", "-m", "8222", "-sd", "/data"]
+    ports:
+      - "8094:4222"
+      - "8095:8222"
+    volumes:
+      - nats_data:/data
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q -O - 'http://localhost:8222/healthz?js-enabled-only=true' || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  jaeger:
+    profiles: ["dev"]
+    image: jaegertracing/jaeger:latest@sha256:bf7f805da4c2bc8d58a6c81ee650fdb6b8e4287698f95fbe231c09c865bc397f
+    restart: unless-stopped
+    ports:
+      - "8084:6831/udp"
+      - "8085:16686"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - backend
+
+  swagger-doc-gen:
+    profiles: ["init", "dev"]
+    build:
+      context: crm-backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./krakend/config:/app/docs/openapi
+    command: sh -c "npm run swagger && sleep 3 && mv /app/docs/openapi/swagger.yaml /app/docs/openapi/root.yaml"
+
+  generation-doc-gen:
+    profiles: ["init", "dev"]
+    build:
+      context: allocation-key-generation
+      dockerfile: Dockerfile
+    volumes:
+      - ./krakend/config:/output
+    environment:
+      - ENV=local
+      - CRM_DATABASE_URL=postgresql+asyncpg://placeholder:placeholder@placeholder:5432/placeholder
+      - LOCAL_DATABASE_URL=postgresql+asyncpg://placeholder:placeholder@placeholder:5432/placeholder
+      - ALLOW_ORIGIN=*
+    entrypoint: ["python", "scripts/export_openapi.py", "/output/generation.json"]
+
+  krakend-config:
+    profiles: ["init", "dev"]
+    build:
+      context: krakend/swagger2krakend
+      dockerfile: Dockerfile
+    volumes:
+      - ./krakend/config:/config
+    environment:
+      - CONFIG_FILE=/config/krakend-builder.yaml
+      - OUTPUT_FILE=/config/krakend.json
+    depends_on:
+      swagger-doc-gen:
+        condition: service_completed_successfully
+      generation-doc-gen:
+        condition: service_completed_successfully
+
+  krakend:
+    profiles: ["dev"]
+    image: krakend:latest@sha256:bd392b692271209927da6c62f1b42d7f8f7bd0cd60b00d97c93bb5b8d42b4999
+    ports:
+      - "8086:8080"
+    volumes:
+      - ./krakend/config:/etc/krakend
+    networks:
+      - backend
+      - reverse-proxy
+    depends_on:
+      crm-backend:
+        condition: service_started
+      allocation-key-generation:
+        condition: service_started
+      keycloak:
+        condition: service_started
+
+  reverse-proxy:
+    profiles: ["dev"]
+    image: nginx:latest@sha256:7150b3a39203cb5bee612ff4a9d18774f8c7caf6399d6e8985e97e28eb751c18
+    ports:
+      - "8087:80"
+      - "8088:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    networks:
+      - reverse-proxy
+    depends_on:
+      nginx-config:
+        condition: service_completed_successfully
+      krakend:
+        condition: service_started
+
+  crm-backend:
+    profiles: ["dev"]
+    build:
+      context: crm-backend
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=80
+      - MICROSERVICE_NAME=crm-backend
+      - ALLOWED_ORIGIN=${APP_CORS_ALLOWED_ORIGIN}
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=80
+      - IAM_SERVICE_NAME=KEYCLOAK
+      - IAM_REALM=optimce-realm
+      - IAM_REALM_NAME=optimce-realm
+      - IAM_BASE_URL=http://keycloak:8080/keycloak
+      - IAM_CLIENT_ID=optimce-backend
+      - IAM_GRANT_TYPE=client_credentials
+      - IAM_CLIENT_SECRET=${AUTH_CLIENT_SECRET}
+      - STORAGE_SERVICE_NAME=S3
+      - STORAGE_ENDPOINT=${STORAGE_API_URL}
+      - STORAGE_REGION=us-east-1
+      - STORAGE_BUCKET=${STORAGE_BUCKET:-crm-files}
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-minioadmin}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - STORAGE_PUBLIC_ENDPOINT=${MINIO_PUBLIC_ENDPOINT}
+      - REMOTE_LOGGING=${REMOTE_LOGGING}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT}
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - DB_TYPE=postgres
+      - DB_HOST=crm-database
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${CRM_DB_PASSWORD}
+      - DB_NAME=crm_db
+    ports:
+      - "8089:80"
+    networks:
+      - backend
+    depends_on:
+      crm-database:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+      jaeger:
+        condition: service_started
+
+  allocation-key-generation:
+    profiles: ["dev"]
+    build:
+      context: allocation-key-generation
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - ENV=local
+      - CRM_DATABASE_URL=postgresql+asyncpg://postgres:${CRM_DB_PASSWORD}@crm-database:5432/crm_db
+      - LOCAL_DATABASE_URL=postgresql+asyncpg://postgres:${ALLOCATION_KEY_DB_PASSWORD}@allocation-key-db:5432/allocation_key_local
+      - NATS_URL=nats://nats:4222
+      - ALLOW_ORIGIN=*
+      - CRM_DB_POOL_SIZE=5
+      - CRM_DB_MAX_OVERFLOW=5
+      - LOCAL_DB_POOL_SIZE=5
+      - LOCAL_DB_MAX_OVERFLOW=5
+      - STORAGE_ENDPOINT=${STORAGE_API_URL}
+      - STORAGE_BUCKET=${STORAGE_BUCKET:-crm-files}
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-minioadmin}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - STORAGE_REGION=us-east-1
+    ports:
+      - "8002:8000"
+    networks:
+      - backend
+    depends_on:
+      allocation-key-db:
+        condition: service_healthy
+      crm-database:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health/readiness', timeout=3).status==200 else 1)\""
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  allocation-key-generation-worker:
+    profiles: ["dev"]
+    build:
+      context: allocation-key-generation
+      dockerfile: Dockerfile.worker
+    restart: unless-stopped
+    environment:
+      - ENV=local
+      - CRM_DATABASE_URL=postgresql+asyncpg://postgres:${CRM_DB_PASSWORD}@crm-database:5432/crm_db
+      - LOCAL_DATABASE_URL=postgresql+asyncpg://postgres:${ALLOCATION_KEY_DB_PASSWORD}@allocation-key-db:5432/allocation_key_local
+      - NATS_URL=nats://nats:4222
+      - ALLOW_ORIGIN=*
+      - CRM_DB_POOL_SIZE=5
+      - CRM_DB_MAX_OVERFLOW=5
+      - LOCAL_DB_POOL_SIZE=5
+      - LOCAL_DB_MAX_OVERFLOW=5
+      - STORAGE_ENDPOINT=${STORAGE_API_URL}
+      - STORAGE_BUCKET=${STORAGE_BUCKET:-crm-files}
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-minioadmin}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - STORAGE_REGION=us-east-1
+    networks:
+      - backend
+    depends_on:
+      allocation-key-db:
+        condition: service_healthy
+      crm-database:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
+  keycloak-config:
+    profiles: ["init", "dev"]
+    image: ghcr.io/ourouk/alpine-envsubst:main@sha256:10899e32576d793f054ddbf23889dc6ef6295726d350a377efc110a976c1a11e
+    env_file:
+      - .env.dev
+    volumes:
+      - ./keycloak/realm:/config
+    command:
+      - < /config/dev-config.template.json > /config/dev-config.json
+
+  nginx-config:
+    profiles: ["init", "dev"]
+    image: ghcr.io/ourouk/alpine-envsubst:main@sha256:10899e32576d793f054ddbf23889dc6ef6295726d350a377efc110a976c1a11e
+    env_file:
+      - .env.dev
+    environment:
+      - CRM_FRONTEND_UPSTREAM=crm-frontend:80
+      - KRAKEND_UPSTREAM=krakend:8080
+      - KEYCLOAK_UPSTREAM=keycloak:8080
+      - MINIO_UPSTREAM=minio:9000
+      - CRM_FRONTEND_PROTOCOL=http
+      - KRAKEND_PROTOCOL=http
+      - KEYCLOAK_PROTOCOL=http
+      - MINIO_PROTOCOL=http
+    volumes:
+      - ./nginx/conf-template.d:/config
+      - ./nginx/conf.d:/output
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        if [ "${USE_HTTPS}" = "true" ]; then
+          cp /config/default-https.template.conf /tmp/template.conf;
+        else
+          cp /config/default-http.template.conf /tmp/template.conf;
+        fi
+        envsubst < /tmp/template.conf | sed 's/§/$/g' > /output/default.conf
+
+  crm-frontend-config:
+    profiles: ["init", "dev"]
+    image: ghcr.io/ourouk/alpine-envsubst:main@sha256:10899e32576d793f054ddbf23889dc6ef6295726d350a377efc110a976c1a11e
+    env_file:
+      - .env.dev
+    volumes:
+      - ./crm-frontend-config:/config
+    command:
+      - < /config/config.template.json > /config/config.json
+
+  crm-frontend:
+    profiles: ["dev"]
+    build:
+      context: crm-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./crm-frontend-config/config.json:/usr/share/nginx/html/assets/config/config.json
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8090:80"
+    networks:
+      - reverse-proxy
+
+volumes:
+  minio_data:
+  nats_data:
+
+networks:
+  backend:
+  reverse-proxy:
+```
 == Workflow Notify Monorepo <annex:notify-monorepo-workflow>
 ```yaml
 name: Notify Monorepo
@@ -501,6 +963,462 @@ jobs:
 
           git commit -m "chore: update submodule ${{ github.event.client_payload.repo }}"
           git push origin HEAD
+```
+== Docker compose production <annex:docker-compose-prod>
+```yaml
+services:
+  # ============================================
+  # INIT PROFILE - Configuration generation
+  # ============================================
+  swagger-doc-gen:
+    profiles: ["init"]
+    image: alpine/curl:latest
+    command:
+      - "-fL"
+      - "https://optimce.github.io/crm-backend/swagger.yml"
+      - "-o"
+      - "/data/root.yaml"
+    volumes:
+      - ./krakend_config:/data:z
+    restart: on-failure
+
+  krakend-config:
+    profiles: ["init"]
+    image: ghcr.io/optimce/swagger2krakend:main
+    volumes:
+      - ./krakend_config:/config
+    environment:
+      - CONFIG_FILE=/config/krakend-builder.yaml
+      - OUTPUT_FILE=/config/krakend.json
+      - KEYCLOAK_URL=${AUTH_INTERNAL_URL}
+      - REALM_NAME=${AUTH_REALM}
+      - ISSUER=${DOMAIN}${WEB_AUTH_URL}/realms/${AUTH_REALM}
+    restart: on-failure
+    depends_on:
+      swagger-doc-gen:
+        condition: service_completed_successfully
+
+  keycloak-config:
+    profiles: ["init"]
+    image: ghcr.io/ourouk/alpine-envsubst:main
+    env_file:
+      - .env
+    volumes:
+      - ./keycloak/realm:/config
+    command:
+      - < /config/prod-config.template.json > /config/prod-config.json
+
+  nginx-config:
+    profiles: ["init"]
+    image: ghcr.io/ourouk/alpine-envsubst:main
+    env_file:
+      - .env
+    volumes:
+      - ./nginx/conf-template.d:/config
+      - ./nginx/conf.d:/output
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        if [ "${USE_HTTPS}" = "true" ]; then
+          cp /config/default-https.template.conf /tmp/template.conf;
+        else
+          cp /config/default-http.template.conf /tmp/template.conf;
+        fi
+        envsubst < /tmp/template.conf | sed 's/§/$/g' > /output/default.conf
+
+  crm-frontend-config:
+    profiles: ["init"]
+    image: ghcr.io/ourouk/alpine-envsubst:main
+    env_file:
+      - .env
+    volumes:
+      - ./crm-frontend-config:/config
+    command:
+      - < /config/config.template.json > /config/config.json
+
+
+  keycloak-group-id-mapper:
+    profiles: ["init"]
+    image: alpine/curl:latest
+    command:
+      - "-fL"
+      - "https://github.com/OptimCE/kc-groupid-mapper/releases/download/v0.0.1/kc-groupid-mapper-1.0.0.jar"
+      - "-o"
+      - "/data/kc-groupid-mapper-1.0.0.jar"
+    volumes:
+      - ./keycloak/providers:/data:z
+    restart: on-failure
+
+  keycloak-optimce-theme:
+    profiles: ["init"]
+    image: alpine:3.20
+    entrypoint: /bin/sh
+    working_dir: /data
+    volumes:
+      - ./keycloak/providers:/data:z
+    command:
+      - "-c"
+      - |
+        set -eu
+        apk add --no-cache curl unzip zip >/dev/null
+        WORK=$$(mktemp -d)
+        JAR=/data/keycloak-theme-for-kc-all-other-versions.jar
+        curl -fsSL \
+          https://github.com/OptimCE/optimce-keycloak-theme/releases/download/v0.0.2/keycloak-theme-for-kc-all-other-versions.jar \
+          -o "$$WORK/src.jar"
+        mkdir -p "$$WORK/unpacked"
+        cd "$$WORK/unpacked"
+        unzip -o "$$WORK/src.jar" >/dev/null
+        if [ -d theme/keycloakify-starter ] && [ ! -d theme/optimce ]; then
+          mv theme/keycloakify-starter theme/optimce
+        fi
+        mkdir -p META-INF
+        echo '{"themes":[{"name":"optimce","types":["login"]}]}' > META-INF/keycloak-themes.json
+        rm -f "$$JAR"
+        zip -r "$$JAR" META-INF theme >/dev/null
+        rm -rf "$$WORK"
+    restart: on-failure
+  # ============================================
+  # BACKEND PROFILE - Databases and runtime
+  # ============================================
+  crm-database:
+    profiles: ["backend"]
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=crm_db
+      - POSTGRES_PASSWORD=${CRM_DB_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - crm_db_data:/var/lib/postgresql/data
+      - ./crm-backend-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - crm
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  keycloak-db:
+    profiles: ["backend"]
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=keycloak
+      - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    networks:
+      - keycloak
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  keycloak:
+    profiles: ["backend"]
+    image: quay.io/keycloak/keycloak:26.5.5@sha256:a7b0cb7a43a1235a61872883414d3f1d9a3ceac9df6e5907bd12202778a6265c
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--import-realm"
+      - "--health-enabled=true"
+      - "--metrics-enabled=true"
+      - "--proxy-headers=xforwarded"
+      - "--http-relative-path=/keycloak"
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/prod-config.json
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://keycloak-db:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - KC_HOSTNAME=${KEYCLOAK_HOSTNAME}
+      - KC_HTTP_ENABLED=true
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+    volumes:
+      - ./keycloak/realm/prod-config.json:/opt/keycloak/data/import/prod-config.json
+      - ./keycloak/providers:/opt/keycloak/providers/
+    networks:
+      - keycloak
+      - api-gateway
+      - reverse-proxy
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+
+
+
+  keycloak-healthcheck:
+    profiles: ["backend"]
+    image: alpine/curl
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - keycloak
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --head -fsS http://keycloak:9000/keycloak/health/ready || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  minio:
+    profiles: ["backend"]
+    image: pgsty/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_SERVER_ADDRESS=:9000
+    volumes:
+      - minio_data:/data
+    networks:
+      - reverse-proxy
+      - minio
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  minio-init:
+    profiles: ["backend"]
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - STORAGE_BUCKET=${STORAGE_BUCKET}
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD};
+      mc mb --ignore-existing local/$${STORAGE_BUCKET};
+      exit 0;
+      "
+    networks:
+      - minio
+
+  krakend:
+    profiles: ["backend"]
+    image: krakend:latest
+    volumes:
+      - ./krakend_config:/etc/krakend
+    networks:
+      - api-gateway
+      - reverse-proxy
+    depends_on:
+      crm-backend:
+        condition: service_started
+      keycloak:
+        condition: service_started
+
+  crm-backend:
+    profiles: ["backend"]
+    image: ghcr.io/optimce/crm-backend:main
+    command: npm start
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - MICROSERVICE_NAME=crm-backend
+      - ALLOWED_ORIGIN=${APP_CORS_ALLOWED_ORIGIN}
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=80
+      - IAM_SERVICE_NAME=KEYCLOAK
+      - IAM_REALM=${AUTH_REALM}
+      - IAM_REALM_NAME=${AUTH_REALM}
+      - IAM_BASE_URL=${AUTH_INTERNAL_URL}
+      - IAM_CLIENT_ID=optimce-backend
+      - IAM_GRANT_TYPE=client_credentials
+      - IAM_CLIENT_SECRET=${AUTH_CLIENT_SECRET}
+      - STORAGE_SERVICE_NAME=S3
+      - STORAGE_ENDPOINT=http://minio:9000
+      - STORAGE_REGION=us-east-1
+      - STORAGE_BUCKET=${STORAGE_BUCKET}
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - STORAGE_PUBLIC_ENDPOINT=${MINIO_PUBLIC_ENDPOINT}
+      - REMOTE_LOGGING=${REMOTE_LOGGING}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT}
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - DB_TYPE=postgres
+      - DB_HOST=crm-database
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${CRM_DB_PASSWORD}
+      - DB_NAME=crm_db
+    networks:
+      - api-gateway
+      - crm
+      - keycloak
+      - minio
+      - opentelemetry
+    depends_on:
+      crm-database:
+        condition: service_healthy
+      keycloak-healthcheck:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+  # ============================================
+  # MIGRATION PROFILE - CRM schema migrations
+  # ============================================
+  optimce-migrator:
+    profiles: ["migration"]
+    image: ghcr.io/optimce/migrator:main
+    restart: "no"
+    environment:
+      - OPTIMCE_CRM_DATABASE_URL=postgresql+asyncpg://postgres:${CRM_DB_PASSWORD}@crm-database:5432/crm_db
+    networks:
+      - crm
+    depends_on:
+      crm-database:
+        condition: service_healthy
+
+  # ============================================
+  # FRONTEND PROFILE - Web serving
+  # ============================================
+  reverse-proxy:
+    profiles: ["frontend"]
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    networks:
+      - reverse-proxy
+      - minio
+      - api-gateway
+      - keycloak
+      - crm
+
+  certbot:
+    profiles: ["frontend"]
+    image: certbot/certbot:latest
+    volumes:
+      - ./nginx/certs:/etc/letsencrypt
+      - ./nginx/certbot-webroot:/webroot
+    command: certonly --webroot -w /webroot -d ${DOMAIN_HOST} --agree-tos -m ${SSL_EMAIL} --non-interactive
+    environment:
+      - DOMAIN_HOST=${DOMAIN_HOST}
+      - SSL_EMAIL=${SSL_EMAIL}
+
+  crm-frontend:
+    profiles: ["frontend"]
+    image: ghcr.io/optimce/crm-frontend:main
+    volumes:
+      - ./crm-frontend-config/config.json:/usr/share/nginx/html/assets/config/config.json
+    networks:
+      - reverse-proxy
+
+  # ============================================
+  # BACKUP PROFILE - Database backups
+  # ============================================
+  crm-database-backup:
+    profiles: ["backup"]
+    image: postgres:18-alpine
+    volumes:
+      - ./backups:/backups
+    environment:
+      - PGPASSWORD=${CRM_DB_PASSWORD}
+    command: >
+      sh -c '
+        pg_dump -h crm-database -U postgres -d crm_db -f /backups/crm_db_$(date +%Y%m%d_%H%M%S).sql ;
+      '
+    networks:
+      - crm
+
+  keycloak-db-backup:
+    profiles: ["backup"]
+    image: postgres:18-alpine
+    volumes:
+      - ./backups:/backups
+    environment:
+      - PGPASSWORD=${KEYCLOAK_DB_PASSWORD}
+    command: >
+      sh -c '
+        pg_dump -h keycloak-db -U postgres -d keycloak -f /backups/keycloak_$(date +%Y%m%d_%H%M%S).sql ;
+      '
+    networks:
+      - keycloak
+
+volumes:
+  crm_db_data:
+  keycloak_db_data:
+  minio_data:
+  krakend_config:
+  keycloak_data:
+
+networks:
+  reverse-proxy:
+  api-gateway:
+  crm:
+  keycloak:
+  minio:
+  opentelemetry:
+```
+== Envsubstub Dockerfile <annex:envsubstub-dockerfile>
+```yaml
+FROM alpine:latest
+RUN apk --no-cache add gettext
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]No
+CMD ["envsubst"]
+```
+```shell
+#!/bin/sh
+set -e
+
+# If first arg starts with < or contains >, it's likely shell syntax
+# so run everything through sh -c
+case "$1" in
+    \<*|*\>*)
+        echo "Executing command: envsubst $*"
+        exec sh -c "envsubst $*"
+        ;;
+esac
+
+# Prepend "envsubst" if the first argument is not an executable
+if ! type -- "$1" &> /dev/null; then
+    set -- envsubst "$@"
+fi
+
+# Show which command will be executed.
+echo "Executing command: $*"
+
+exec "$@"
 ```
 == EMS Global logic <annex:ems-global-logic>
 ```rust
