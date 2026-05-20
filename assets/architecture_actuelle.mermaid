@@ -1,0 +1,118 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#2563eb",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#1e40af",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f3f4f6",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
+graph TB
+
+    %% ======================
+    %% External
+    %% ======================
+    User[👤 Utilisateur<br/>Navigateur]
+
+    %% ======================
+    %% Docker Swarm Architecture
+    %% ======================
+    subgraph K8S["Docker Swarm"]
+
+        %% ===== Edge =====
+        subgraph EdgeNS["Namespace: edge"]
+            Ingress[🌍 Ingress / LB]
+            Krakend[🚪 Krakend<br/>API Gateway]
+        end
+
+        %% ===== Frontend =====
+        subgraph FrontendNS["Namespace: frontend"]
+            Angular[🅰 Angular App<br/>NGINX Pod]
+        end
+
+        %% ===== Security =====
+        subgraph SecurityNS["Namespace: security"]
+            Keycloak[🔐 Keycloak Pod]
+            KCDB[(🗄 Keycloak DB)]
+        end
+
+        %% ===== Business =====
+        subgraph BusinessNS["Namespace: business"]
+            CRM[💼 CRM Service Pod]
+            CRMDB[(🗄 CRM DB)]
+            OpenFiles[📂 S3 Compatible Server]
+        end
+
+        %% ===== Event-driven =====
+        subgraph EventNS["Namespace: event-services"]
+            Notification[📨 Notification MS]
+            TemplateGen[📝 Template Generator MS]
+            KeyGen[🔑 Key Generation MS]
+            KeySim[🧪 Key Simulation MS]
+            KeyGenDB[(🗄 KeyGen DB)]
+            KeySimDB[(🗄 KeySim DB)]
+        end
+
+        %% ===== Infra =====
+        subgraph InfraNS["Namespace: infra"]
+            EventBus[(📡 Event Bus)]
+        end
+    end
+
+    %% ======================
+    %% Connections
+    %% ======================
+
+    User --> Ingress
+
+    Ingress --> Angular
+    Ingress --> Krakend
+
+    Angular --> Krakend
+
+    Krakend --> Keycloak
+    Krakend --> CRM
+    Krakend --> Notification
+    Krakend --> TemplateGen
+    Krakend --> KeyGen
+    Krakend --> KeySim
+
+    Keycloak --> KCDB
+
+    CRM --> CRMDB
+    CRM --> OpenFiles
+    CRM --> EventBus
+
+    KeyGen --> KeyGenDB
+    KeySim --> KeySimDB
+
+    EventBus --> Notification
+    EventBus --> TemplateGen
+    EventBus --> KeyGen
+    EventBus --> KeySim
+
+
+    %% ======================
+    %% Styling Classes
+    %% ======================
+
+    classDef edge fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#111827
+    classDef frontend fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#111827
+    classDef security fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#111827
+    classDef business fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#111827
+    classDef event fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#111827
+    classDef infra fill:#e5e7eb,stroke:#4b5563,stroke-width:2px,color:#111827
+    classDef database fill:#ffffff,stroke:#111827,stroke-width:2px,stroke-dasharray: 5 5
+
+    class Ingress,Krakend edge
+    class Angular frontend
+    class Keycloak security
+    class CRM,OpenFiles business
+    class Notification,TemplateGen,KeyGen,KeySim event
+    class EventBus infra
+    class KCDB,CRMDB,KeyGenDB,KeySimDB database

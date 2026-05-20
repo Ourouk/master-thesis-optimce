@@ -20,7 +20,8 @@
     )
   ),
   bibliography-file: "../ref.bib",
-  annex: include "annex.typ"
+  annex: include "annex.typ",
+  binding: false,
 )
 #set text(lang: "eng")
 = Abstract
@@ -51,6 +52,39 @@ The approach combines:
 == Conclusion
 
 By the end of this work, the OptimCE project is transformed into a stable, modular, and easily reusable solution, characterized by reduced technical complexity. This restructuring promotes its adoption by the open-source community while ensuring its longevity and laying the foundations for collaborative and adaptable governance.
+
+#pagebreak()
+
+#set text(lang: "fr")
+= Résumé
+
+Ce mémoire de master présente la transition du sous-projet OptimCE — développé dans le cadre du projet de recherche Locomotrice — vers un modèle open source. L'objectif est de restructurer le projet pour le rendre accessible, maintenable et adaptable pour une communauté diversifiée, incluant des chercheurs, des entreprises et des communautés énergétiques.
+
+== Problématique
+
+Les défis abordés comprennent :
+- *Qualité du code* : Améliorer la lisibilité, la modularité et l'expérience développeur.
+- *Reproductibilité* : Simplifier l'infrastructure pour assurer une installation fluide.
+- *Simplification* : Réduire la complexité du projet, actuellement excessive pour son échelle.
+- *Documentation* : Créer des ressources claires adaptées à différents publics.
+- *Tests* : Mettre en place des tests unitaires et d'intégration pour garantir la stabilité.
+- *Communication* : Développer une stratégie de promotion pour maximiser l'adoption.
+- *Gouvernance* : Établir des processus collaboratifs pour un développement efficace.
+
+== Méthodologie
+
+L'approche combine :
+- *Audit architectural* : Identification des anti-patterns (ex. : Monolithe Distribué).
+- *Refactoring* : Fusion des composants redondants (ex. : Backend Database et Backend).
+- *DevOps* : Intégration de CI/CD et automatisation.
+- *Outillage* : Développement de solutions pour le déploiement et la collaboration.
+- *Benchmarking* : Étude des meilleures pratiques de projets open source établis.
+- *Outils de communication* : Utilisation d'outils disponibles pour faciliter la collaboration.
+
+== Conclusion
+
+À l'issue de ce travail, le projet OptimCE est transformé en une solution stable, modulaire et facilement réutilisable, caractérisée par une complexité technique réduite. Cette restructuration favorise son adoption par la communauté open source tout en assurant sa pérennité et en posant les bases d'une gouvernance collaborative et adaptable.
+
 #pagebreak()
 
 #set text(lang: "fr")
@@ -92,6 +126,8 @@ Le stage s'est déroulé au sein des locaux de l'ISIL (Institut Supérieur Indus
 Le stage a été encadré par Eric Paques lors de communications régulières.
 
 Le projet étant réalisé en partie en collaboration avec l'Université de Liège, des réunions avec ces derniers étaient organisées hebdomadairement.
+
+Il est à noté que l'Université de Liège n'est pas réellement impliquée dans mon stage, mais que les réunions avec eux étaient nécessaires pour assurer une bonne coordination entre les différentes parties du projet, notamment pour la partie EMS qui est gérée par l'université. Cependant, mon travail se concentrait principalement sur le projet OptimCE, réalisé par le CeCoTePe.
 = Problématique, objectifs et enjeux
 == Problématique
 === Problématique générale
@@ -104,10 +140,14 @@ Le projet Locomotrice, initialement développé dans un cadre de recherche, doit
 Comment choisir une licence open-source compatible avec les usages envisagés (usage communautaire, usage commercial, contributions externes) et sécuriser juridiquement la publication du code ?
 
 - Lisibilité et qualité du code / Developer Experience
-Comment rendre un code historiquement développé par une équipe de recherche, souvent hétérogène et non formaté, plus lisible, cohérent et maintenable ?
+Comment rendre un code historiquement développé par une équipe de recherche, souvent hétérogène et non formaté, plus lisible, cohérent et maintenable ? Comment améliorer l'expérience développeur pour encourager les contributions externes ?
+
+En effet en Open Source, la bonne volonté des contributeurs est un facteur clé de succès. Il est donc essentiel de réduire les frictions à la contribution.
 
 - Reproductibilité et portabilité du projet
-Comment réduire la complexité actuelle du projet pour permettre une installation simple ?
+Comment réduire la complexité actuelle du projet pour permettre une installation simple ? 
+
+Toujours dans l'optique de réduire les frictions à l'adoption, il est essentiel de simplifier l'infrastructure nécessaire pour faire fonctionner le projet, tout en garantissant une reproductibilité complète. Les utilisateurs peuvent en effet devenir contributeurs, et il est important de leur faciliter la tâche pour qu'ils puissent tester et modifier le projet sans rencontrer de problèmes d'installation ou de configuration.
 
 - Comment structurer l'architecture du code pour la rendre compréhensible par des développeurs externes ?
 Quelle infrastructure minimale de développement et de production est nécessaire pour garantir une reproductibilité complète ?
@@ -116,7 +156,7 @@ Quelle infrastructure minimale de développement et de production est nécessair
 Comment fournir une documentation claire, complète (installation, API, architecture, exemples), et adaptée à différents publics (développeurs, chercheurs, entreprises) ?
 
 - Testing et qualité logicielle
-Comment mettre en place une stratégie de tests (unitaires, intégration) permettant d'améliorer la qualité, détecter les régressions et renforcer la confiance dans le projet ?
+Comment mettre en place une stratégie de tests (unitaires, intégration) permettant d'améliorer la qualité, détecter les régressions et renforcer la confiance dans le projet ? Réduire la charge de maintenance du projet.
 
 == Les objectifs
 En tant qu'ingénieur en informatique, mon objectif est de préparer la transition du projet Locomotrice vers une diffusion open-source. Pour cela, mon travail se concentre sur :
@@ -141,7 +181,7 @@ Le suivi du projet a été effectué sur *Notion* (gestionnaire de projet et de 
 
 Un autre aspect du suivi du projet a été le processus de prise de décisions avec des étapes documentées :
 #figure(
-  image("assets/Notion02.png", height: 5cm),
+  image("assets/Notion02.png", height: 7.5cm),
   caption: [Documentation partiellement organisée autour des décisions prises],
 )
 Une bonne partie de ce mémoire a notamment été écrite en relisant les recherches en amont des différentes implémentations.
@@ -151,36 +191,30 @@ Pour structurer notre mise en open-source, nous nous sommes inspirés d'autres o
 
 Nous nous sommes principalement intéressés au projet *Nextcloud*#footnote[Plateforme open-source de synchronisation et partage de fichiers, auto-hébergée. Alternative à Dropbox ou Google Drive.] et à d'autres projets open-source rencontrés dans notre stack technique.
 
+La lecture de documentation relative à l'open-source nous a également permis de structurer notre approche, notamment la documentation fournie par le gouvernement francais sur les projets open-source #cite(<pocos-dinsic-stable:online>).
 === Hébergement du code
-Nous avons cherché l'approche la plus standard utilisée dans la majorité des exemples open-source rencontrés :
+L'analyse des projets majeurs révèle une standardisation forte des outils pour l'hébergement et le versionnement :
 ==== Git
-Git est le gestionnaire de versions de code le plus populaire et donc le plus connu des développeurs.
+Git s'impose comme le gestionnaire de versions de code incontournable, une maîtrise attendue de tout développeur souhaitant contribuer à l'open-source.
 ==== GitHub
-GitHub#footnote[Plateforme web pour héberger et gérer des dépôts Git. Offre CI/CD, gestion des issues, wikis, releases, et collaboration pour les projets open-source.] est devenu en quelque sorte synonyme de Git, plateforme la plus connue, offrant toute une série de services aux développeurs open-source. Nous avons néanmoins envisagé des alternatives telles que Gitea et GitLab pour leur hébergement aisé et leur indépendance vis-à-vis de Microsoft. Toutefois, l'offre de Microsoft l'a emporté pour son accessibilité et ses pipelines CI/CD#footnote[Intégration Continue/Déploiement Continu : automatisation qui teste, compile et déploie le code à chaque commit pour détecter les erreurs tôt.] gratuits.
-=== Bug Reporting
-GitHub fournit un système d'issues. Nous avons donc décidé d'utiliser une approche hybride : une boîte mail pour les utilisateurs finaux et l'accès aux issues pour les contributeurs.
-=== Gestion de collaboration au niveau du code
-Nous avons reproduit la logique et la philosophie suivantes dans nos contributions :
-- Commits atomiques : nous avons essayé de garder des commits de petite taille retraçant chaque modification effectuée.
-- Utilisation intensive de branches :
-  - Branche principale : code destiné à être mis en production.
-  - features/features-name : branche destinée à ajouter une fonctionnalité au projet.
-  - fix/fix-name : branche destinée à corriger un bug.
-- Suivi d'une demande de fusion :
-  - Nous effectuons une relecture humaine.
-  - Utilisation d'un agent IA pour compléter cette revue (Copilot fourni par GitHub).
-  - Exécution des CI/CD.
-  - Itération jusqu'à obtenir une version qui nous convient.
-Nous validons la fusion et l'effectuons.
+GitHub#footnote[Plateforme web pour héberger et gérer des dépôts Git. Offre CI/CD, gestion des issues, wikis, releases, et collaboration pour les projets open-source.] est devenu de facto la plateforme de référence pour exposer un projet. Si certaines communautés privilégient des alternatives comme Gitea ou GitLab pour des raisons d'indépendance, l'écosystème de GitHub reste privilégié par la très grande majorité pour offrir une visibilité maximale et des outils intégrés fluides (notamment des pipelines CI/CD#footnote[Intégration Continue/Déploiement Continu : automatisation qui teste, compile et déploie le code à chaque commit pour détecter les erreurs tôt.] indispensables au maintien de la qualité).
+=== Bug Reporting (Signalement des problèmes)
+Les grands projets structurent méthodiquement le recueil de retours pour ne pas surcharger les développeurs. Il est courant d'observer une approche hybride : l'utilisation des systèmes spécialisés comme les issues GitHub pour les échanges techniques par les contributeurs, et la mise à disposition de canaux plus accessibles (forums, boîtes mail) pour les demandes des utilisateurs finaux expérimentant le produit.
+=== Gestion de la collaboration au niveau du code
+L'étude des flux de travail (workflows) open-source met en évidence l'application de conventions strictes pour garantir un développement collaboratif fluide et asynchrone :
+- Commits atomiques : les modifications sont découpées en petites unités logiques pour faciliter la compréhension, la relecture critique et l'éventuelle réversibilité.
+- Utilisation intensive de branches (Branching model) :
+  - L'isolation du code en développement reste systématique vis-à-vis de la branche principale de production.
+  - L'utilisation de nomenclatures claires limite les conflits (ex. : `feature/*` pour l'ajout de fonctionnalités, `fix/*` pour la correction de bugs).
+- Suivi rigoureux des demandes de fusion (Pull Requests) :
+  - L'intégration de nouveau code nécessite toujours un processus de validation itératif (code review) par les pairs ou mainteneurs.
+  - Ce processus est sécurisé par des outils automatisés (tests via CI/CD, analyseurs statiques) et complété par l'évaluation humaine et parfois artificielle de la qualité ou de la sécurité algorithmique de l'intégration.
 
-Nous reparlerons de tout cela dans la section dédiée au travail effectué.
-
-=== Accroche utilisateurs finaux
-Développement d'un site web dédié aux utilisateurs finaux et aux contributeurs potentiels.
-- Un blog et une newsletter pour tenir les personnes intéressées informées.
-- Liens vers les différents canaux de communication du projet.
-- Liens vers la démo/bêta du projet.
-Cet aspect était nécessaire pour la communication du projet et pour les tests permettant des retours utilisateurs.
+=== Accroche des utilisateurs finaux (Community Building)
+Le succès d'un projet open-source ne se limite pas à son code source brut, mais se révèle dans sa capacité à fédérer une communauté. Les projets ayant la meilleure pérennité disposent généralement d'une vitrine claire et accessible dédiée tant au grand public qu'aux collaborateurs potentiels :
+- L'utilisation de blogs ou newsletters pour maintenir l'intérêt autour de la feuille de route (roadmap).
+- Des accès immédiats, transparents et dirigés vers les points d'entrée communicationnels.
+- L'accès rapide à un environnement de test ou à une démo, un facteur primordial favorisant l'adoption rapide et permettant d'amorcer le processus d'amélioration continue via le retour des utilisateurs.
 = Travail réalisé
 Dans ce chapitre, nous allons nous intéresser au travail effectué, dans l'ordre chronologique des modifications et des ajouts de fonctionnalités.
 == Revue du code et analyse de l'architecture
@@ -277,157 +311,20 @@ Une librairie ORM#footnote[Object-Relational Mapping : traduit automatiquement l
 - Établir des relations entre les entités (ex. : une communauté peut avoir plusieurs utilisateurs, et chaque utilisateur peut appartenir à plusieurs communautés).
 - Gérer les champs spécifiques (identifiants uniques, URLs, descriptions, etc.) et leurs contraintes (unicité, nullabilité, etc.).
 
-Extrait de code :
-//TODO: Choose to store or not code in annex
-```typescript
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
-import { Role } from "../../../shared/dtos/role.js";
-import { User } from "../../users/domain/user.models.js";
-import { Address } from "../../../shared/address/address.models.js";
-
-/**
- * Entity representing a Community.
- * Stores community details and links to members.
- */
-@Entity("community")
-export class Community {
-  /**
-   * Unique ID of the community.
-   * Auto-generated identity column.
-   */
-  @PrimaryGeneratedColumn("identity", { generatedIdentity: "ALWAYS" })
-  id!: number;
-
-  /**
-   * Name of the community.
-   * Must be unique.
-   */
-  @Column({ type: "varchar", length: 255, unique: true })
-  name!: string;
-
-  /**
-   * External Authentication ID for the community (e.g. from Keycloak/Auth0).
-   */
-  @Column({ name: "auth_community_id", type: "varchar", length: 255, unique: true, nullable: false })
-  auth_community_id!: string;
-
-  @Column({ name: "website_url", type: "varchar", length: 255, nullable: true })
-  website_url!: string | null;
-
-  @Column({ name: "logo_url", type: "varchar", length: 255, nullable: true })
-  logo_url!: string | null;
-
-  @Column({ type: "text", nullable: true })
-  description!: string | null;
-
-  @Column({ name: "headquarters_address_id", type: "int", nullable: true })
-  headquarters_address_id!: number | null;
-
-  @ManyToOne(() => Address, { nullable: true })
-  @JoinColumn({ name: "headquarters_address_id" })
-  headquarters_address!: Address | null;
-
-  @CreateDateColumn({ name: "created_at" })
-  created_at!: Date;
-
-  @UpdateDateColumn({ name: "updated_at" })
-  updated_at!: Date;
-
-  // Inverse side: One Community has many CommunityUser entries
-  @OneToMany(() => CommunityUser, (communityUser) => communityUser.community)
-  users!: CommunityUser[];
-}
-
-```
+Extrait de code disponible en annexe : @annex:community-entity
 ==== Services
 Un ensemble de services est responsable des tâches suivantes :
 - Récupérer les données depuis la base de données en fonction des requêtes (ex. : lister toutes les communautés publiques).
 - Traiter les données avant de les retourner (ex. : générer des URLs temporaires pour les logos des communautés).
 - Gérer les erreurs (ex. : journaliser les échecs de génération d'URL pour les logos).
 - Paginer les résultats.
-Exemple :
-//TODO: Choose to store or not code in annex
-```typescript
-async getAllPublicCommunities(query: CommunityQueryDTO): Promise<[PublicCommunityDTO[], Pagination]> {
-  const [values, total] = await this.community_repository.getAllPublicCommunities(query);
-  const return_values = await Promise.all(
-    values.map(async (community) => {
-      let logo_presigned_url: string | null = null;
-      if (community.logo_url) {
-        try {
-          logo_presigned_url = await this.storage_service.getDocumentUrl(community.logo_url);
-        } catch (err) {
-          logger.error(
-            { operation: "getAllPublicCommunities", error: err, communityId: community.id },
-            "Failed to generate presigned URL for community logo",
-          );
-        }
-      }
-      return toPublicCommunityDTO(community, logo_presigned_url);
-    }),
-  );
-  const total_pages = Math.ceil(total / query.limit);
-  return [return_values, { page: query.page, limit: query.limit, total, total_pages }];
-}
-```
+Exemple de service disponible en annexe : @annex:getAllPublicCommunities
 === DTO
-Les objets de transfert de données (DTO) structurent les informations retournées au client.
-//TODO: Choose to store or not code in annex
-```typescript
-/**
- * DTO returned by the public communities list. Includes a short-lived
- * presigned logo URL so the client can render the image directly.
- */
-export class PublicCommunityDTO#footnote[Data Transfer Object : objet contenant uniquement les données à retourner au client, sans logique métier. Isole l'API interne de l'API publique.] {
-  @Expose()
-  id!: number;
-
-  @Expose()
-  name!: string;
-
-  @Expose()
-  logo_url!: string | null;
-
-  /** Short-lived presigned URL (~15 min). Null when the community has no logo or URL generation failed. */
-  @Expose()
-  logo_presigned_url!: string | null;
-}
-```
+Les objets de transfert de données (DTO) structurent les informations retournées au client. Voir un exemple en annexe : @annex:public-community-dto
 ==== Architecture complète
 Cette approche permet une séparation claire des différentes couches, ce qui est essentiel pour le principe de séparation des responsabilités #cite(<Separati80:online>).
 
-Nous retrouvons ainsi une arborescence de fichiers organisée de la manière suivante pour chaque module :
-```
-└── src
-    └── community
-        ├── api
-        │   ├── community.controller.ts
-        │   ├── community.dtos
-        │   ├── community.routes.ts
-        │   └── community.swagger.ts
-        ├── domain
-        │   ├── community.models.ts
-        │   ├── i-community.repository.ts
-        │   └── i-community.services.ts
-        ├── infra
-        │   ├── community.repository.ts
-        │   └── community.service.ts
-        └── shared
-            ├── community.error.ts
-            ├── to_dto.ts
-            └── to_model.ts
-```
+Nous retrouvons ainsi une arborescence de fichiers organisée de la manière suivante pour chaque module (voir annexe : @annex:file-architecture) :
 - Couche API (Présentation)
   - *community.controller.ts* : gère les requêtes et réponses HTTP et délègue le traitement aux services.
   - *community.dtos.ts* : définit les DTO (Data Transfer Objects) pour la validation des requêtes et des réponses.
@@ -457,76 +354,7 @@ L'objectif a donc été de remplacer les nombreux appels REST entre ces composan
 === Réorganisation du code en sous-dépôts
 L'ancienne organisation des fichiers dans le code source était fonctionnelle mais complexe, avec de nombreux sous-dossiers. L'inconvénient principal était qu'un seul dépôt Git gérait l'entièreté du code source, ce qui augmentait fortement le nombre de fichiers à suivre.
 
-En conséquence, même des opérations basiques comme les commits et les fetch devenaient progressivement plus lentes.
-```bash
-├── Authentification
-│   ├── auth-back-end
-│   ├── back-end
-│   └── front-end
-├── crm
-│   ├── assets
-│   ├── config
-│   ├── database_script
-│   ├── images
-│   ├── src
-│   └── tests
-├── crm-frontend
-│   ├── public
-│   └── src
-├── databases
-│   ├── community_database
-│   ├── key-database-ms
-│   ├── user_back_end
-│   └── user_db_ms
-├── deploiement-new-version
-│   ├── kc-groupid-mapper
-│   ├── keycloak-config
-│   └── script
-├── documentation-app
-│   └── src
-├── Gestionnaire de clef de répartition
-│   ├── back_end
-│   ├── front-end
-│   ├── Generators
-│   └── SimulateurMS
-├── Gestionnaire de communautés
-│   ├── back_end
-│   ├── community-back-end
-│   └── front-end
-├── Gestionnaire de documents
-│   ├── back-end
-│   ├── back-end-database
-│   └── front-end
-├── Gestionnaire de membres
-│   ├── back_end
-│   ├── front-end
-│   └── members_database_back_end
-├── images
-├── KarateTesting
-│   └── KarateMaven
-├── optimce-app
-│   ├── apps
-│   └── libs
-├── proxies
-│   ├── back_end_proxy
-│   └── front-end-orchestrator
-├── services
-│   ├── notification_back_end
-│   └── openfiles
-├── template
-│   ├── back-end-database-template
-│   ├── back-end-template
-│   └── front-end-service
-├── tools
-│   ├── LoggingTracing
-│   └── RSA_generation
-└── Users
-    ├── back-end
-    ├── front-end
-    └── users-back-end
-
-66 directories
-```
+En conséquence, même des opérations basiques comme les commits et les fetch devenaient progressivement plus lentes. La structure complète de l'ancien projet est disponible en annexe : @annex:old-directory-structure
 Nous avons donc décidé de séparer chaque composant dans son propre dépôt Git. Cette approche présente plusieurs avantages majeurs pour un projet open-source :
 
 - *Modularité et indépendance* : Chaque composant peut être développé, testé et déployé indépendamment, permettant aux contributeurs de se concentrer sur un seul module sans impacter les autres.
@@ -547,8 +375,13 @@ Cette licence offre un bon équilibre entre la permissivité et la protection ju
 Pour les outils développés par d'autres communautés et intégrés dans notre projet, nous avons veillé à ce qu'ils soient compatibles avec la licence Apache 2.0, afin d'assurer une cohérence juridique et de faciliter la réutilisation du code.
 === Création d'une politique de contribution
 Le projet dispose désormais d'une politique de contribution concise. Les contributeurs peuvent proposer des modifications via des pull requests, qui sont ensuite examinées par les mainteneurs du projet. Nous encourageons les contributions de tous types, qu'il s'agisse de corrections de bugs, d'ajout de fonctionnalités ou d'améliorations de la documentation.
+==== Hiérarchie des contributeurs
+- Mainteneurs : responsables de la gestion globale du projet, de la validation des contributions et de la prise de décisions stratégiques.
+- Contributeurs internes : Personnes travaillant directement sur le projet au sein de l'organisation, avec des droits d'accès étendus pour faciliter le développement.
+- Contributeurs externes : membres de la communauté qui proposent des contributions via des pull requests, avec des droits d'accès limités pour garantir la sécurité du projet.
+- Utilisateurs : personnes qui utilisent le projet. Ils peuvent signaler des bugs ou suggérer des améliorations via les issues, mais n'ont pas de droits d'accès au code.
 ==== Linting et formatage
-Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté selon les règles définies dans le README.md.
+Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté sehjhblon les règles définies dans le README.md.
 - Nous avons intégré des outils de linting et de formatage dans les pipelines CI/CD pour automatiser ce processus et assurer une cohérence dans le code soumis par les contributeurs.
 - Nous avons également fourni des configurations de linting et de formatage dans les dépôts, ainsi que des scripts npm pour faciliter leur utilisation en local avant de soumettre une pull request.
 - Nous encourageons l'utilisation de hooks Git (ex. : lint-staged) pour exécuter automatiquement les vérifications de linting et de formatage avant chaque commit, afin de réduire les erreurs et d'améliorer la qualité du code dès le début du processus de contribution.
@@ -564,46 +397,10 @@ Nous fournissons également un fichier agents.md pour aider les contributeurs à
 === CI/CD
 Chaque dépôt est configuré avec des pipelines CI/CD sur GitHub Actions#footnote[Service GitHub permettant d'exécuter automatiquement des workflows (tests, builds, déploiements) à chaque commit ou pull request.], permettant d'automatiser les tests, les builds et les déploiements. Ces pipelines sont conçus pour garantir la qualité du code et faciliter le processus de contribution.
 ==== Exemple de pipeline CI/CD
-On peut voir ci-dessous un exemple de l'arborescence des fichiers d'un dépôt, avec les différents workflows CI/CD configurés pour les tests, la publication Docker, la notification de mise à jour du monorepo et la mise à jour de la documentation.
-
-```sh
-.
-├── dependabot.yml
-└── workflows
-    ├── codeql.yml
-    ├── docker-publish.yml
-    ├── notify_monorepo_update.yml
-    ├── test.yml
-    └── update-documentation.yml
-
-2 directories, 7 files
-```
+On peut voir ci-dessous un exemple de l'arborescence des fichiers d'un dépôt (voir annexe : @annex:cicd-file-tree), avec les différents workflows CI/CD configurés pour les tests, la publication Docker, la notification de mise à jour du monorepo et la mise à jour de la documentation.
 Nous allons revenir sur chacun de ces workflows dans les sections suivantes.
 ==== Test
-Le sobrement nommé *test.yml* est déclenché à chaque pull request et à chaque push sur la branche principale. Il exécute une série de tests unitaires et d'intégration pour s'assurer que les modifications proposées n'introduisent pas de régressions ou de bugs dans le code existant.
-```yaml
-name: Test
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run test-all
-```
+Le sobrement nommé *test.yml* est déclenché à chaque pull request et à chaque push sur la branche principale. Il exécute une série de tests unitaires et d'intégration pour s'assurer que les modifications proposées n'introduisent pas de régressions ou de bugs dans le code existant. Le contenu du workflow est disponible en annexe : @annex:test-workflow
 ==== Description du workflow de test
 Ce workflow GitHub Actions se déclenche sur les pushes et les pull requests visant la branche `main`. Il exécute un job nommé `test` sur le runner `ubuntu-latest` pour automatiser la validation des contributions. Les étapes principales sont :
 
@@ -630,28 +427,9 @@ GitHub nous propose une liste de vulnérabilités avec un niveau de sévérité.
 )
 Chaque rapport de vulnérabilité contient une description du problème, des recommandations pour le corriger, et un lien vers la base de données CVE correspondante pour plus d'informations.
 - *Dependabot* :
-Le fichier *dependabot.yml* configure Dependabot, un outil de GitHub qui surveille les dépendances du projet à la recherche de vulnérabilités. Dependabot crée automatiquement des pull requests pour mettre à jour les dépendances vulnérables, ce qui nous permet de maintenir le projet à jour et sécurisé sans effort manuel.
-```yaml
----
-version: 2
-updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "devcontainers"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-```
+Le fichier *dependabot.yml* configure Dependabot, un outil de GitHub qui surveille les dépendances du projet à la recherche de vulnérabilités. Dependabot crée automatiquement des pull requests pour mettre à jour les dépendances vulnérables, ce qui nous permet de maintenir le projet à jour et sécurisé sans effort manuel. La configuration complète est disponible en annexe : @annex:dependabot-config
+
+Combiné à l'utilisation régulière de `npm audit` pour scanner les vulnérabilités de la chaîne de dépendances JavaScript, cette approche nous a permis d'identifier et de patcher plusieurs dépendances présentant de graves failles de sécurité. Ces corrections, validées automatiquement par les tests CI avant intégration, ont renforcé significativement la surface d'attaque du projet.
 Le code ci-dessus configure toutes les technologies utilisées dans le projet. Une vérification hebdomadaire est effectuée pour chaque technologie, et des pull requests sont créées automatiquement pour les mises à jour nécessaires.
 #figure(
   image("assets/dependabot.png"),
@@ -662,156 +440,7 @@ On peut voir ci-dessus un exemple de pull request créée par Dependabot. Elle s
 Dans ce cas précis, la pull request met à jour la version de TypeScript utilisée dans le projet, mais casse le processus de build. Cela nous permet d'éviter de casser la branche principale avec une mise à jour qui n'est pas encore compatible avec notre code, tout en nous alertant de la nécessité de mettre à jour notre code pour rester compatible avec les dernières versions des dépendances.
 
 ==== Docker build and publish
-Le workflow *docker-publish.yml* est responsable de la construction et de la publication des images Docker pour les différents composants du projet. Il est déclenché à chaque push sur la branche principale, et utilise les secrets GitHub pour se connecter à un registre d'images Docker, dans notre cas GitHub Container Registry.
-```yaml
-name: Test
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run test-all
-```
-==== Tests
-Ce code est une GitHub Actions qui se déclenche sur les pushes et les pull requests visant la branche `main`. Il exécute un job nommé `test` sur un runnerle `ubuntu-latest` pour automatiser la validation des contributions. Les étapes principales sont :
-
-- `actions/checkout@v6` : récupère le code du dépôt.
-- `actions/setup-node@v6` : installe Node.js (ici la version 22) et active le cache `npm` pour accélérer les builds.
-- `npm ci` : installe les dépendances de manière reproductible.
-- `npm run test-all` : lance l'ensemble des tests unitaires et d'intégration définis pour le projet.
-
-Cette action permet de voir rapidement si les modifications proposées passent les tests, assurant ainsi la qualité du code avant de fusionner les changements dans la branche principale.
-==== Sécurité
-Plusieurs workflows sont dédiés à la sécurité du projet, notamment
-- *CodeQL* :
-Le workflow *codeql.yml* est dédié à l'analyse de sécurité du code. Il utilise l'outil CodeQL de GitHub pour scanner le code à la recherche de vulnérabilités connues et de mauvaises pratiques de sécurité. Ce workflow est également déclenché sur les pushes et les pull requests vers la branche principale, garantissant que chaque contribution est analysée pour les risques de sécurité avant d'être intégrée au projet.
-
-Les résultats de l'analyse sont disponibles dans l'onglet "Security" du dépôt, nous permettant de suivre et de corriger rapidement les problèmes de sécurité identifiés.
-#figure(
-  image("assets/security_reporting.png"),
-  caption: [Exemple de rapport de sécurité],
-)
-Github nous propose une liste de vulnérabilités avec un niveau de sévérité.
-#figure(
-  image("assets/security_workflow_permissions.png"),
-  caption: [Permissions et workflow de sécurité],
-)
-Chaque rapport de vulnérabilité contient une description du problème, des recommandations pour le corriger, et un lien vers la base de données CVE correspondante pour plus d'informations.
-- *Dependabot* :
-Le fichier *dependabot.yml* configure Dependabot, un outil de GitHub qui surveille les dépendances du projet à la recherche de vulnérabilités. Dependabot crée automatiquement des pull requests pour mettre à jour les dépendances vulnérables, ce qui nous permet de maintenir le projet à jour et sécurisé sans effort manuel.
-```yaml
----
-version: 2
-updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "devcontainers"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-```
-Le code ci dessus configure tous les technologies utilisées dans le projet. Une vérification hebdomadaire est effectuée pour chaque technologie, et des pull requests sont créées automatiquement pour les mises à jour nécessaires.
-#figure(
-  image("assets/dependabot.png"),
-  caption: [Exemple de Pull Request générée par Dependabot],
-)
-On peut voir ci-dessus un exemple de pull request créée par dependabot. Elle s'intègre parfaitement dans notre processus de contribution, avec des tests automatisés qui s'exécutent pour valider la mise à jour avant de fusionner les changements.
-
-Dans ce cas précis, la pull request met à jour la version de TypeScript utilisée dans le projet, mais casse le processeur de build. Cela nous permet d'éviter de casser la branche principale avec une mise à jour qui n'est pas encore compatible avec notre code, tout en nous alertant de la nécessité de mettre à jour notre code pour rester à jour avec les dernières versions des dépendances.
-
-==== Docker build and publish
-Le workflow *docker-publish.yml* est responsable de la construction et de la publication des images Docker pour les différents composants du projet. Il est déclenché à chaque push sur la branche principale, et utilise les secrets GitHub pour se connecter à un registre d'images Docker dans notre cas GitHub Container Registry.
-```yaml
-name: Docker
-on:
-  workflow_dispatch:
-  push:
-    branches: [ "main" ]
-    tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6
-        with:
-          cosign-release: 'v2.2.4'
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
-
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        env:
-          TAGS: ${{ steps.meta.outputs.tags }}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-```
+Le workflow *docker-publish.yml* est responsable de la construction et de la publication des images Docker pour les différents composants du projet. Il est déclenché à chaque push sur la branche principale, et utilise les secrets GitHub pour se connecter à un registre d'images Docker, dans notre cas GitHub Container Registry. Le contenu complet du workflow est disponible en annexe : @annex:docker-build-publish
 Ce workflow est déclenché par les pushes et les pull requests vers la branche `main`, ainsi que manuellement via l'interface GitHub. Il utilise plusieurs actions pour construire et publier une image Docker, notamment :
 - actions/checkout : récupère le code du dépôt.
 - sigstore/cosign-installer : installe l'outil Cosign pour signer les images Docker.
@@ -824,99 +453,18 @@ Ce workflow est déclenché par les pushes et les pull requests vers la branche 
 La publication de l'image Docker est conditionnée à ce que le workflow ne soit pas déclenché par une pull request, afin d'éviter de publier des images non validées. Cependant, les tests de construction sont exécutés pour toutes les contributions, assurant ainsi que les modifications proposées peuvent être construites correctement avant d'être fusionnées dans la branche principale.
 
 ==== Update documentation
-Le workflow *update-documentation.yml* est conçu pour maintenir la documentation du projet à jour. Il est déclenché à chaque push sur la branche principale et utilise des outils de génération de documentation (par exemple Swagger/OpenAPI#footnote[Standard ouvert décrivant les API REST (endpoints, paramètres, réponses). Permet de générer automatiquement documentation et clients.] pour les API) afin de produire des versions actualisées de la documentation. Celle-ci est ensuite publiée sur un site web dédié et réutilisée ultérieurement par d'autres composants du projet.
-```yaml
-name: Update OpenAPI documentation
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - docs/**
-jobs:
-  build-and-deploy:
-    if: github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
-    env:
-      NODE_ENV: development
-
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build OpenAPI documentation
-        run: |
-          npm run swagger
-          npm run swagger:doc:md
-          npm run swagger:doc:html
-
-      - name: Move and rename swagger file
-        run: mv docs/openapi/swagger.yaml docs/swagger.yml
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: docs
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-```
+Le workflow *update-documentation.yml* est conçu pour maintenir la documentation du projet à jour. Il est déclenché à chaque push sur la branche principale et utilise des outils de génération de documentation (par exemple Swagger/OpenAPI#footnote[Standard ouvert décrivant les API REST (endpoints, paramètres, réponses). Permet de générer automatiquement documentation et clients.] pour les API) afin de produire des versions actualisées de la documentation. Celle-ci est ensuite publiée sur un site web dédié et réutilisée ultérieurement par d'autres composants du projet. Le contenu du workflow est disponible en annexe : @annex:update-docs-workflow
 Ce workflow est déclenché par les pushes vers la branche `main`, à l'exception des modifications dans le dossier `docs/` pour éviter les boucles de déploiement. Il utilise plusieurs actions pour construire et déployer la documentation, notamment :
 - actions/configure-pages : configure GitHub Pages pour le dépôt.
 - actions/upload-pages-artifact : télécharge les fichiers de documentation générés en tant qu'artifact.
 - actions/deploy-pages : déploie les fichiers de documentation sur GitHub Pages.
 
-Une dépendance npm permet également de générer la documentation à partir des fichiers Swagger/OpenAPI, via les commandes suivantes :
-```sh
-    npm run swagger
-    npm run swagger:doc:md
-    npm run swagger:doc:html
-```
+Une dépendance npm permet également de générer la documentation à partir des fichiers Swagger/OpenAPI, via les commandes suivantes (voir annexe : @annex:swagger-npm-commands)
 qui génèrent respectivement les fichiers Swagger, la documentation au format Markdown, et la documentation au format HTML. Ces commandes sont intégrées dans le fichier package.json du projet.
 == Développement d'un monorepo de staging
 Pouvoir travailler sur chaque composant de manière indépendante constitue un avantage majeur pour la modularité et la maintenabilité du projet. Cela peut toutefois introduire des défis en termes de synchronisation et de coordination entre les différents composants. C'est pourquoi nous avons développé un monorepo de staging, qui sert de point central pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs.
 === Git submodules
-Nous avons utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration.
-```gitmodules
-[submodule "crm-backend"]
-	path = crm-backend
-	url = ../crm-backend.git
-[submodule "crm-frontend"]
-	path = crm-frontend
-	url = ../crm-frontend.git
-[submodule "keycloak/kc-groupid-mapper"]
-	path = keycloak/kc-groupid-mapper
-	url = ../kc-groupid-mapper.git
-[submodule "krakend/swagger2krakend"]
-	path = krakend/swagger2krakend
-	url = ../swagger2krakend.git
-[submodule "optimce-keycloak-theme"]
-	path = keycloak/optimce-keycloak-theme
-	url = ../optimce-keycloak-theme.git
-```
+Nous avons utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est disponible en annexe : @annex:gitmodules-config
 Dans la syntaxe du fichier de configuration, on peut constater l'un des avantages de l'organisation GitHub : la possibilité d'utiliser des chemins relatifs pour les URL des submodules, ce qui facilite la gestion et la synchronisation des différents composants du projet.
 
 Cela permet aussi de télécharger l'ensemble du projet avec une seule commande `git clone --recurse-submodules`, ce qui est particulièrement utile pour les nouveaux contributeurs qui souhaitent se lancer dans le développement sans avoir à cloner chaque dépôt individuellement.
@@ -925,7 +473,7 @@ Les différents IDE permettent aussi de gérer les versions de submodules de man
 
 Nous avons principalement utilisé Visual Studio Code pour gérer les submodules.
 #figure(
-  image("assets/vscode_submodules.png"),
+  image("assets/vscode_submodules.png", height: 8cm),
   caption: [Gestion des submodules dans Visual Studio Code],
 )
 Cette capture d'écran présente l'interface de Visual Studio Code pour la gestion des submodules. Elle permet de visualiser les changements dans chaque submodule, de les synchroniser avec leurs dépôts respectifs, et de gérer les différentes branches et commits pour chaque composant du projet.
@@ -936,76 +484,8 @@ La possibilité d'isoler et de tester chaque branche de manière indépendante p
 Afin de faciliter la synchronisation entre les dépôts de composants et le monorepo de staging, nous avons mis en place un workflow GitHub Actions se déclenchant à chaque push sur les branches principales des dépôts de composants. Ce workflow utilise des scripts pour mettre à jour automatiquement les submodules dans le monorepo de staging, garantissant ainsi que celui-ci intègre toujours les dernières modifications apportées aux différents composants.
 
 Il est composé de deux éléments principaux :
-- Un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche principale, qui envoie un événement de type `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo.
-```yaml
-name: Notify Monorepo
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  notify:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - name: Send repository dispatch
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.MONOREPO_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/OptimCE/monorepo/dispatches \
-            -d '{
-              "event_type": "submodule-updated",
-              "client_payload": {
-                "repo": "crm-backend"
-              }
-            }'
-```
-Ce workflow est déclenché par les pushes vers la branche `main` de chaque dépôt de composant. Il utilise la commande `curl` pour envoyer une requête POST à l'API GitHub, déclenchant ainsi un événement de type `repository_dispatch` dans le dépôt du monorepo. Le payload de l'événement contient des informations sur le dépôt qui a été mis à jour, ce qui permet au monorepo d'identifier le submodule à synchroniser.
-```yaml
-name: Update Submodules
-
-on:
-  repository_dispatch:
-    types: [submodule-updated]
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout monorepo
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Setup Git identity
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions@github.com"
-
-      - name: Update only changed submodule
-        run: |
-          git submodule update --remote --merge ${{ github.event.client_payload.repo }}
-
-      - name: Commit and push changes
-        run: |
-          git add .
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git commit -m "chore: update submodule ${{ github.event.client_payload.repo }}"
-          git push origin HEAD
-```
+- Un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche principale, qui envoie un événement de type `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo. Voir le workflow en annexe : @annex:notify-monorepo-workflow
+Ce workflow est déclenché par les pushes vers la branche `main` de chaque dépôt de composant. Il utilise la commande `curl` pour envoyer une requête POST à l'API GitHub, déclenchant ainsi un événement de type `repository_dispatch` dans le dépôt du monorepo. Le payload de l'événement contient des informations sur le dépôt qui a été mis à jour, ce qui permet au monorepo d'identifier le submodule à synchroniser. Voir le workflow de mise à jour en annexe : @annex:update-submodules-workflow
 Ce workflow est déclenché par l'événement `repository_dispatch` envoyé par les workflows des dépôts de composants. Il met à jour le submodule correspondant au dépôt qui a été modifié, puis commit et push les changements dans la branche principale du monorepo. Si aucun changement n'est détecté (par exemple, si le submodule est déjà à jour), le workflow s'arrête sans faire de commit.
 
 Le token MONOREPO_TOKEN est généré sur demande par les mainteneurs du projet, et est stocké en tant que secret dans les paramètres de l'organisation, ce qui garantit sa sécurité tout en permettant une utilisation facile dans les workflows GitHub Actions.
@@ -1086,6 +566,9 @@ De plus, GitHub Container Registry offre des fonctionnalités de sécurité avan
 Cette modification était par ailleurs nécessaire pour les déploiements Kubernetes.
 === Docker Compose
 La version de production est elle aussi faite en docker-compose.
+
+Un aspect notable de cette configuration est que l'ensemble du déploiement se pilote via un unique fichier `.env`. En complétant une dizaine de champs (identifiants, URLs, ports, secrets), l'utilisateur obtient une infrastructure entièrement fonctionnelle : du reverse proxy à la télémétrie, en passant par l'authentification Keycloak, le stockage MinIO et l'API gateway Krakend. Cette simplicité de configuration réduit considérablement la barrière à l'entrée pour les utilisateurs finaux souhaitant auto-héberger le projet.
+
 Mais nous pouvons aisément faire des traductions du docker compose vers d'autres orchestrateurs de conteneurs, notamment :
 - Docker Swarm#footnote[Orchestrateur de conteneurs natif Docker. Plus simple que Kubernetes mais moins flexible. Gère scaling, failover et load-balancing.] : 
 Docker Swarm est très proche de docker compose, et la plupart des fonctionnalités utilisées dans notre docker-compose sont compatibles avec Docker Swarm. Cela nous permet de déployer notre infrastructure sur un cluster Docker Swarm sans nécessiter de modifications majeures, en utilisant simplement le même fichier docker-compose avec quelques ajustements mineurs pour les spécificités de Swarm (ex. : utilisation de secrets, configuration des services en mode swarm, etc.).
@@ -1140,13 +623,51 @@ Il s'agit d'un projet écrit en Rust qui implémente une logique de distribution
 Ce projet est officiellement personnel, mais est conçu pour être facilement intégrable au reste du projet, et open-source sous la même licence que le reste du projet.
 
 Il a été développé car leur algorithme était lent, ne prenait pas en compte les notions de parité entre utilisateurs et n'était pas en open-source comme l'EMS est censé l'être à l'issue du projet. 
+===== Algorithme de distribution
+L'algorithme de distribution implémenté dans EcoArbiter suit le workflow suivant :
+#figure(
+  image("assets/emsg-logic.png", height: 20cm),
+  caption: [Workflow de l'algorithme de distribution d'EcoArbiter],
+)
+L'algorithme est fait pour être être très rapide et capable de recevoir une grande quantité d'update. Avec une préférence pour une latence faible à une réponse toujours correcte, ce qui est essentiel pour une logique de distribution mise à jour à haute fréquence.
 = Résultats et analyse
 == Expérience développeur
+
+Dès le mois de décembre, le projet avait atteint un niveau de fonctionnalité satisfaisant. Cependant, la complexité de l'architecture initiale rendait l'ajout de nouvelles fonctionnalités, voire même la réalisation de simples modifications, particulièrement laborieuse. Chaque changement nécessitait d'intervenir dans de multiples composants fortement couplés, augmentant le risque de régressions et le temps de développement.
+
+Après le refactoring architectural et la mise en place des outils d'automatisation, la situation s'est nettement améliorée. Eric Paques lui-même s'est dit satisfait de la vitesse à laquelle le développement pourra reprendre son cours dans les prochains mois. La réduction de la complexité, la séparation claire des responsabilités et les pipelines CI/CD permettent désormais d'itérer rapidement et en toute confiance.
 == Hébergement
+
+Le déploiement et la mise à jour en une commande ont tenu leur promesse. L'infrastructure basée sur Docker Compose, couplée aux scripts d'automatisation développés, permet désormais de déployer l'ensemble du projet ou d'appliquer des mises à jour avec une simplicité déconcertante par rapport à la situation initiale. Cette fiabilité opérationnelle est un atout majeur pour l'adoption du projet par des utilisateurs finaux qui n'ont pas nécessairement une expertise DevOps avancée.
+
 == Sécurité
+
+Les approches mises en place ont porté leurs fruits en matière de sécurité. L'intégration de CodeQL dans les pipelines CI/CD permet de détecter automatiquement les vulnérabilités et les mauvaises pratiques avant chaque fusion de code. La signature des images Docker avec Cosign garantit l'intégrité et la provenance des artefacts déployés.
+
+Grâce à Dependabot et aux outils d'audit fournis par npm, nous avons également pu identifier et corriger rapidement des dépendances présentant de graves failles de sécurité. Ces mises à jour automatiques, validées par les tests CI avant intégration, assurent que le projet reste protégé contre les vulnérabilités connues sans effort manuel supplémentaire.
+
 == Gain de performance
-=== Latence
-=== CPU
-=== Consommation de RAM
-Le produit consommait 3 GO à vide sans activité, nous sommes descendus à 800 Mo.
-= Discussion et apports personnels
+
+Il est important de souligner que la version précédente du projet manquait cruellement de télémétrie, ce qui rend difficile une comparaison quantitative précise des performances au-delà de la consommation de RAM (déjà mentionnée : réduction de 3 Go à 800 Mo à vide).
+
+Cependant, au niveau des retours utilisateurs, une amélioration significative de la latence a été relevée. La réduction du nombre d'appels synchrones entre micro-services et la fusion des composants redondants ont contribué à fluidifier l'expérience utilisateur, même si les métriques précises n'étaient pas disponibles pour établir une comparaison chiffrée.
+
+= Conclusion
+
+Ce mémoire a présenté la transition du projet OptimCE, composant clé du projet de recherche Locomotrice, vers un modèle open-source pérenne et collaboratif. Le travail réalisé s'est articulé autour de plusieurs axes majeurs.
+
+Sur le plan technique, nous avons procédé à une restructuration profonde de l'architecture du projet. L'analyse initiale a révélé un anti-pattern de monolithe distribué, caractérisé par une complexité opérationnelle excessive et des appels synchrones nombreux entre micro-services. La fusion des composants redondants (utilisateurs, communauté, opérations de partage) en un service CRM unifié, combinée à la suppression des services backend-db intermédiaires, a permis de réduire significativement cette complexité. Les résultats sont tangibles : la consommation mémoire est passée de 3 Go à 800 Mo à vide, et la maintenabilité du code s'en trouve considérablement améliorée.
+
+L'organisation du code source a également été repensée. La séparation en dépôts Git indépendants au sein d'une organisation GitHub dédiée offre une modularité et une réutilisabilité accrues, tout en facilitant la contribution externe. Chaque dépôt dispose désormais de pipelines CI/CD automatisés incluant tests unitaires, analyse de sécurité via CodeQL, mises à jour automatiques des dépendances avec Dependabot, et publication d'images Docker signées avec Cosign.
+
+Le développement d'un monorepo de staging, basé sur les sous-modules Git, a permis de résoudre le défi de synchronisation entre les composants indépendants. Couplé à un docker-compose de développement complet, il offre un environnement de test et d'intégration reproductible, accessible en une seule commande. L'automatisation du déploiement, via des scripts de génération de configuration et l'outil Swagger2Krakend développé pour l'occasion, garantit une infrastructure cohérente et à jour entre les environnements de développement et de production.
+
+La gouvernance du projet a été structurée autour d'une licence Apache 2.0, d'une politique de contribution claire définissant les rôles (mainteneurs, contributeurs internes et externes, utilisateurs), et d'outils de qualité logicielle (linting, formatage, hooks Git). Ces éléments sont essentiels pour encourager et faciliter les contributions externes.
+
+Sur le plan communautaire, les fondations ont été posées pour accueillir et fidéliser les contributeurs. La documentation adaptée à différents publics (développeurs, chercheurs, entreprises), les canaux de communication structurés (issues GitHub, forums) et les processus de revue de code transparents créent un environnement propice à la collaboration. L'organisation GitHub OptimCE centralise l'ensemble de ces éléments et offre une vitrine claire pour le projet. La réussite de cette transition open-source dépendra désormais de la capacité à fédérer une communauté active autour du projet, en maintenant un équilibre entre l'accessibilité pour les nouveaux venus et la rigueur technique nécessaire à la qualité du code.
+
+Enfin, ma participation s'est étendue au-delà du périmètre initial d'OptimCE, notamment avec le développement d'EcoArbiter, un algorithme de redistribution énergétique en temps réel écrit en Rust, conçu comme une alternative performante et équitable au projet proposé par l'ULiège dans le cadre du sous-projet EMS Global.
+
+Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, nous avons transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective — les trois piliers indispensables à sa pérennité.
+
+Les perspectives futures incluent l'élargissement de la communauté de contributeurs, l'évolution vers un déploiement Kubernetes si la demande le justifie (notamment pour une offre SaaS), et l'intégration continue des retours des utilisateurs finaux pour guider les développements futurs. La transition vers l'open-source n'est pas un aboutissement, mais le début d'un processus d'amélioration continue qui devra être entretenu par la communauté.
