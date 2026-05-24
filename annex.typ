@@ -1813,3 +1813,361 @@ pub struct EmsgSummary {
     pub deficit_count: usize,
 }
 ```
+= Mermaid Diagrams
+== Abstract Refactored Architecture <annex:refactored-architecture>
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#2563eb",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#1e40af",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f3f4f6",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
+graph TB
+
+    %% ======================
+    %% External
+    %% ======================
+    User[👤 Utilisateur<br/>Navigateur]
+
+    %% ======================
+    %% Docker Swarm Architecture
+    %% ======================
+    subgraph K8S["Docker Swarm"]
+
+        %% ===== Edge =====
+        subgraph EdgeNS["Namespace: edge"]
+            Ingress[🌍 Ingress / LB]
+            Krakend[🚪 Krakend<br/>API Gateway]
+        end
+
+        %% ===== Frontend =====
+        subgraph FrontendNS["Namespace: frontend"]
+            Angular[🅰 Angular App<br/>NGINX Pod]
+        end
+
+        %% ===== Security =====
+        subgraph SecurityNS["Namespace: security"]
+            Keycloak[🔐 Keycloak Pod]
+            KCDB[(🗄 Keycloak DB)]
+        end
+
+        %% ===== Business =====
+        subgraph BusinessNS["Namespace: business"]
+            CRM[💼 CRM Service Pod]
+            CRMDB[(🗄 CRM DB)]
+            OpenFiles[📂 S3 Compatible Server]
+        end
+
+        %% ===== Event-driven =====
+        subgraph EventNS["Namespace: event-services"]
+            Notification[📨 Notification MS]
+            TemplateGen[📝 Template Generator MS]
+            KeyGen[🔑 Key Generation MS]
+            KeySim[🧪 Key Simulation MS]
+            KeyGenDB[(🗄 KeyGen DB)]
+            KeySimDB[(🗄 KeySim DB)]
+        end
+
+        %% ===== Infra =====
+        subgraph InfraNS["Namespace: infra"]
+            EventBus[(📡 Event Bus)]
+        end
+    end
+
+    %% ======================
+    %% Connections
+    %% ======================
+
+    User --> Ingress
+
+    Ingress --> Angular
+    Ingress --> Krakend
+
+    Angular --> Krakend
+
+    Krakend --> Keycloak
+    Krakend --> CRM
+    Krakend --> Notification
+    Krakend --> TemplateGen
+    Krakend --> KeyGen
+    Krakend --> KeySim
+
+    Keycloak --> KCDB
+
+    CRM --> CRMDB
+    CRM --> OpenFiles
+    CRM --> EventBus
+
+    KeyGen --> KeyGenDB
+    KeySim --> KeySimDB
+
+    EventBus --> Notification
+    EventBus --> TemplateGen
+    EventBus --> KeyGen
+    EventBus --> KeySim
+
+
+    %% ======================
+    %% Styling Classes
+    %% ======================
+
+    classDef edge fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#111827
+    classDef frontend fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#111827
+    classDef security fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#111827
+    classDef business fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#111827
+    classDef event fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#111827
+    classDef infra fill:#e5e7eb,stroke:#4b5563,stroke-width:2px,color:#111827
+    classDef database fill:#ffffff,stroke:#111827,stroke-width:2px,stroke-dasharray: 5 5
+
+    class Ingress,Krakend edge
+    class Angular frontend
+    class Keycloak security
+    class CRM,OpenFiles business
+    class Notification,TemplateGen,KeyGen,KeySim event
+    class EventBus infra
+    class KCDB,CRMDB,KeyGenDB,KeySimDB database
+```
+== Docker Compose Dev Architecture <annex:docker-compose-dev-architecture>
+```mermaid
+flowchart TB
+
+%% =========================
+%% STYLE
+%% =========================
+classDef data fill:#E8F1FF,stroke:#2B5AA6,stroke-width:1px,color:#0B1F3A;
+classDef identity fill:#E9FFF3,stroke:#1F7A4C,stroke-width:1px,color:#0B2E1A;
+classDef app fill:#FFF4E5,stroke:#A66A00,stroke-width:1px,color:#3A2400;
+classDef edge fill:#F3E8FF,stroke:#6B2FA3,stroke-width:1px,color:#220B3A;
+classDef config fill:#F5F5F5,stroke:#666,stroke-width:1px,color:#222;
+
+%% =========================
+%% CONFIG LAYER (top support layer)
+%% =========================
+subgraph CONFIG["Configuration / Build-Time Pipeline"]
+direction LR
+SWAGGER["swagger-doc-gen"]
+KRAKEND_CFG["krakend-config"]
+NGINX_CFG["nginx-config"]
+KEYCLOAK_CFG["keycloak-config"]
+FRONTEND_CFG["crm-frontend-config"]
+
+SWAGGER --> KRAKEND_CFG
+end
+class CONFIG config;
+
+%% =========================
+%% DATA LAYER
+%% =========================
+subgraph DATA["Data Layer"]
+direction LR
+CRM_DB["crm-database\n(Postgres)"]
+KC_DB["keycloak-db\n(Postgres)"]
+MINIO["minio\n(Object Storage)"]
+MINIO_INIT["minio-init"]
+JAEGER["jaeger\n(Tracing)"]
+
+MINIO --> MINIO_INIT
+end
+class DATA data;
+
+%% =========================
+%% IDENTITY LAYER
+%% =========================
+subgraph IDENTITY["Identity & Access"]
+direction LR
+KEYCLOAK["keycloak"]
+end
+class IDENTITY identity;
+
+KC_DB --> KEYCLOAK
+KEYCLOAK_CFG --> KEYCLOAK
+
+%% =========================
+%% APPLICATION LAYER
+%% =========================
+subgraph APP["Application Layer"]
+direction LR
+CRM["crm-backend"]
+KRAKEND["krakend\n(API Gateway)"]
+end
+class APP app;
+
+CRM_DB --> CRM
+MINIO_INIT --> CRM
+JAEGER --> CRM
+KEYCLOAK --> CRM
+
+CRM --> KRAKEND
+KEYCLOAK --> KRAKEND
+KRAKEND_CFG --> KRAKEND
+
+%% =========================
+%% EDGE / DELIVERY LAYER
+%% =========================
+subgraph EDGE["Edge & Delivery"]
+direction LR
+FRONTEND["crm-frontend"]
+NGINX["reverse-proxy (Nginx)"]
+end
+class EDGE edge;
+
+FRONTEND_CFG --> FRONTEND
+
+FRONTEND --> NGINX
+KRAKEND --> NGINX
+KEYCLOAK --> NGINX
+MINIO --> NGINX
+NGINX_CFG --> NGINX
+
+%% =========================
+%% ENTRY POINT
+%% =========================
+USER((User))
+USER --> NGINX
+```
+```mermaid 
+flowchart LR
+
+    subgraph CorePlatform[Core Platform]
+        CRMBackend
+        AKG
+        AKGWorker
+    end
+
+    subgraph SharedInfra[Shared Infrastructure]
+        NATS
+        MinIO
+        Jaeger
+    end
+
+    subgraph Persistence[Persistence Layer]
+        CRMDB[(CRM DB)]
+        AKGDB[(Allocation DB)]
+        KeycloakDB[(Keycloak DB)]
+    end
+
+    subgraph Security[Security]
+        Keycloak
+    end
+
+    CRMBackend --> CRMDB
+    CRMBackend --> Keycloak
+    CRMBackend --> Jaeger
+
+    AKG --> CRMDB
+    AKG --> AKGDB
+    AKG --> NATS
+    AKG --> MinIO
+
+    AKGWorker --> CRMDB
+    AKGWorker --> AKGDB
+    AKGWorker --> NATS
+    AKGWorker --> MinIO
+
+    Keycloak --> KeycloakDB
+```
+```mermaid
+flowchart TB
+
+    subgraph Sources[Configuration Sources]
+        ENV[Environment Variables]
+        FILES[Template Files]
+        SECRETS[Secrets / Credentials]
+        COMPOSE[Docker Compose Definitions]
+    end
+
+    subgraph Generation[Configuration Generation]
+        INIT[Entrypoint Init Scripts]
+        TEMPLATE[Template Engine]
+        MERGE[Configuration Merge Logic]
+    end
+
+    subgraph Outputs[Generated Runtime Config]
+        KRAKENDCFG[KrakenD Configuration]
+        NGINXCFG[NGINX Configuration]
+        SERVICECFG[Service Runtime Config]
+        KC_CFG[Keycloak Runtime Config]
+    end
+
+    subgraph Runtime[Running Containers]
+        KrakenD
+        NGINX
+        CRMBackend
+        Keycloak
+    end
+
+    ENV --> INIT
+    FILES --> TEMPLATE
+    SECRETS --> MERGE
+    COMPOSE --> MERGE
+
+    INIT --> TEMPLATE
+    TEMPLATE --> MERGE
+
+    MERGE --> KRAKENDCFG
+    MERGE --> NGINXCFG
+    MERGE --> SERVICECFG
+    MERGE --> KC_CFG
+
+    KRAKENDCFG --> KrakenD
+    NGINXCFG --> NGINX
+    SERVICECFG --> CRMBackend
+    KC_CFG --> Keycloak
+```
+=== General Configuration Generation Logic <annex:general-config-generation-logic>
+```mermaid
+flowchart TB
+
+    subgraph Sources[Configuration Sources]
+        ENV[Environment Variables]
+        FILES[Template Files]
+        SECRETS[Secrets / Credentials]
+        COMPOSE[Docker Compose Definitions]
+    end
+
+    subgraph Generation[Configuration Generation]
+        INIT[Entrypoint Init Scripts]
+        TEMPLATE[Template Engine]
+        MERGE[Configuration Merge Logic]
+    end
+
+    subgraph Outputs[Generated Runtime Config]
+        KRAKENDCFG[KrakenD Configuration]
+        NGINXCFG[NGINX Configuration]
+        SERVICECFG[Service Runtime Config]
+        KC_CFG[Keycloak Runtime Config]
+    end
+
+    subgraph Runtime[Running Containers]
+        KrakenD
+        NGINX
+        CRMBackend
+        Keycloak
+    end
+
+    ENV --> INIT
+    FILES --> TEMPLATE
+    SECRETS --> MERGE
+    COMPOSE --> MERGE
+
+    INIT --> TEMPLATE
+    TEMPLATE --> MERGE
+
+    MERGE --> KRAKENDCFG
+    MERGE --> NGINXCFG
+    MERGE --> SERVICECFG
+    MERGE --> KC_CFG
+
+    KRAKENDCFG --> KrakenD
+    NGINXCFG --> NGINX
+    SERVICECFG --> CRMBackend
+    KC_CFG --> Keycloak
+```

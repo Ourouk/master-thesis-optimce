@@ -211,6 +211,13 @@
   // ── Figures & Tables ──────────────────────────────────────
   // Numbered by chapter (e.g., Figure 3.2, Table 1.1).
   set figure(numbering: "1.1")
+  
+  set table(
+    inset: 0.8em,
+    stroke: 0.5pt + luma(220),
+    fill: (x, y) => if y == 0 { luma(220) } else if calc.rem(y, 2) == 0 { luma(245) } else { white },
+    align: (x, y) => if x == 0 { horizon + left } else { horizon + center },
+  )
 
   // ── Footnotes ─────────────────────────────────────────────
   show footnote: set text(size: 0.85em, fill: Uliege.GrayDark)
