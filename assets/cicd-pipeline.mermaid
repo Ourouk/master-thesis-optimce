@@ -1,0 +1,75 @@
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  },
+  "flowchart": {
+    "nodeSpacing": 30,
+    "rankSpacing": 40,
+    "curve": "basis"
+  }
+}}%%
+
+graph TB
+
+    PushPR(("Push / Pull Request")) --> Branch{"main branch ?"}
+
+    Branch -->|oui| Test["Test"]
+    Branch -->|non| TestOnly["Test"]
+    Branch -->|oui| Security["Sécurité"]
+    Branch -->|non| SecurityOnly["Sécurité"]
+
+    subgraph TestRunner["Tests"]
+        Lint["Lint<br/>ESLint / Ruff / SQLFluff"]
+        Unit["Tests unitaires<br/>npm test"]
+        Integ["Tests intégration<br/>npm run test-all"]
+        Lint --> Unit --> Integ
+    end
+
+    Test --> TestRunner
+
+    subgraph SecurityRunner["Sécurité"]
+        CodeQL["CodeQL Scan<br/>Vulnérabilités"]
+        Dependabot["Dependabot<br/>Dépendances npm/Docker"]
+        Dependabot -.-> AutoPR["Pull Request auto<br/>Mise à jour sécurité"]
+    end
+
+    Security --> SecurityRunner
+
+    TestRunner -->|"push main"| DockerBuild["Docker Build & Publish"]
+    SecurityRunner -->|"push main"| DockerBuild
+
+    subgraph DockerRunner["Docker"]
+        Build["Docker Buildx<br/>Multi-platform"]
+        Sign["Cosign Sign<br/>Keyless Sigstore"]
+        Push["Push to GHCR"]
+        Build --> Sign --> Push
+    end
+
+    DockerBuild --> DockerRunner
+
+    DockerRunner --> Doc["Update Documentation"]
+    DockerRunner --> Notify["Notify Monorepo"]
+
+    subgraph DocRunner["Documentation"]
+        Swagger["Generate Swagger<br/>OpenAPI"]
+        Pages["Deploy GitHub Pages"]
+        Swagger --> Pages
+    end
+
+    Doc --> DocRunner
+
+    subgraph NotifRunner["Synchronisation"]
+        Dispatch["repository_dispatch<br/>Payload: composant modifié"]
+        Submodule["Monorepo staging<br/>Submodule mis à jour"]
+        Dispatch --> Submodule
+    end
+
+    Notify --> NotifRunner

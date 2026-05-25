@@ -964,7 +964,7 @@ jobs:
           git commit -m "chore: update submodule ${{ github.event.client_payload.repo }}"
           git push origin HEAD
 ```
-== Docker compose production <annex:docker-compose-prod>
+== Docker Compose production <annex:docker-compose-prod>
 ```yaml
 services:
   # ============================================
@@ -1388,6 +1388,38 @@ networks:
   keycloak:
   minio:
   opentelemetry:
+```
+== Swagger to Krakend Yaml Builder Configuration <annex:swagger-to-krakend-config>
+```yaml
+global:
+  # Global configurations applied to all endpoints (e.g. Auth validators)
+  extra_config: ./config/auth.json
+  # Variables that will be substituted in the global extra_config
+  variables:
+    KEYCLOAK_URL: http://keycloak:8080/keycloak
+    REALM_NAME: optimce-realm
+    ISSUER: http://localhost:8087/keycloak/realms/optimce-realm
+
+services:
+  # The key 'crm-backend' is the service name (used as the default prefix: /crm-backend/...)
+  crm-backend:
+    swagger: ./docs/openapi/swagger.yaml
+    host: "http://crm-backend:80"
+    # Specific per-service configuration (e.g. Rate limits)
+    extra_config: ./config/ratelimit.json
+    variables:
+      max_rate: 100
+
+  # 'root' is a special key that maps directly to the root path (/) by default
+  root:
+    swagger: ./config/root.yaml
+    host: "http://crm-backend:80"
+    
+  # You can override the prefix explicitly
+  microservice:
+    swagger: ./microservice/openapi.yaml
+    host: "http://microservice:8080"
+    prefix: "/custom_prefix"
 ```
 == Envsubstub Dockerfile <annex:envsubstub-dockerfile>
 ```yaml
@@ -1817,16 +1849,10 @@ pub struct EmsgSummary {
 == Abstract Refactored Architecture <annex:refactored-architecture>
 ```mermaid
 %%{init: {
-  "theme": "base",
+  "theme": "neutral",
   "themeVariables": {
     "fontFamily": "Inter, Segoe UI, sans-serif",
-    "fontSize": "14px",
-    "primaryColor": "#2563eb",
-    "primaryTextColor": "#111827",
-    "primaryBorderColor": "#1e40af",
-    "lineColor": "#6b7280",
-    "secondaryColor": "#f3f4f6",
-    "tertiaryColor": "#ffffff"
+    "fontSize": "14px"
   }
 }}%%
 
@@ -1937,6 +1963,20 @@ graph TB
 ```
 == Docker Compose Dev Architecture <annex:docker-compose-dev-architecture>
 ```mermaid
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
 flowchart TB
 
 %% =========================
@@ -2033,7 +2073,21 @@ NGINX_CFG --> NGINX
 USER((User))
 USER --> NGINX
 ```
-```mermaid 
+```mermaid
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
 flowchart LR
 
     subgraph CorePlatform[Core Platform]
@@ -2075,6 +2129,20 @@ flowchart LR
     Keycloak --> KeycloakDB
 ```
 ```mermaid
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
 flowchart TB
 
     subgraph Sources[Configuration Sources]
@@ -2124,6 +2192,20 @@ flowchart TB
 ```
 === General Configuration Generation Logic <annex:general-config-generation-logic>
 ```mermaid
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  }
+}}%%
+
 flowchart TB
 
     subgraph Sources[Configuration Sources]
@@ -2170,4 +2252,113 @@ flowchart TB
     NGINXCFG --> NGINX
     SERVICECFG --> CRMBackend
     KC_CFG --> Keycloak
+```
+
+== CI/CD Pipeline <annex:cicd-pipeline>
+```mermaid
+%%{init: {
+  "theme": "neutral",
+  "themeVariables": {
+    "fontFamily": "Inter, Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#111827",
+    "primaryBorderColor": "#4b5563",
+    "lineColor": "#6b7280",
+    "secondaryColor": "#f9fafb",
+    "tertiaryColor": "#ffffff"
+  },
+  "flowchart": {
+    "nodeSpacing": 30,
+    "rankSpacing": 40,
+    "curve": "basis"
+  }
+}}%%
+
+graph TB
+
+    PushPR(("Push / Pull Request")) --> Branch{"main branch ?"}
+
+    Branch -->|oui| Test["Test"]
+    Branch -->|non| TestOnly["Test"]
+    Branch -->|oui| Security["Sécurité"]
+    Branch -->|non| SecurityOnly["Sécurité"]
+
+    subgraph TestRunner["Tests"]
+        Lint["Lint<br/>ESLint / Ruff / SQLFluff"]
+        Unit["Tests unitaires<br/>npm test"]
+        Integ["Tests intégration<br/>npm run test-all"]
+        Lint --> Unit --> Integ
+    end
+
+    Test --> TestRunner
+
+    subgraph SecurityRunner["Sécurité"]
+        CodeQL["CodeQL Scan<br/>Vulnérabilités"]
+        Dependabot["Dependabot<br/>Dépendances npm/Docker"]
+        Dependabot -.-> AutoPR["Pull Request auto<br/>Mise à jour sécurité"]
+    end
+
+    Security --> SecurityRunner
+
+    TestRunner -->|"push main"| DockerBuild["Docker Build & Publish"]
+    SecurityRunner -->|"push main"| DockerBuild
+
+    subgraph DockerRunner["Docker"]
+        Build["Docker Buildx<br/>Multi-platform"]
+        Sign["Cosign Sign<br/>Keyless Sigstore"]
+        Push["Push to GHCR"]
+        Build --> Sign --> Push
+    end
+
+    DockerBuild --> DockerRunner
+
+    DockerRunner --> Doc["Update Documentation"]
+    DockerRunner --> Notify["Notify Monorepo"]
+
+    subgraph DocRunner["Documentation"]
+        Swagger["Generate Swagger<br/>OpenAPI"]
+        Pages["Deploy GitHub Pages"]
+        Swagger --> Pages
+    end
+
+    Doc --> DocRunner
+
+    subgraph NotifRunner["Synchronisation"]
+        Dispatch["repository_dispatch<br/>Payload: composant modifié"]
+        Submodule["Monorepo staging<br/>Submodule mis à jour"]
+        Dispatch --> Submodule
+    end
+
+    Notify --> NotifRunner
+```
+
+== Configuration DevContainer <annex:devcontainer-config>
+```json
+{
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	// Mount an optional volume to have git working properly
+	"mounts": [
+		"source=${localWorkspaceFolder}/../.git/modules/crm-backend,target=/workspaces/.git/modules/crm-backend,type=bind"
+	]
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
 ```
