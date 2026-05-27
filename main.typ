@@ -12,27 +12,20 @@
       specialty: "Génie Électrique et Informatique",
     ),
   ),
-  thanks: (
-    (
-      first-name: "Eric",
-      last-name: "Paques",
-      role: "Promoteur, CeCoTePe",
-    )
-  ),
   bibliography-file: "../ref.bib",
   annex: include "annex.typ",
   binding: false,
 )
-
+#set text(lang: "fr")
 = Remerciements
 
-Je tiens à remercier Eric Paques, mon promoteur au sein du CeCoTePe, pour son encadrement, sa confiance et ses conseils avisés tout au long de ce travail.
+Je tiens à remercier Éric Paque, mon promoteur au sein du CeCoTePe, pour son encadrement, sa confiance et ses conseils avisés tout au long de ce travail.
 
 Je remercie également les membres de l'équipe BEMS de l'Université de Liège pour leur collaboration et leurs retours constructifs lors des réunions de coordination hebdomadaires.
 
-J'exprime ma gratitude envers l'ensemble des partenaires du projet Locomotrice — le CeCoTePe, l'Université de Liège et Émission Zéro — pour leur engagement dans cette recherche visant à faciliter la transition énergétique participative.
+J'exprime ma gratitude envers l'ensemble des partenaires du projet Locomotrice, le CeCoTePe, l'Université de Liège et Émission Zéro, pour leur engagement dans cette recherche visant à faciliter la transition énergétique participative.
 
-Je tiens aussi à saluer les membres de la communauté open source pour leur travail acharné et leur contribution à l'écosystème logiciel, qui m'ont inspiré dans la structuration et la gouvernance de ce projet.
+Je tiens aussi à saluer les membres de la communauté open-source pour leur travail acharné et leur contribution à l'écosystème logiciel, qui m'ont inspiré dans la structuration et la gouvernance de ce projet.
 
 Mes remerciements s'adressent également à l'équipe éducative de l'ISIL, qui m'a soutenu tout au long de mon cursus académique.
 
@@ -50,27 +43,27 @@ This Master's Thesis presents the transition of the OptimCE subproject—develop
 == Problem Statement
 
 The challenges addressed include:
-- Code Quality: Improving readability, modularity, and developer experience.
-- Reproducibility: Simplifying the infrastructure to ensure smooth installation.
-- Simplification: Reducing the project's complexity, which is currently excessive for its scale.
-- Documentation: Creating clear resources tailored to different audiences.
-- Testing: Implementing unit and integration tests to ensure stability.
-- Communication: Developing a promotion strategy to maximize adoption.
-- Governance: Establishing collaborative processes for effective development.
+- *Code Quality*: Improving readability, modularity, and developer experience.
+- *Reproducibility*: Simplifying the infrastructure to ensure smooth installation.
+- *Simplification*: Reducing the project's complexity, which is currently excessive for its scale.
+- *Documentation*: Creating clear resources tailored to different audiences.
+- *Testing*: Implementing unit and integration tests to ensure stability.
+- *Communication*: Developing a promotion strategy to maximize adoption.
+- *Governance*: Establishing collaborative processes for effective development.
 
 == Methodology
 
 The approach combines:
-- Architectural Audit: Identifying anti-patterns (e.g., Distributed Monolith).
-- Refactoring: Merging redundant components (e.g., Backend Database and Backend).
-- DevOps: Integrating CI/CD and automation.
-- Tooling: Developing solutions for deployment and collaboration.
-- Benchmarking: Studying best practices from established open-source projects.
-- Communication Tools: Using available tools to facilitate collaboration.
+- *Architectural Audit*: Identifying anti-patterns (e.g., Distributed Monolith).
+- *Refactoring*: Merging redundant components (e.g., Backend Database and Backend).
+- *DevOps*: Integrating CI/CD#footnote[Continuous Integration / Continuous Deployment — pratiques d'intégration et de déploiement continus du code.] and automation.
+- *Tooling*: Developing solutions for deployment and collaboration.
+- *Benchmarking*: Studying best practices from established open-source projects.
+- *Communication Tools*: Using available tools to facilitate collaboration.
 
 == Results
 
-The refactoring resulted in a 73% reduction in memory consumption (3 GB to 800 MB), a significant decrease in synchronous REST calls between micro-services (leading to reduced system latency), and the implementation of a complete CI/CD pipeline with automated security scanning, dependency updates, and signed Docker images. The project is now structured as a modular architecture with independent Git repositories, a staging monorepo, and a one-command deployment system.
+The refactoring resulted in a 73% reduction in memory consumption (3 GB to 800 MB), a significant decrease in synchronous REST#footnote[Representational State Transfer — style d'architecture logicielle basé sur des appels HTTP sans état.] calls between micro-services#footnote[Architecture décomposant une application en services indépendants communiquant via le réseau.] (leading to reduced system latency), and the implementation of a complete CI/CD pipeline with automated security scanning, dependency updates, and signed Docker images. The project is now structured as a modular architecture with independent Git repositories, a staging monorepo, and a one-command deployment system.
 
 == Conclusion
 
@@ -81,7 +74,7 @@ By the end of this work, the OptimCE project is transformed into a stable, modul
 #set text(lang: "fr")
 = Résumé
 
-Ce mémoire de master présente la transition du sous-projet OptimCE — développé dans le cadre du projet de recherche Locomotrice — vers un modèle open source. L'objectif est de restructurer le projet pour le rendre accessible, maintenable et adaptable pour une communauté diversifiée, incluant des chercheurs, des entreprises et des communautés énergétiques.
+Ce mémoire de master présente la transition du sous-projet OptimCE, développé dans le cadre du projet de recherche Locomotrice, vers un modèle open-source. L'objectif est de restructurer le projet pour le rendre accessible, maintenable et adaptable pour une communauté diversifiée, incluant des chercheurs, des entreprises et des communautés énergétiques.
 
 == Problématique
 
@@ -101,7 +94,7 @@ L'approche combine :
 - *Refactoring* : Fusion des composants redondants (ex. : Backend Database et Backend).
 - *DevOps* : Intégration de CI/CD et automatisation.
 - *Outillage* : Développement de solutions pour le déploiement et la collaboration.
-- *Benchmarking* : Étude des meilleures pratiques de projets open source établis.
+- *Benchmarking* : Étude des meilleures pratiques de projets open-source établis.
 - *Outils de communication* : Utilisation d'outils disponibles pour faciliter la collaboration.
 
 == Résultats
@@ -110,24 +103,65 @@ Le refactoring a permis une réduction de 73 % de la consommation mémoire (de 3
 
 == Conclusion
 
-À l'issue de ce travail, le projet OptimCE a été transformé en une solution stable, modulaire et facilement réutilisable, caractérisée par une complexité technique réduite. Cette restructuration favorise son adoption par la communauté open source tout en assurant sa pérennité et en posant les bases d'une gouvernance collaborative et adaptable.
+À l'issue de ce travail, le projet OptimCE a été transformé en une solution stable, modulaire et facilement réutilisable, caractérisée par une complexité technique réduite. Cette restructuration favorise son adoption par la communauté open-source tout en assurant sa pérennité et en posant les bases d'une gouvernance collaborative et adaptable.
 
 #pagebreak()
 
 #set text(lang: "fr")
+= Lexique
+
+#table(
+  columns: (auto, 1fr),
+  inset: 3pt,
+  stroke: none,
+  [*Abréviation*], [Signification],
+  [*2PC*], [Two-Phase Commit : protocole de validation en deux phases pour les transactions distribuées],
+  [*ACID*], [Atomicité, Cohérence, Isolation, Durabilité],
+  [*BEMS*], [Building Energy Management System],
+  [*CeCoTePe*], [Centre de Coopération Technique et Pédagogique],
+  [*CI/CD*], [Continuous Integration / Continuous Deployment],
+  [*CRM*], [Customer Relationship Management],
+  [*CVE*], [Common Vulnerabilities and Exposures],
+  [*DDD*], [Domain-Driven Design],
+  [*DTO*], [Data Transfer Object],
+  [*DX*], [Developer Experience (Expérience Développeur)],
+  [*EMS*], [Energy Management System],
+  [*HEPL*], [Haute École de la Province de Liège],
+  [*IaC*], [Infrastructure as Code],
+  [*ISIL*], [Institut Supérieur Industriel de Liège],
+  [*JWT*], [JSON Web Token],
+  [*k3s*], [Distribution Kubernetes légère],
+  [*NATS*], [Broker de messages open-source],
+  [*OAuth 2.0*], [Open Authorization 2.0],
+  [*OIDC*], [OpenID Connect],
+  [*ORM*], [Object-Relational Mapping],
+  [*OTLP*], [OpenTelemetry Protocol],
+  [*PPS*], [Produit, Procédé ou Service],
+  [*REST*], [Representational State Transfer],
+  [*RGPD*], [Règlement Général sur la Protection des Données],
+  [*S3*], [Simple Storage Service],
+  [*SaaS*], [Software as a Service],
+  [*SDK*], [Software Development Kit],
+  [*SRE*], [Site Reliability Engineering],
+  [*TRL*], [Technology Readiness Level],
+  [*TTL*], [Time To Live],
+  [*VPS*], [Virtual Private Server],
+)
+
+#pagebreak()
 = Introduction
 
-Ce mémoire s'inscrit dans le cadre de la mise en open source du projet *OptimCE*, un composant clé du projet de recherche *Locomotrice*. Le projet Locomotrice est financé par l'appel à projets Win²Wal#footnote([Le programme Win²WAL finance, au sein des universités, hautes écoles et centres de recherche agréés, des projets de recherche industrielle qui permettront l'émergence d'un produit, d'un procédé ou d'un service (PPS).#cite(<Spw_2026_wallonie>)]) et inclut le CeCoTePe#footnote[Centre de Coopération Technique et Pédagogique, ASBL encadrant des formations professionnelles et de la recherche.], l'équipe BEMS de l'Université de Liège et Émission Zéro en tant que partenaire industriel. Son objectif est de faciliter la transition énergétique participative en développant une plateforme open source pour les communautés d'énergie #cite(<locomotrice>). Le projet se divise en deux volets : OptimCE — plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe — et EMS (Energy Management System) — sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
+Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE*, un composant clé du projet de recherche *Locomotrice*. Le projet Locomotrice est financé par l'appel à projets Win²Wal#footnote([Le programme Win²WAL finance, au sein des universités, hautes écoles et centres de recherche agréés, des projets de recherche industrielle qui permettront l'émergence d'un produit, d'un procédé ou d'un service (PPS).#cite(<Spw_2026_wallonie>)]) et inclut le CeCoTePe#footnote[Centre de Coopération Technique et Pédagogique, ASBL encadrant des formations professionnelles et de la recherche.], l'équipe BEMS de l'Université de Liège et Émission Zéro en tant que partenaire industriel. Son objectif est de faciliter la transition énergétique participative en développant une plateforme open-source pour les communautés d'énergie #cite(<locomotrice>). Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
 
 L'objectif principal d'OptimCE est de fournir une plateforme administrative de gestion de membres et d'informations spécifiques à la gestion d'une communauté d'énergie. L'entreprise repreneuse a comme seules exigences techniques l'utilisation de *Node.js* et de *Kubernetes*, sans exprimer de préférence particulière quant au système de gestion de bases de données. Ces décisions architecturales seront détaillées ultérieurement dans ce document.
 
 Le projet *OptimCE* atteint un niveau de maturité technologique (TRL#footnote[Technology Readiness Level : niveau de maturité technologique (1-9) indiquant la proximité d'un déploiement en production. Le niveau 7 signifie un système déjà testé et à faible risque.]) de 7 #cite(<Horizon_Europe_2026_gouv>). Ce niveau indique que le projet est proche d'un état opérationnel, prêt à être déployé en production. Initialement, ce développement était prévu pour être réalisé par un seul développeur dans le cadre interne de la Haute École de la Province de Liège (HEPL).
 
-Ce travail a été réalisé au sein des locaux de l'ISIL (Institut Supérieur Industriel de Liège) sur une période de 8 mois, d'octobre à mai, sous l'encadrement d'Eric Paques. Des réunions hebdomadaires de coordination avec l'Université de Liège ont également été organisées pour assurer la synchronisation entre les volets OptimCE et EMS du projet.
+Ce travail a été réalisé au sein des locaux de l'ISIL (Institut Supérieur Industriel de Liège) sur une période de 8 mois, d'octobre à mai, sous l'encadrement d'Éric Paque. Des réunions hebdomadaires de coordination avec l'Université de Liège ont également été organisées pour assurer la synchronisation entre les volets OptimCE et EMS du projet.
 
 == Contexte du projet Locomotrice
 
-Le projet Locomotrice, initialement développé dans un cadre de recherche, doit être rendu open source afin d'être accessible à la communauté d'utilisateurs ainsi qu'aux entreprises susceptibles de le reprendre. Cette transition hors du contexte académique pose plusieurs défis majeurs.
+Le projet Locomotrice, initialement développé dans un cadre de recherche, doit être rendu open-source afin d'être accessible à la communauté d'utilisateurs ainsi qu'aux entreprises susceptibles de le reprendre. Cette transition hors du contexte académique pose plusieurs défis majeurs.
 
 == Problématique
 
@@ -139,7 +173,7 @@ Comment transformer un prototype de recherche complexe et fragile en une solutio
 
 - *Licences* : Comment choisir une licence open-source compatible avec les usages envisagés (usage communautaire, usage commercial, contributions externes) et sécuriser juridiquement la publication du code ?
 
-- *Attractivité et Expérience Développeur (DX)* : La réussite d'un projet open source repose fondamentalement sur sa capacité à attirer et à fidéliser des contributeurs. Face à un code initialement conçu par un développeur/chercheur solo, aux pratiques ou au formatage parfois hétérogènes, comment instaurer une base de travail lisible, cohérente et rassurante ? L'enjeu est d'optimiser l'expérience développeur pour éliminer les barrières à l'entrée et toute friction technique qui risqueraient de décourager la bonne volonté de la communauté.
+- *Attractivité et Expérience Développeur (DX)* : La réussite d'un projet open-source repose fondamentalement sur sa capacité à attirer et à fidéliser des contributeurs. Face à un code initialement conçu par un développeur/chercheur solo, aux pratiques ou au formatage parfois hétérogènes, comment instaurer une base de travail lisible, cohérente et rassurante ? L'enjeu est d'optimiser l'expérience développeur pour éliminer les barrières à l'entrée et toute friction technique qui risqueraient de décourager la bonne volonté de la communauté.
 
 - *Reproductibilité et portabilité du projet* : Comment réduire la complexité actuelle du projet pour garantir une installation facile ?
 
@@ -182,7 +216,7 @@ Dans un contexte académique, cette dette est particulièrement insidieuse : les
 
 La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans notre projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un *monolithe distribué*, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
 
-Ces concepts — lois de Lehman, dette technique et dérive architecturale — constituent le prisme théorique à travers lequel nous analyserons l'état initial du projet OptimCE et les choix de refactoring opérés.
+Ces concepts, lois de Lehman, dette technique et dérive architecturale, constituent le prisme théorique à travers lequel nous analyserons l'état initial du projet OptimCE et les choix de refactoring opérés.
 
 == Architectures logicielles : du monolithe aux micro-services
 
@@ -222,9 +256,9 @@ Un bon candidat au statut de micro-service indépendant présente les caractéri
 
 À l'inverse, un module intensivement dépendant des données d'autres services, qui scale de manière identique et n'effectue pas de tâches asynchrones lourdes, a tout intérêt à être intégré au monolithe.
 
-=== Domain Driven Design (DDD) <ddd>
+=== Domain-Driven Design (DDD) <ddd>
 
-Pour mener ce travail d'analyse, le Domain Driven Design propose une méthode se basant sur la structure du domaine métier plutôt que sur des considérations purement techniques. Les concepts de *bounded contexts* et d'*ubiquitous language* permettent d'identifier les zones de cohérence sémantique où un service peut opérer de manière autonome.
+Pour mener ce travail d'analyse, le Domain-Driven Design propose une méthode se basant sur la structure du domaine métier plutôt que sur des considérations purement techniques. Les concepts de *bounded contexts* et d'*ubiquitous language* permettent d'identifier les zones de cohérence sémantique où un service peut opérer de manière autonome.
 
 Le principe fondamental du DDD est que chaque bounded context possède sa propre représentation des entités partagées. Prenons l'exemple d'un client :
 - Pour un service de livraison, c'est une adresse et un prix payé
@@ -276,7 +310,7 @@ L'infrastructure as code (IaC) permet de définir et versionner l'infrastructure
 = Méthodologie et solutions proposées
 
 == Suivi du projet
-Un suivi rigoureux du projet est essentiel pour garantir la transparence, la coordination et la documentation des décisions tout au long du développement. Un projet open source, en particulier, nécessite une communication claire et une documentation accessible pour permettre à la communauté de comprendre les choix techniques et de contribuer efficacement.
+Un suivi rigoureux du projet est essentiel pour garantir la transparence, la coordination et la documentation des décisions tout au long du développement. Un projet open-source, en particulier, nécessite une communication claire et une documentation accessible pour permettre à la communauté de comprendre les choix techniques et de contribuer efficacement.
 === Notion
 Le suivi du projet a été effectué via *Notion*, utilisé comme gestionnaire de tâches (Kanban) et comme support de documentation des décisions architecturales. Une partie significative de ce mémoire a été rédigée en se basant sur les recherches préalables aux différentes implémentations, documentées au fil du travail.
 
@@ -302,7 +336,7 @@ Ce processus documentaire s'est révélé indispensable, non seulement pour rati
 
 === Alternatives libres et pérennité
 
-Il convient toutefois d'émettre quelques réserves quant à l'utilisation de Notion dans le cadre d'un projet open source, particulièrement concernant la pérennité de la documentation. Notion étant une *plateforme propriétaire*, il existe un risque inhérent de perte de données ou de restriction d'accès à l'avenir. Il est donc indispensable de définir une stratégie de sauvegarde régulière, par exemple en exportant les pages aux formats Markdown ou PDF, pour en garantir la disponibilité à long terme. Une alternative plus en adéquation avec la philosophie du projet consisterait à migrer vers des solutions open source éprouvées, telles qu'un wiki auto-hébergé couplé à une instance Kanban libre de droits.
+Il convient toutefois d'émettre quelques réserves quant à l'utilisation de Notion dans le cadre d'un projet open-source, particulièrement concernant la pérennité de la documentation. Notion étant une *plateforme propriétaire*, il existe un risque inhérent de perte de données ou de restriction d'accès à l'avenir. Il est donc indispensable de définir une stratégie de sauvegarde régulière, par exemple en exportant les pages aux formats Markdown ou PDF, pour en garantir la disponibilité à long terme. Une alternative plus en adéquation avec la philosophie du projet consisterait à migrer vers des solutions open-source éprouvées, telles qu'un wiki auto-hébergé couplé à une instance Kanban libre de droits.
 
 === Jira et Confluence
 
@@ -312,24 +346,24 @@ Bien que Jira et Confluence soient des standards de l'industrie pour la gestion 
 
 Le choix de Notion s'est finalement justifié par sa simplicité, sa flexibilité et sa capacité à centraliser de manière homogène le pilotage des tâches et la documentation technique. Néanmoins, pour rester en parfaite cohérence avec les principes de l'open source à long terme, ce compromis devra sans doute céder sa place à une infrastructure libre.
 
-En définitive, l'utilisation en continu d'un écosystème de suivi moderne a constitué un atout majeur. Elle a fluidifié la coordination et autorisé une traçabilité beaucoup plus granulaire que les méthodes classiques de reporting employées dans la recherche académique. En effet, l'exercice de la note d'avancement, souvent rédigée semestriellement par stricte obligation pour les validateurs financiers, s'avère chronophage, de nature narrative et pauvre en transmission technique pour d'autres développeurs. À l'inverse, la documentation « au fil de l'eau » mise en place a généré un patrimoine informationnel immédiat et pérenne, directement valorisable, surtout dans le cadre d'un projet open source.
+En définitive, l'utilisation en continu d'un écosystème de suivi moderne a constitué un atout majeur. Elle a fluidifié la coordination et autorisé une traçabilité beaucoup plus granulaire que les méthodes classiques de reporting employées dans la recherche académique. En effet, l'exercice de la note d'avancement, souvent rédigée semestriellement par stricte obligation pour les validateurs financiers, s'avère chronophage, de nature narrative et pauvre en transmission technique pour d'autres développeurs. À l'inverse, la documentation « au fil de l'eau » mise en place a généré un patrimoine informationnel immédiat et pérenne, directement valorisable, surtout dans le cadre d'un projet open-source.
 
 == Revue du code et analyse de l'architecture
 
-L'analyse initiale du code source a révélé que l'architecture micro-services, bien qu'adaptée aux grandes équipes et aux déploiements cloud natifs, pose plusieurs défis majeurs dans le cadre d'un projet open source.
+L'analyse initiale du code source a révélé que l'architecture micro-services, bien qu'adaptée aux grandes équipes et aux déploiements cloud natifs, pose plusieurs défis majeurs dans le cadre d'un projet open-source.
 
 Bien que conçue pour offrir la résilience, la scalabilité et un déploiement indépendant des composants, cette architecture introduit une complexité opérationnelle accrue, notamment en matière de tests, de compréhension globale du système et de maintenance.
 
 Chaque micro-service, bien que faiblement couplé et déployable individuellement, nécessite une gestion fine des interconnexions, des protocoles de communication et des mécanismes de tolérance aux pannes, ce qui peut rendre le projet difficile à appréhender pour de nouveaux contributeurs ou pour une petite équipe de développeurs.
 
-Elle nécessite donc une infrastructure et une culture de développement orientées vers les grandes équipes et/ou les entreprises. Un autre problème est que nous n'avions aucune certitude quant au déploiement du produit en tant que SaaS ; il pourrait très bien suivre une architecture auto-hébergée.
+Elle nécessite donc une infrastructure et une culture de développement orientées vers les grandes équipes et/ou les entreprises. Un autre problème est que nous n'avions aucune certitude quant au déploiement du produit en tant que SaaS#footnote[Software as a Service — modèle de distribution de logiciel où l'application est hébergée par un fournisseur.] ; il pourrait très bien suivre une architecture auto-hébergée.
 === Illustration du problème
 Lors de la division initiale, théoriquement, le code paraissait assez simple à suivre avec des frontières claires entre les composants.
 #figure(
   image("assets/architecture_simple.png"),
   caption: [Architecture initialement prévue],
 )
-Or cette division relève d'un domaine de recherche à part entière : le *Domain Driven Design* #cite(<2026_microsoft>), tel que détaillé dans la section sur les architectures logicielles au @ddd. Son objectif est d'étudier l'interaction et la définition des objets au sein de l'ensemble du code source d'un produit.
+Or cette division relève d'un domaine de recherche à part entière : le *DDD*, tel que détaillé dans la section sur les architectures logicielles au @ddd. Son objectif est d'étudier l'interaction et la définition des objets au sein de l'ensemble du code source d'un produit.
 
 L'intérêt du micro-service apparaît principalement lorsque les services manipulent les mêmes objets de façon totalement différente et ne les définissent même pas de la même manière, permettant ainsi une communication asynchrone où les données sont partiellement copiées et adaptées via un bus de communication.
 
@@ -384,7 +418,7 @@ Le monolithe distribué (notre architecture de départ par dérive) présentait 
 
 === Suppression des backend-db
 
-Initialement, une série de services avait pour rôle de transcrire les appels vers les bases de données en API REST. Bien que cette abstraction pût se justifier pour assurer une stricte séparation, elle apportait une couche de complexité supplémentaire qui n'était plus nécessaire dans notre contexte : chaque micro-service peut en effet accéder directement à sa propre base de données via une bibliothèque ORM. Nous avons donc préféré les fusionner avec les services qui les utilisaient, ce qui a permis d'alléger l'architecture en réduisant le nombre de conteneurs à déployer et à maintenir.
+Initialement, une série de services avait pour rôle de transcrire les appels vers les bases de données en API REST. Bien que cette abstraction pût se justifier pour assurer une stricte séparation, elle apportait une couche de complexité supplémentaire qui n'était plus nécessaire dans notre contexte : chaque micro-service peut en effet accéder directement à sa propre base de données via une bibliothèque ORM#footnote[Object-Relational Mapping — technique de correspondance entre les objets d'un langage de programmation et les tables d'une base de données relationnelle.]. Nous avons donc préféré les fusionner avec les services qui les utilisaient, ce qui a permis d'alléger l'architecture en réduisant le nombre de conteneurs à déployer et à maintenir.
 
 === Fusion de composants
 Nous avons également procédé à une fusion de micro-services en raison d'appels synchrones trop fréquents et de leur impact négatif sur les performances :
@@ -414,9 +448,9 @@ L'architecture micro-services présente cependant certains avantages non néglig
 - *Fonctionnement asynchrone nécessaire* : certaines tâches peuvent s'avérer particulièrement demandeuses en calculs, chronophages, ou ne nécessiter aucune interaction directe avec le CRM. Dans ces cas de figure, il reste préférable de les isoler au sein de micro-services dédiés, garantissant ainsi une gestion optimisée des ressources et une scalabilité indépendante. Elles pourraient, par exemple, être relayées vers des instances dans le cloud ou exécutées sous forme de fonctions serverless (comme des AWS Lambda). Cette approche permettrait de réduire significativement les coûts d'infrastructure, dans la mesure où les ressources ne seraient allouées qu'au moment précis de l'exécution de ces tâches. Un tel modèle s'avère particulièrement pertinent dans le contexte d'une architecture hybride, combinant un hébergement sur site (on-premise) et des services cloud.
 
 - *Composants micro-services restants* :
-  - Notifications -> Utilisation de SDK aisé sans être limité par un langage spécifique, et qui peut être facilement externalisé vers des services cloud (ex. : AWS SNS, Twilio).
-  - Simulation/Génération de clés -> Tâches potentiellement lourdes nécessitant une gestion indépendante des ressources, et pouvant bénéficier de langages spécialisés pour les calculs mathématiques.
-  - Template -> Gestion de modèles de documents ou d'e-mails, qui peut nécessiter une logique spécifique et bénéficier d'une isolation pour faciliter les évolutions futures.
+  - *Notifications* : Utilisation de SDK aisé sans être limité par un langage spécifique, et qui peut être facilement externalisé vers des services cloud (ex. : AWS SNS, Twilio).
+  - *Simulation/Génération de clés* : Tâches potentiellement lourdes nécessitant une gestion indépendante des ressources, et pouvant bénéficier de langages spécialisés pour les calculs mathématiques.
+  - *Template* : Gestion de modèles de documents ou d'e-mails, qui peut nécessiter une logique spécifique et bénéficier d'une isolation pour faciliter les évolutions futures.
   Ces composants restent donc indépendants du CRM et peuvent être développés dans les langages les plus adaptés à leur fonctionnement. Dans la majorité des cas, ces modules pourraient être implémentés sous forme de fonctions lambda si nous opérions dans le cloud.
 === Schéma après modification
 
@@ -487,12 +521,12 @@ Nous retrouvons ainsi une arborescence de fichiers organisée de la manière sui
   - *to_model.ts* : convertit les DTO vers les modèles métier pour la logique métier.
 === Fusion de services
 
-La seconde partie de la refonte a concerné la fusion des composants users, community et opérations de partage dans le composant CRM (Customer Relationship Management). L'objectif a été de remplacer les nombreux appels REST entre ces composants par une gestion orientée objets de ces informations.
+La seconde partie de la refonte a concerné la fusion des composants users, community et opérations de partage dans le composant CRM. L'objectif a été de remplacer les nombreux appels REST entre ces composants par une gestion orientée objets de ces informations.
 
 Cette fusion a nécessité une réorganisation significative du code :
-- Harmonisation des modèles de données : les entités `User`, `Community` et `CommunityUser` ont été unifiées dans un seul contexte de domaine, avec des relations Many-to-Many gérées par l'ORM.
+- *Harmonisation des modèles de données* : les entités `User`, `Community` et `CommunityUser` ont été unifiées dans un seul contexte de domaine, avec des relations Many-to-Many gérées par l'ORM.
 - Les schémas de base de données des trois composants ont été consolidés en une seule base PostgreSQL.
-- Refactorisation des contrôleurs API : les endpoints REST des trois services ont été regroupés dans des contrôleurs unifiés, avec une gestion cohérente des erreurs et de la pagination.
+- *Refactorisation des contrôleurs API* : les endpoints REST des trois services ont été regroupés dans des contrôleurs unifiés, avec une gestion cohérente des erreurs et de la pagination.
 
 === Conclusion
 Ce changement a permis une réduction significative du nombre d'appels synchrones REST entre les micro-services. La diminution de la complexité est notable et nous a permis d'itérer plus rapidement.
@@ -524,10 +558,10 @@ Pour les outils développés par d'autres communautés et intégrés dans notre 
 === Création d'une politique de contribution
 Le projet dispose désormais d'une politique de contribution concise. Les contributeurs peuvent proposer des modifications via des pull requests, qui sont ensuite examinées par les mainteneurs du projet. Nous encourageons les contributions de tous types, qu'il s'agisse de corrections de bugs, d'ajout de fonctionnalités ou d'améliorations de la documentation.
 ==== Hiérarchie des contributeurs
-- Mainteneurs : responsables de la gestion globale du projet, de la validation des contributions et de la prise de décisions stratégiques.
-- Contributeurs internes : personnes travaillant directement sur le projet au sein de l'organisation, avec des droits d'accès étendus pour faciliter le développement.
-- Contributeurs externes : membres de la communauté qui proposent des contributions via des pull requests, avec des droits d'accès limités pour garantir la sécurité du projet.
-- Utilisateurs : personnes qui utilisent le projet. Ils peuvent signaler des bugs ou suggérer des améliorations via les issues, mais n'ont pas de droits d'accès au code.
+- *Mainteneurs* : responsables de la gestion globale du projet, de la validation des contributions et de la prise de décisions stratégiques.
+- *Contributeurs internes* : personnes travaillant directement sur le projet au sein de l'organisation, avec des droits d'accès étendus pour faciliter le développement.
+- *Contributeurs externes* : membres de la communauté qui proposent des contributions via des pull requests, avec des droits d'accès limités pour garantir la sécurité du projet.
+- *Utilisateurs* : personnes qui utilisent le projet. Ils peuvent signaler des bugs ou suggérer des améliorations via les issues, mais n'ont pas de droits d'accès au code.
 ==== Linting et formatage
 Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté selon les règles définies dans le README.md.
 - Nous avons intégré des outils de linting et de formatage dans les pipelines CI/CD pour automatiser ce processus et assurer une cohérence dans le code soumis par les contributeurs.
@@ -535,9 +569,9 @@ Pour garantir la qualité du code et faciliter les contributions, nous avons pr�
 - Nous encourageons l'utilisation de hooks Git (ex. : lint-staged) pour exécuter automatiquement les vérifications de linting et de formatage avant chaque commit, afin de réduire les erreurs et d'améliorer la qualité du code dès le début du processus de contribution.
 
 Nous utilisons donc les linters/formatters suivants selon les différentes technologies utilisées :
-- TypeScript : ESLint et Prettier
-- SQL : SQLFluff
-- Python : ruff
+- *TypeScript* : ESLint et Prettier
+- *SQL* : SQLFluff
+- *Python* : ruff
 Des configurations encore plus spécifiques peuvent être définies selon les besoins de chaque composant.
 
 Nous fournissons également un fichier agents.md pour aider les contributeurs à utiliser des agents d'IA (ex. : GitHub Copilot) pour compléter leurs relectures de code, en fournissant des conseils sur les meilleures pratiques et en suggérant des améliorations potentielles. Celui-ci contient les recommandations de linting et de formatage.
@@ -587,7 +621,7 @@ Plusieurs mécanismes assurent la sécurité du projet :
   caption: [Permissions et workflow de sécurité],
 )
 
-- *Dependabot* : Le fichier *dependabot.yml* configure la surveillance automatique des dépendances (npm, Docker, GitHub Actions, devcontainers). Des pull requests sont créées automatiquement pour les mises à jour de sécurité, avec une vérification hebdomadaire. La configuration complète est disponible en @annex:dependabot-config
+- *Dependabot* : Le fichier *dependabot.yml* configure la surveillance automatique des dépendances (npm, Docker, GitHub Actions, DevContainers). Des pull requests sont créées automatiquement pour les mises à jour de sécurité, avec une vérification hebdomadaire. La configuration complète est disponible en @annex:dependabot-config
 #figure(
   image("assets/dependabot.png"),
   caption: [Exemple de Pull Request générée par Dependabot],
@@ -642,7 +676,7 @@ Voici les principaux services définis dans le fichier docker-compose.dev.yml (v
 
 #figure(
   image("assets/docker-compose-dev-mermaid.png"),
-  caption: [Diagramme — docker-compose de développement @annex:docker-compose-dev-architecture],
+  caption: [Diagramme : docker-compose de développement @annex:docker-compose-dev-architecture],
 )
 
 
@@ -669,7 +703,7 @@ Le code source du script est disponible dans le dépôt du monorepo, et est con�
 L'automatisation du déploiement est une étape cruciale pour garantir la rapidité et la fiabilité des mises à jour du projet. Nous avons développé une série de services dédiés à la génération automatique des fichiers de configuration, qui s'intègrent directement dans le docker-compose de développement et de production :
 
 - *swagger-doc-gen* : ce service génère la documentation OpenAPI à partir du backend CRM. Les fichiers produits sont utilisés par le service suivant.
-- *krakend-config* : ce service génère la configuration de l'API gateway Krakend à partir des spécifications OpenAPI produites par le service précédent. Cela permet de maintenir la configuration de l'API gateway à jour avec les dernières modifications du backend, sans nécessiter d'intervention manuelle.
+- *krakend-config* : ce service génère la configuration de l'API Gateway KrakenD à partir des spécifications OpenAPI produites par le service précédent. Cela permet de maintenir la configuration de l'API Gateway à jour avec les dernières modifications du backend, sans nécessiter d'intervention manuelle.
 - *Configuration par templates* : plusieurs services sont dédiés à la génération de fichiers de configuration à partir de modèles et de variables d'environnement :
   - *keycloak-config* : produit le fichier de configuration du realm Keycloak (ceci est un fichier de configuration contenant les paramètres de configuration de l'instance).
   - *nginx-config* : adapte le reverse proxy selon que l'environnement utilise HTTP ou HTTPS.
@@ -704,7 +738,7 @@ Cette modification était par ailleurs nécessaire pour les déploiements Kubern
 
 La version de production est elle aussi faite en docker-compose (voir @annex:docker-compose-prod).
 
-Un aspect notable de cette configuration est que l'ensemble du déploiement se pilote via un unique fichier `.env`. En complétant une dizaine de champs (identifiants, URLs, ports, secrets), l'utilisateur obtient une infrastructure entièrement fonctionnelle : du reverse proxy à la télémétrie, en passant par l'authentification Keycloak, le stockage MinIO et l'API gateway Krakend. Cette simplicité de configuration réduit considérablement la barrière à l'entrée pour les utilisateurs finaux souhaitant auto-héberger le projet.
+Un aspect notable de cette configuration est que l'ensemble du déploiement se pilote via un unique fichier `.env`. En complétant une dizaine de champs (identifiants, URLs, ports, secrets), l'utilisateur obtient une infrastructure entièrement fonctionnelle : du reverse proxy à la télémétrie, en passant par l'authentification Keycloak, le stockage MinIO et l'API Gateway KrakenD. Cette simplicité de configuration réduit considérablement la barrière à l'entrée pour les utilisateurs finaux souhaitant auto-héberger le projet.
 
 Cependant, nous pouvons aisément faire des traductions du docker compose vers d'autres orchestrateurs de conteneurs, notamment :
 - Docker Swarm#footnote[Orchestrateur de conteneurs natif Docker. Plus simple que Kubernetes mais moins flexible. Gère scaling, failover et load-balancing.] : 
@@ -720,8 +754,8 @@ La version de production introduit plusieurs services absents du développement 
 - *crm-database-backup* et *keycloak-db-backup* : services de backup exécutés sur demande (profil `backup`) qui exportent les bases de données via `pg_dump` dans un répertoire persistant.
 === Déploiement réel
 
-La version actuellement déployée est basée sur Docker Compose et hébergée sur un VPS chez Hostinger. Nous avons retenu cette solution pour trois raisons principales :
-- La souveraineté des données : l'hébergement en Europe garantit le respect du RGPD.
+La version actuellement déployée est basée sur Docker Compose et hébergée sur un VPS#footnote[Virtual Private Server — serveur virtuel isolé au sein d'un serveur physique partagé.] chez Hostinger. Nous avons retenu cette solution pour trois raisons principales :
+- *La souveraineté des données* : l'hébergement en Europe garantit le respect du RGPD.
 - Le coût réduit, adapté au budget d'un projet de recherche.
 - La simplicité de l'interface de gestion, qui reflète le niveau de compétence technique attendu d'un utilisateur final auto-hébergeant le projet. Cette similarité nous permet d'évaluer de manière réaliste les défis de déploiement rencontrés par les utilisateurs finaux.
 ==== Pourquoi ne pas faire un déploiement sur cluster Kubernetes ?
@@ -770,13 +804,13 @@ L'authentification et l'autorisation du projet reposent sur Keycloak, un serveur
 
 OAuth 2.0 est un standard d'autorisation qui définit les mécanismes de partage d'informations et d'interaction entre services. Il ne gère pas directement l'authentification, mais permet à une application d'obtenir un accès limité à un compte utilisateur auprès d'un service.
 
-OpenID Connect (OIDC) complète OAuth 2.0 en ajoutant une couche d'authentification standardisée. Il impose l'ajout d'un troisième jeton, l'`id_token`, contenant les informations d'identité de l'utilisateur. L'avantage principal d'OIDC est l'interopérabilité : grâce à la standardisation des claims#footnote[Revendications standardisées dans le payload du JWT], il est possible de changer de fournisseur d'identité sans modifier l'application cliente.
+OIDC complète OAuth 2.0 en ajoutant une couche d'authentification standardisée. Il impose l'ajout d'un troisième jeton, l'`id_token`, contenant les informations d'identité de l'utilisateur. L'avantage principal d'OIDC est l'interopérabilité : grâce à la standardisation des claims#footnote[Revendications standardisées dans le payload du JWT], il est possible de changer de fournisseur d'identité sans modifier l'application cliente.
 
 ==== Mécanismes de vérification des jetons
 
 Notre architecture supporte deux approches pour la vérification des jetons d'accès :
 
-- *Jetons auto-contenus (JWT)* : Le jeton contient toutes les informations nécessaires (scopes, permissions, identité). Il est signé par le serveur d'autorisation et peut être vérifié localement par les microservices grâce à la clé publique, sans appel réseau supplémentaire. Seul le refresh token nécessite une vérification auprès du serveur OAuth pour contrôler d'éventuelles révocations.
+- *Jetons auto-contenus (JWT)*#footnote[JSON Web Token — format de jeton d'accès compact et auto-contenu, utilisé pour l'authentification.] : Le jeton contient toutes les informations nécessaires (scopes, permissions, identité). Il est signé par le serveur d'autorisation et peut être vérifié localement par les microservices grâce à la clé publique, sans appel réseau supplémentaire. Seul le refresh token nécessite une vérification auprès du serveur OAuth pour contrôler d'éventuelles révocations.
 - *Jetons opaques* : Le jeton ne contient aucune information lisible. Le backend doit interroger le serveur d'autorisation via une route d'introspection pour vérifier sa validité à chaque requête.
 
 L'approche JWT auto-contenu a été privilégiée pour sa performance, car elle évite un appel réseau synchrone à chaque requête authentifiée.
@@ -841,7 +875,7 @@ Cette approche permet de fournir une configuration prête à l'emploi dès le la
 
 Certains services ont nécessité le développement de petits outils pour préparer leurs fichiers, ou l'utilisation de sidecars.
 
-- *Swagger2Krakend* : outil développé pour automatiser la génération des configurations de l'API gateway Krakend à partir de spécifications OpenAPI. Intégré au monorepo, ce projet open-source est utilisé dans les pipelines de développement et de production pour maintenir ces configurations à jour. Développé en Python, il permet de spécifier, via un fichier de configuration YAML, les différentes règles à appliquer aux spécifications des API définies au format OpenAPI. Un exemple de ces règles est disponible en @annex:swagger-to-krakend-config. Par exemple, il est possible de sécuriser une API en imposant la vérification du JWT pour toutes les connexions entrantes sur un endpoint donné, ou encore d'appliquer du rate-limiting. Si cet outil a été initialement conçu dans un souci de gain de temps, il a grandement facilité l'évolution et la sécurisation rapide de l'infrastructure.
+- *Swagger2Krakend* : outil développé pour automatiser la génération des configurations de l'API Gateway KrakenD à partir de spécifications OpenAPI. Intégré au monorepo, ce projet open-source est utilisé dans les pipelines de développement et de production pour maintenir ces configurations à jour. Développé en Python, il permet de spécifier, via un fichier de configuration YAML, les différentes règles à appliquer aux spécifications des API définies au format OpenAPI. Un exemple de ces règles est disponible en @annex:swagger-to-krakend-config. Par exemple, il est possible de sécuriser une API en imposant la vérification du JWT pour toutes les connexions entrantes sur un endpoint donné, ou encore d'appliquer du rate-limiting. Si cet outil a été initialement conçu dans un souci de gain de temps, il a grandement facilité l'évolution et la sécurisation rapide de l'infrastructure.
 
 - *Génération de fichiers de configuration à partir de templates* : Kubernetes dispose d'une solution native pour ce problème (ConfigMap), mais celle-ci n'existe pas dans l'écosystème Docker. Des fichiers templates ont par conséquent été créés pour chaque configuration à modifier automatiquement. L'utilitaire Unix `envsubst` (fourni par le paquet `gettext`) a été utilisé pour remplacer les variables d'environnement par leurs valeurs actuelles et produire le fichier de configuration final. Ce fichier est ensuite monté dans le conteneur correspondant. Une image OCI minimale contenant cet utilitaire a de plus été assemblée (voir @annex:envsubstub-dockerfile).
 #figure(
@@ -954,13 +988,13 @@ L'architecture du projet expose plusieurs points d'entrée potentiels qui ont é
 Plusieurs mesures de sécurité ont été appliquées au niveau des conteneurs :
 - *Signature des images* : Chaque image Docker publiée est signée avec Cosign via Sigstore (détails dans la section Résultats).
 - *Registre accessible publiquement en lecture* : Les images sont hébergées sur GitHub Container Registry. La lecture est publique pour faciliter le déploiement, mais l'écriture est strictement restreinte aux workflows CI/CD authentifiés.
-- *Mises à jour des dépendances* : Dependabot surveille les dépendances npm, Docker, GitHub Actions et devcontainers, créant automatiquement des pull requests pour les mises à jour de sécurité.
+- *Mises à jour des dépendances* : Dependabot surveille les dépendances npm, Docker, GitHub Actions et DevContainers, créant automatiquement des pull requests pour les mises à jour de sécurité.
 - *Analyse statique* : CodeQL scanne le code à chaque contribution pour détecter les vulnérabilités connues (injections SQL, XSS, etc.).
 
 === Segmentation réseau
 
 La politique de communication entre services a été renforcée dans la version de production. Alors que l'environnement de développement utilise deux réseaux (`backend` et `reverse-proxy`), la production en déploie cinq pour une isolation plus fine :
-- *api-gateway* : réseau partagé entre Krakend, le backend CRM et le reverse-proxy.
+- *api-gateway* : réseau partagé entre KrakenD, le backend CRM et le reverse-proxy.
 - *crm* : réseau isolé pour le backend CRM, sa base de données et le migrateur.
 - *keycloak* : réseau dédié à Keycloak, sa base de données et le healthcheck sidecar.
 - *minio* : réseau isolé pour le stockage S3.
@@ -1007,7 +1041,7 @@ De plus, une architecture micro-services pure introduit des problématiques comp
 - *Propagation d'état pilotée par événements* : Chaque donnée doit avoir un unique service détenteur de la vérité (source of truth). Les autres services maintiennent des modèles de lecture localement, acceptant une consistance éventuelle.
 - *Pattern Transactional Outbox* : Toute modification dans la base de données du service source doit générer un événement de manière atomique, garantissant qu'aucun changement ne soit perdu.
 - *Idempotence* : Les consommateurs d'événements doivent ignorer les doublons par conception, car la livraison au moins une fois (at-least-once) est la norme dans les systèmes asynchrones.
-- *Compensation plutôt que transactions distribuées* : En cas d'erreur, il faut implémenter des événements de compensation pour annuler les opérations précédentes, car les transactions ACID distribuées (2PC) ne sont pas viables à grande échelle.
+- *Compensation plutôt que transactions distribuées* : En cas d'erreur, il faut implémenter des événements de compensation pour annuler les opérations précédentes, car les transactions ACID#footnote[Atomicité, Cohérence, Isolation, Durabilité — propriétés garantissant la fiabilité des transactions en base de données.] distribuées (2PC#footnote[Two-Phase Commit — protocole de validation en deux phases pour les transactions distribuées.]) ne sont pas viables à grande échelle.
 - *Watchdogs de consistance* : Des mécanismes de vérification périodique sont nécessaires pour détecter et corriger les divergences entre les données répliquées.
 - *Contrats et schémas d'événements* : La structure des événements doit être strictement définie et versionnée pour éviter les incompréhensions entre services.
 
@@ -1040,7 +1074,7 @@ La gestion sécurisée des secrets (identifiants de base de données, clés API,
 Notre recherche sur Vault a identifié plusieurs modèles d'intégration prometteurs :
 - *Authentification Kubernetes* : Utilisation des Service Accounts pour authentifier les pods de manière native, permettant une rotation automatique des secrets.
 - *AppRole pour Docker Swarm* : Workflow basé sur le stockage des `secretID` dans les secrets Docker, adapté aux environnements non-Kubernetes.
-- *Accès "Just-in-Time"* : Génération de credentials à durée de vie limitée (TTL) avec révocation instantanée en cas de suspicion de compromission, réduisant considérablement la fenêtre d'attaque.
+- *Accès "Just-in-Time"* : Génération de credentials à durée de vie limitée (TTL#footnote[Time To Live — durée de vie maximale d'une donnée avant son expiration.]) avec révocation instantanée en cas de suspicion de compromission, réduisant considérablement la fenêtre d'attaque.
 
 Les modèles de livraison identifiés incluent :
 - *Zero-Touch (Agent Injector)* : Injection d'un sidecar qui expose les secrets comme des fichiers locaux, gérant automatiquement l'authentification et la rotation.
@@ -1102,15 +1136,19 @@ Plusieurs axes d'amélioration ont été identifiés pour les développements fu
 
 == Retour d'expérience
 
-Ce travail a été l'occasion de tirer plusieurs enseignements clés pour la pérennisation d'un projet de recherche en open-source :
+Ce travail a confirmé une conviction forte : il n’existe pas de silver bullet en ingénierie. Il n’y a que des bonnes réponses, adaptées à leur contexte. Voici les enseignements clés tirés de l’expérience OptimCE, qui illustrent cette réalité :
 
-- *Le Domain-Driven Design n'est pas optionnel dès qu'on dépasse deux services* : l'absence d'une analyse DDD initiale a conduit à un monolithe distribué. Quelques jours de modélisation du domaine en amont auraient évité des mois de refactoring.
+- *Domain-Driven Design* : n'est pas optionnel dès qu'on dépasse deux services. L'absence d'une analyse DDD initiale a conduit à un monolithe distribué. Quelques jours de modélisation du domaine en amont auraient évité des semaines de refactoring.
 
-- *Kubernetes n'est pas la réponse à tout* : pour ~15 conteneurs sur un VPS unique, Docker Compose offre un meilleur rapport simplicité-efficacité. La tentation d'adopter Kubernetes « parce que c'est le standard » doit être pondérée par les besoins réels du projet.
+- *Kubernetes* : n'est pas la réponse à tout. Pour ~15 conteneurs sur un VPS unique, Docker Compose offre un meilleur rapport simplicité-efficacité. La tentation d'adopter Kubernetes « parce que c'est le standard » doit être pondérée par les besoins réels du projet.
 
-- *Documenter la dette technique est plus important que de la rembourser* : dans un projet de recherche, la dette est inévitable. Un tableau Kanban de suivi, couplé à une documentation des décisions architecturales, s'est avéré plus utile qu'un refactoring systématique et prématuré.
+- *Documenter la dette technique* : est plus important que de la rembourser. Dans un projet de recherche, la dette est inévitable. Un tableau Kanban de suivi, couplé à une documentation des décisions architecturales, s'est avéré plus utile qu'un refactoring systématique et prématuré.
 
-- *Les DevContainers ou une documentation extensive éliminent réellement le syndrome du « ça marche sur ma machine »* : l'investissement dans leur configuration a été largement rentabilisé par la réduction des problèmes d'environnement et du temps d'onboarding des nouveaux contributeurs.
+- *Documentation, gestionnaire de projet et DevContainers* : éliminent réellement le syndrome du « ça marche sur ma machine ». L'investissement dans leur configuration a été largement rentabilisé par la réduction des problèmes d'environnement et du temps d'onboarding des nouveaux contributeurs.
+
+- *CI/CD* : le ciment des équipes en communication asymétrique
+Dans un contexte où les contributeurs ne communiquent pas en temps réel (fuseaux horaires décalés, équipes distribuées, ou contributions asynchrones), le CI/CD devient un pilier de la maintenabilité. En effet, cela impose une discipline collective. L'impact n'est donc pas que technique mais un outil de collaboration au même titre qu'un tableau Kanban ou les documents partagés.
+
 
 Ces leçons, bien que spécifiques au contexte d'OptimCE, illustrent des défis récurrents dans la transition de prototypes de recherche vers des projets open-source viables.
 
@@ -1130,7 +1168,7 @@ Sur le plan communautaire, les fondations ont été posées pour accueillir et f
 
 Notre participation s'est étendue au-delà du périmètre initial d'OptimCE, notamment avec le développement d'EcoArbiter, un algorithme de redistribution énergétique en temps réel écrit en Rust, conçu comme une alternative performante et équitable au projet proposé par l'ULiège dans le cadre du sous-projet EMS Global.
 
-Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, nous avons transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective — les trois piliers indispensables à sa pérennité.
+Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, nous avons transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective : les trois piliers indispensables à sa pérennité.
 
 Les perspectives futures incluent l'élargissement de la communauté de contributeurs, l'évolution vers un déploiement Kubernetes si la demande le justifie (notamment pour une offre SaaS), et l'intégration continue des retours des utilisateurs finaux pour guider les développements futurs. La transition vers l'open-source n'est pas un aboutissement, mais le début d'un processus d'amélioration continue qui devra être entretenu par la communauté.
 
