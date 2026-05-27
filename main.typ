@@ -598,7 +598,7 @@ Un *runner* est une machine virtuelle ou un conteneur chargé d'exécuter les é
 Par ailleurs, certaines fonctionnalités avancées possèdent leurs propres fichiers de configuration directement situés à la racine du répertoire `.github/`. C'est le cas des outils d'analyse de sécurité (tels que CodeQL) ou de gestion automatisée des dépendances (comme Dependabot), qui sont nativement interprétés par GitHub pour enclencher les processus de vérification correspondants.
 ==== Exemple de pipeline CI/CD
 On peut voir ci-dessous un exemple de l'arborescence des fichiers d'un dépôt (voir @annex:cicd-file-tree), avec les différents workflows CI/CD configurés pour les tests, la publication Docker, la notification de mise à jour du monorepo et la mise à jour de la documentation.
-Nous allons revenir sur chacun de ces workflows dans les sections suivantes.
+Chacun de ces workflows sera détaillé dans les sections suivantes.
 
 #figure(
   image("assets/cicd-pipeline-mermaid.png", width: 100%),
@@ -810,7 +810,7 @@ OIDC complète OAuth 2.0 en ajoutant une couche d'authentification standardisée
 
 ==== Mécanismes de vérification des jetons
 
-Notre architecture supporte deux approches pour la vérification des jetons d'accès :
+L'architecture supporte deux approches pour la vérification des jetons d'accès :
 
 - *Jetons auto-contenus (JWT)*#footnote[JSON Web Token — format de jeton d'accès compact et auto-contenu, utilisé pour l'authentification.] : Le jeton contient toutes les informations nécessaires (scopes, permissions, identité). Il est signé par le serveur d'autorisation et peut être vérifié localement par les microservices grâce à la clé publique, sans appel réseau supplémentaire. Seul le refresh token nécessite une vérification auprès du serveur OAuth pour contrôler d'éventuelles révocations.
 - *Jetons opaques* : Le jeton ne contient aucune information lisible. Le backend doit interroger le serveur d'autorisation via une route d'introspection pour vérifier sa validité à chaque requête.
@@ -969,7 +969,7 @@ La signature des images Docker avec Cosign garantit l'intégrité et la provenan
 
 Dès le mois de décembre, le projet avait atteint un niveau de fonctionnalité satisfaisant. Cependant, la complexité de l'architecture initiale rendait l'ajout de nouvelles fonctionnalités, voire même la réalisation de simples modifications, particulièrement laborieux. Chaque changement nécessitait d'intervenir dans de multiples composants fortement couplés, augmentant le risque de régressions et le temps de développement.
 
-Après le refactoring architectural et la mise en place des outils d'automatisation, la situation s'est nettement améliorée. Notre promoteur a constaté une amélioration significative de la vélocité de développement pour les prochains mois. La réduction de la complexité, la séparation claire des responsabilités et les pipelines CI/CD permettent désormais d'itérer rapidement et en toute confiance.
+Après le refactoring architectural et la mise en place des outils d'automatisation, la situation s'est nettement améliorée. Mon promoteur a constaté une amélioration significative de la vélocité de développement pour les prochains mois. La réduction de la complexité, la séparation claire des responsabilités et les pipelines CI/CD permettent désormais d'itérer rapidement et en toute confiance.
 
 Le déploiement et la mise à jour en une commande ont tenu leur promesse. L'infrastructure basée sur Docker Compose, couplée aux scripts d'automatisation développés, permet désormais de déployer l'ensemble du projet ou d'appliquer des mises à jour avec une simplicité déconcertante par rapport à la situation initiale. Cette fiabilité opérationnelle est un atout majeur pour l'adoption du projet par des utilisateurs finaux qui n'ont pas nécessairement une expertise DevOps avancée.
 
@@ -1032,7 +1032,7 @@ Bien que l'architecture soit conçue pour être compatible avec Kubernetes (via 
 
 === Monolithe modulaire vs micro-services complets
 
-Le choix de l'architecture modulaire (monolithe CRM + micro-services pour les composants spécifiques) est un compromis. Nous avons perdu certains avantages des micro-services purs :
+Le choix de l'architecture modulaire (monolithe CRM + micro-services pour les composants spécifiques) est un compromis. Certains avantages des micro-services purs ont été perdus :
 - L'indépendance de déploiement des composants fusionnés (users, community, partage)
 - La possibilité de scaler individuellement chaque fonctionnalité
 - L'isolation technologique complète
@@ -1053,7 +1053,7 @@ Pour un projet comme OptimCE, où les relations entre utilisateurs, communautés
 
 === Git submodules vs monorepo natif
 
-Nous avons choisi les Git submodules plutôt qu'un monorepo natif (avec outils comme Nx ou Turborepo) pour des raisons de simplicité et de familiarité. Cette approche présente des inconvénients :
+J'ai choisi les Git submodules plutôt qu'un monorepo natif (avec outils comme Nx ou Turborepo) pour des raisons de simplicité et de familiarité. Cette approche présente des inconvénients :
 - La gestion des submodules peut être source de confusion pour les contributeurs novices
 - Les dépendances entre submodules ne sont pas résolues automatiquement
 - Les outils CI/CD doivent être configurés séparément pour chaque dépôt
@@ -1071,9 +1071,9 @@ Cependant, pour le contexte cible (communautés d'énergie auto-hébergeant le p
 
 === Gestion des secrets : HashiCorp Vault
 
-La gestion sécurisée des secrets (identifiants de base de données, clés API, certificats) est un aspect critique de toute architecture distribuée. Nous avons étudié l'intégration de HashiCorp Vault, une solution leader dans ce domaine, mais avons finalement décidé de la rejeter pour le déploiement actuel.
+La gestion sécurisée des secrets (identifiants de base de données, clés API, certificats) est un aspect critique de toute architecture distribuée. L'intégration de HashiCorp Vault, une solution leader dans ce domaine, a été étudiée mais finalement écartée pour le déploiement actuel.
 
-Notre recherche sur Vault a identifié plusieurs modèles d'intégration prometteurs :
+La recherche sur Vault a identifié plusieurs modèles d'intégration prometteurs :
 - *Authentification Kubernetes* : Utilisation des Service Accounts pour authentifier les pods de manière native, permettant une rotation automatique des secrets.
 - *AppRole pour Docker Swarm* : Workflow basé sur le stockage des `secretID` dans les secrets Docker, adapté aux environnements non-Kubernetes.
 - *Accès "Just-in-Time"* : Génération de credentials à durée de vie limitée (TTL#footnote[Time To Live — durée de vie maximale d'une donnée avant son expiration.]) avec révocation instantanée en cas de suspicion de compromission, réduisant considérablement la fenêtre d'attaque.
@@ -1168,7 +1168,7 @@ La gouvernance du projet a été structurée autour d'une licence Apache 2.0, d'
 
 Sur le plan communautaire, les fondations ont été posées pour accueillir et fidéliser les contributeurs. La documentation adaptée à différents publics (développeurs, chercheurs, entreprises), les canaux de communication structurés (issues GitHub, forums) et les processus de revue de code transparents créent un environnement propice à la collaboration. L'organisation GitHub OptimCE centralise l'ensemble de ces éléments et offre une vitrine claire pour le projet. La réussite de cette transition open-source dépendra désormais de la capacité à fédérer une communauté active autour du projet, en maintenant un équilibre entre l'accessibilité pour les nouveaux venus et la rigueur technique nécessaire à la qualité du code.
 
-Notre participation s'est étendue au-delà du périmètre initial d'OptimCE, notamment avec le développement d'EcoArbiter, un algorithme de redistribution énergétique en temps réel écrit en Rust, conçu comme une alternative performante et équitable au projet proposé par l'ULiège dans le cadre du sous-projet EMS Global.
+Ma participation s'est étendue au-delà du périmètre initial d'OptimCE, notamment avec le développement d'EcoArbiter, un algorithme de redistribution énergétique en temps réel écrit en Rust, conçu comme une alternative performante et équitable au projet proposé par l'ULiège dans le cadre du sous-projet EMS Global.
 
 Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, j'ai transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective : les trois piliers indispensables à sa pérennité.
 
