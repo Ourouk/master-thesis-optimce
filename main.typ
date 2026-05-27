@@ -187,7 +187,7 @@ Comment transformer un prototype de recherche complexe et fragile en une solutio
 
 == Objectifs
 
-Notre travail se concentre sur :
+Ce travail se concentre sur :
 
 - L'amélioration de l'architecture et de la structure du code, afin de rendre le projet plus clair et modulaire.
 - La lisibilité et la qualité du code, via des bonnes pratiques et des outils de vérification.
@@ -198,7 +198,7 @@ L'objectif global est de rendre le projet stable, compréhensible et facilement 
 
 = État de l'art
 
-Cette section présente le cadre théorique et les références qui ont guidé nos choix architecturaux et organisationnels.
+Cette section présente le cadre théorique et les références qui ont guidé les choix architecturaux et organisationnels.
 
 == Évolution du code et dette technique
 
@@ -214,9 +214,9 @@ Dans un contexte académique, cette dette est particulièrement insidieuse : les
 
 === Dérive architecturale
 
-La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans notre projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un *monolithe distribué*, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
+La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans ce projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un *monolithe distribué*, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
 
-Ces concepts, lois de Lehman, dette technique et dérive architecturale, constituent le prisme théorique à travers lequel nous analyserons l'état initial du projet OptimCE et les choix de refactoring opérés.
+Ces concepts, lois de Lehman, dette technique et dérive architecturale, constituent le prisme théorique à travers lequel j'ai analysé l'état initial du projet OptimCE et les choix de refactoring opérés.
 
 == Architectures logicielles : du monolithe aux micro-services
 
@@ -267,7 +267,7 @@ Le principe fondamental du DDD est que chaque bounded context possède sa propre
 
 Chaque contexte ne conserve que les données qui lui sont pertinentes, évitant ainsi le couplage fort. Si deux services parlent d'un objet de la même manière, le DDD suggère qu'il n'y a pas de raison valable de les séparer.
 
-Dans le contexte de notre projet, l'absence d'une analyse DDD initiale a conduit à une définition imprécise des entités partagées entre services, générant un couplage fort et des appels synchrones excessifs. Le refactoring a consisté à identifier les bounded contexts naturels et à regrouper ceux qui partageaient la même sémantique.
+Dans le contexte de ce projet, l'absence d'une analyse DDD initiale a conduit à une définition imprécise des entités partagées entre services, générant un couplage fort et des appels synchrones excessifs. Le refactoring a consisté à identifier les bounded contexts naturels et à regrouper ceux qui partageaient la même sémantique.
 
 == Bonnes pratiques open-source
 
@@ -340,7 +340,7 @@ Il convient toutefois d'émettre quelques réserves quant à l'utilisation de No
 
 === Jira et Confluence
 
-Bien que Jira et Confluence soient des standards de l'industrie pour la gestion de projet et la documentation, leur adoption a été écartée ici. Ces plateformes, quoique très complètes, s'avèrent souvent complexes et surdimensionnées pour les besoins d'une équipe restreinte évoluant dans un cadre de recherche. Leur courbe d'apprentissage abrupte risque de constituer une barrière à l'entrée pour les contributeurs externes. À l'inverse, Notion offre une interface plus accessible et une souplesse parfaitement adaptée à notre contexte. Par ailleurs, l'expérience préalable du développeur principal avec cet outil en a grandement facilité l'intégration immédiate dans le flux de travail quotidien.
+Bien que Jira et Confluence soient des standards de l'industrie pour la gestion de projet et la documentation, leur adoption a été écartée ici. Ces plateformes, quoique très complètes, s'avèrent souvent complexes et surdimensionnées pour les besoins d'une équipe restreinte évoluant dans un cadre de recherche. Leur courbe d'apprentissage abrupte risque de constituer une barrière à l'entrée pour les contributeurs externes. À l'inverse, Notion offre une interface plus accessible et une souplesse parfaitement adaptée au contexte. Par ailleurs, l'expérience préalable du développeur principal avec cet outil en a grandement facilité l'intégration immédiate dans le flux de travail quotidien.
 
 === Bilan sur le système de suivi
 
@@ -356,7 +356,7 @@ Bien que conçue pour offrir la résilience, la scalabilité et un déploiement 
 
 Chaque micro-service, bien que faiblement couplé et déployable individuellement, nécessite une gestion fine des interconnexions, des protocoles de communication et des mécanismes de tolérance aux pannes, ce qui peut rendre le projet difficile à appréhender pour de nouveaux contributeurs ou pour une petite équipe de développeurs.
 
-Elle nécessite donc une infrastructure et une culture de développement orientées vers les grandes équipes et/ou les entreprises. Un autre problème est que nous n'avions aucune certitude quant au déploiement du produit en tant que SaaS#footnote[Software as a Service — modèle de distribution de logiciel où l'application est hébergée par un fournisseur.] ; il pourrait très bien suivre une architecture auto-hébergée.
+Elle nécessite donc une infrastructure et une culture de développement orientées vers les grandes équipes et/ou les entreprises. Un autre problème est que je n'avais aucune certitude quant au déploiement du produit en tant que SaaS#footnote[Software as a Service — modèle de distribution de logiciel où l'application est hébergée par un fournisseur.] ; il pourrait très bien suivre une architecture auto-hébergée.
 === Illustration du problème
 Lors de la division initiale, théoriquement, le code paraissait assez simple à suivre avec des frontières claires entre les composants.
 #figure(
@@ -369,7 +369,7 @@ L'intérêt du micro-service apparaît principalement lorsque les services manip
 
 En pratique, cette démarche d'analyse s'avère complexe. Dans le cadre de ce projet, l'évolution continue du domaine au fil du développement et une vision initiale incomplète de son ensemble ont mené à une définition imprécise des entités, entraînant ainsi une augmentation graduelle de la complexité technique.
 == Proposition de modifications
-Face à la complexité du projet, et dans l'objectif d'améliorer la lisibilité et l'expérience développeur, nous avons entrepris un important refactoring.
+Face à la complexité du projet, et dans l'objectif d'améliorer la lisibilité et l'expérience développeur, j'ai entrepris un important refactoring.
 
 === Anti-pattern : le monolithe distribué
 Le monolithe distribué est un anti-pattern où les services sont physiquement séparés mais logiquement fortement couplés, combinant les inconvénients des deux approches : complexité opérationnelle des micro-services sans les bénéfices de l'indépendance. Cet anti-pattern apparaît fréquemment lorsqu'une architecture micro-services est adoptée sans une analyse rigoureuse des frontières du domaine métier.
@@ -379,7 +379,7 @@ Le monolithe distribué est un anti-pattern où les services sont physiquement s
   caption: [Le monolithe distribué, source : Thomas Morin #cite(<Morintd_2026_dev>)],
 )
 
-Dans notre projet initial, l'utilisation intensive d'appels synchrones REST entre services créait exactement ce scénario : chaque service dépendait fortement des autres pour fonctionner, formant un réseau de dépendances où la défaillance d'un composant pouvait impacter l'ensemble du système.
+Dans le projet initial, l'utilisation intensive d'appels synchrones REST entre services créait exactement ce scénario : chaque service dépendait fortement des autres pour fonctionner, formant un réseau de dépendances où la défaillance d'un composant pouvait impacter l'ensemble du système.
 Le projet était tombé dans cet anti-pattern.
 
 Combinant les désavantages du monolithe et des microservices. #cite(<Morintd_2026_dev>). Des parties du projet étaient trop proches au niveau du domaine d'analyse et nécessitaient techniquement trop d'appels synchrones.
@@ -388,7 +388,7 @@ Ces appels synchrones rendaient les micro-services très interdépendants et né
 
 Ce n'est d'ailleurs pas une erreur de conception initiale, mais plutôt une conséquence naturelle d'une évolution continue du projet sans une vision globale claire du domaine métier. En effet, à mesure que de nouvelles fonctionnalités étaient ajoutées et que le domaine s'affinait, les frontières entre les services devenaient floues, entraînant une augmentation progressive de la complexité technique. L'erreur n'est donc pas une mauvaise décision initiale, mais plutôt l'absence d'une vision d'ensemble au début du projet, ce qui a conduit à une dérive vers un monolithe distribué.
 
-En plus d'une certaine pression du repreneur souhaitant l'utilisation de Kubernetes, qui est très adapté aux micro-services, mais pas nécessairement à notre projet, nous avons été confrontés à un dilemme : soit conserver l'architecture micro-services et accepter la complexité accrue, soit regrouper les services trop interdépendants pour réduire cette complexité.
+En plus d'une certaine pression du repreneur souhaitant l'utilisation de Kubernetes, qui est très adapté aux micro-services, mais pas nécessairement au projet, j'ai été confronté à un dilemme : soit conserver l'architecture micro-services et accepter la complexité accrue, soit regrouper les services trop interdépendants pour réduire cette complexité.
 
 #figure(
   image("assets/architecture.png"),
@@ -399,7 +399,7 @@ Une des idées était donc de rassembler les fonctionnalités redondantes dans d
 
 === Analyse comparative des architectures
 
-Avant de procéder au refactoring, nous avons évalué ces architectures :
+Avant de procéder au refactoring, j'ai évalué ces architectures :
 
 #table(
   columns: (auto, auto, auto, auto, auto),
@@ -414,14 +414,14 @@ Avant de procéder au refactoring, nous avons évalué ces architectures :
 )
 _Tableau comparatif des architectures évaluées pour le projet OptimCE._
 
-Le monolithe distribué (notre architecture de départ par dérive) présentait les pires scores en combinant les inconvénients des autres approches. Le monolithe pur a été rejeté car il aurait empêché l'utilisation de Python pour les composants mathématiques et limité la scalabilité future. Les micro-services complets ont été écartés en raison de la complexité opérationnelle excessive pour une équipe réduite. L'architecture modulaire, un monolithe modulaire couplé à des micro-services pour les composants nécessitant une indépendance technique, a été retenue comme compromis optimal.
+Le monolithe distribué (l'architecture de départ par dérive) présentait les pires scores en combinant les inconvénients des autres approches. Le monolithe pur a été rejeté car il aurait empêché l'utilisation de Python pour les composants mathématiques et limité la scalabilité future. Les micro-services complets ont été écartés en raison de la complexité opérationnelle excessive pour une équipe réduite. L'architecture modulaire, un monolithe modulaire couplé à des micro-services pour les composants nécessitant une indépendance technique, a été retenue comme compromis optimal.
 
 === Suppression des backend-db
 
-Initialement, une série de services avait pour rôle de transcrire les appels vers les bases de données en API REST. Bien que cette abstraction pût se justifier pour assurer une stricte séparation, elle apportait une couche de complexité supplémentaire qui n'était plus nécessaire dans notre contexte : chaque micro-service peut en effet accéder directement à sa propre base de données via une bibliothèque ORM#footnote[Object-Relational Mapping — technique de correspondance entre les objets d'un langage de programmation et les tables d'une base de données relationnelle.]. Nous avons donc préféré les fusionner avec les services qui les utilisaient, ce qui a permis d'alléger l'architecture en réduisant le nombre de conteneurs à déployer et à maintenir.
+Initialement, une série de services avait pour rôle de transcrire les appels vers les bases de données en API REST. Bien que cette abstraction pût se justifier pour assurer une stricte séparation, elle apportait une couche de complexité supplémentaire qui n'était plus nécessaire dans ce contexte : chaque micro-service peut en effet accéder directement à sa propre base de données via une bibliothèque ORM#footnote[Object-Relational Mapping — technique de correspondance entre les objets d'un langage de programmation et les tables d'une base de données relationnelle.]. J'ai donc préféré les fusionner avec les services qui les utilisaient, ce qui a permis d'alléger l'architecture en réduisant le nombre de conteneurs à déployer et à maintenir.
 
 === Fusion de composants
-Nous avons également procédé à une fusion de micro-services en raison d'appels synchrones trop fréquents et de leur impact négatif sur les performances :
+J'ai donc proposé la fusion des micro-services en raison d'appels synchrones trop fréquents et de leur impact négatif sur les performances :
 - Opérations de partage
 - Communauté
 - Membres
@@ -431,13 +431,13 @@ Ces fonctionnalités ont été regroupées vers un service unifié : le CRM (Cus
 Le nom de CRM a été choisi car c'est un nom assez commun dans les programmes SaaS, et il reflète bien la nature de ce service central qui gère les interactions avec les utilisateurs, les communautés et les opérations de partage. De plus, ce nom est suffisamment générique pour ne pas limiter l'évolution future du projet, tout en étant facilement compréhensible pour les développeurs et les utilisateurs finaux.
 
 === Fusion des frontends
-Les frontends, initialement séparés pour chaque micro-service, ont été fusionnés en une seule interface utilisateur. Cette décision a été motivée par le fait que les différentes fonctionnalités (gestion de communauté, gestion des membres, opérations de partage) sont étroitement liées du point de vue de l'utilisateur final. Les regrouper dans une interface unifiée améliore la cohérence de l'expérience utilisateur et simplifie la maintenance du code frontend, ce qui nous permet de partager les éléments d'interface communs (ex. : barre de navigation, styles) sans devoir les dupliquer ou les synchroniser entre plusieurs projets.
+Les frontends, initialement séparés pour chaque micro-service, ont été fusionnés en une seule interface utilisateur. Cette décision a été motivée par le fait que les différentes fonctionnalités (gestion de communauté, gestion des membres, opérations de partage) sont étroitement liées du point de vue de l'utilisateur final. Les regrouper dans une interface unifiée améliore la cohérence de l'expérience utilisateur et simplifie la maintenance du code frontend, ce qui permet de partager les éléments d'interface communs (ex. : barre de navigation, styles) sans devoir les dupliquer ou les synchroniser entre plusieurs projets.
 === Remplacement de certains composants par des services tiers
 Certains composants, tels que l'API Gateway, le service d'identité ou le stockage d'objets, ont été remplacés par des solutions tierces éprouvées (KrakenD, Keycloak, MinIO). Cette décision a été prise pour réduire la charge de maintenance, bénéficier de fonctionnalités avancées (ex. : sécurité, scalabilité) et accélérer le développement en s'appuyant sur des outils spécialisés.
 
-En effet, certains outils avaient été développés en interne pour répondre à des besoins spécifiques, mais leur maintenance et leur évolution représentaient une charge importante. En adoptant des solutions tierces, nous avons pu nous concentrer sur les fonctionnalités métier du projet tout en bénéficiant de la robustesse et de la communauté de support associée à ces outils.
+En effet, certains outils avaient été développés en interne pour répondre à des besoins spécifiques, mais leur maintenance et leur évolution représentaient une charge importante. En adoptant des solutions tierces, il a été possible de se concentrer sur les fonctionnalités métier du projet tout en bénéficiant de la robustesse et de la communauté de support associée à ces outils.
 
-Nous avons donc adapté notre architecture pour intégrer ces services tiers, en veillant à ce que les interfaces de communication soient clairement définies et que les données soient correctement synchronisées entre les différents composants du système.
+L'architecture a donc été adaptée et les interfaces de communication ont été définies et que les données soient correctement synchronisées entre les différents composants du système.
 === Justification du maintien de certains micro-services
 On pourrait se demander pourquoi ne pas fusionner l'ensemble dans l'application centrale.
 
@@ -451,7 +451,7 @@ L'architecture micro-services présente cependant certains avantages non néglig
   - *Notifications* : Utilisation de SDK aisé sans être limité par un langage spécifique, et qui peut être facilement externalisé vers des services cloud (ex. : AWS SNS, Twilio).
   - *Simulation/Génération de clés* : Tâches potentiellement lourdes nécessitant une gestion indépendante des ressources, et pouvant bénéficier de langages spécialisés pour les calculs mathématiques.
   - *Template* : Gestion de modèles de documents ou d'e-mails, qui peut nécessiter une logique spécifique et bénéficier d'une isolation pour faciliter les évolutions futures.
-  Ces composants restent donc indépendants du CRM et peuvent être développés dans les langages les plus adaptés à leur fonctionnement. Dans la majorité des cas, ces modules pourraient être implémentés sous forme de fonctions lambda si nous opérions dans le cloud.
+  Ces composants restent donc indépendants du CRM et peuvent être développés dans les langages les plus adaptés à leur fonctionnement. Dans la majorité des cas, ces modules pourraient être implémentés sous forme de fonctions lambda si le déploiement était effectué dans le cloud.
 === Schéma après modification
 
 ==== Composant central : CRM-backend :
@@ -479,7 +479,7 @@ L'architecture micro-services présente cependant certains avantages non néglig
 
 == Refactoring architectural
 === Implémentation de la couche d'accès aux données
-Afin de conserver une architecture solide et modulaire, nous avons adopté la structure suivante :
+Afin de conserver une architecture solide et modulaire, la structure suivante a été adoptée :
 ==== Mapping objet-relationnel
 Une librairie ORM permet de :
 - Définir des entités (comme Community) qui reflètent les tables de la base de données.
@@ -499,7 +499,7 @@ Les objets de transfert de données (DTO) structurent les informations retourné
 ==== Architecture complète
 Cette approche permet une séparation claire des différentes couches, ce qui est essentiel pour le principe de séparation des responsabilités #cite(<Separati80:online>).
 
-Nous retrouvons ainsi une arborescence de fichiers organisée de la manière suivante pour chaque module (voir @annex:file-architecture) :
+On retrouve ainsi une arborescence de fichiers organisée de la manière suivante pour chaque module (voir @annex:file-architecture) :
 - Couche API (Présentation)
   - *community.controller.ts* : gère les requêtes et réponses HTTP et délègue le traitement aux services.
   - *community.dtos.ts* : définit les DTO (Data Transfer Objects) pour la validation des requêtes et des réponses.
@@ -529,7 +529,7 @@ Cette fusion a nécessité une réorganisation significative du code :
 - *Refactorisation des contrôleurs API* : les endpoints REST des trois services ont été regroupés dans des contrôleurs unifiés, avec une gestion cohérente des erreurs et de la pagination.
 
 === Conclusion
-Ce changement a permis une réduction significative du nombre d'appels synchrones REST entre les micro-services. La diminution de la complexité est notable et nous a permis d'itérer plus rapidement.
+Ce changement a permis une réduction significative du nombre d'appels synchrones REST entre les micro-services. La diminution de la complexité est notable et a permis d'itérer plus rapidement.
 
 Ces modifications ont principalement été implémentées par Éric Paques. J'ai eu l'occasion de participer à la revue de code et à la validation des choix techniques, ainsi qu'à l'utilisation de ce nouveau modèle dans l'ajout de certaines fonctionnalités.
 == Mise en open-source
@@ -537,7 +537,7 @@ Ces modifications ont principalement été implémentées par Éric Paques. J'ai
 L'ancienne organisation des fichiers dans le code source était fonctionnelle mais complexe, avec de nombreux sous-dossiers. L'inconvénient principal était qu'un seul dépôt Git gérait l'entièreté du code source, ce qui augmentait fortement le nombre de fichiers à suivre.
 
 En conséquence, même des opérations basiques comme les commits et les fetch devenaient progressivement plus lentes. La structure complète de l'ancien projet est disponible en @annex:old-directory-structure
-Nous avons donc décidé de séparer chaque composant dans son propre dépôt Git. Cette approche présente plusieurs avantages majeurs pour un projet open-source :
+J'ai donc décidé de séparer chaque composant dans son propre dépôt Git. Cette approche présente plusieurs avantages majeurs pour un projet open-source :
 
 - *Modularité et indépendance* : Chaque composant peut être développé, testé et déployé indépendamment, permettant aux contributeurs de se concentrer sur un seul module sans impacter les autres.
 - *Gestion des versions granulaire* : Chaque dépôt possède son propre historique de versionnage, facilitant le suivi des modifications et les publications de versions individuelles.
@@ -546,39 +546,39 @@ Nous avons donc décidé de séparer chaque composant dans son propre dépôt Gi
 - *Réduction de la complexité* : Un dépôt de petite taille est plus facile à comprendre, à cloner et à maintenir pour les nouveaux contributeurs.
 
 === Création d'une organisation
-Nous avons créé une organisation GitHub dédiée au projet, permettant de centraliser la gestion des dépôts, des équipes et des permissions. Cette organisation facilite la collaboration entre les différents contributeurs et offre une meilleure visibilité pour le projet.
+J'ai été à l'initiative de la création d'une organisation GitHub dédiée au projet, permettant de centraliser la gestion des dépôts, des équipes et des permissions. Cette organisation facilite la collaboration entre les différents contributeurs et offre une meilleure visibilité pour le projet.
 
-Sous le nom OptimCE (#link("https://github.com/OptimCE")), nous avons en effet rassemblé tous les dépôts liés au projet. Cette organisation nous permet de centraliser la gestion des secrets et des pipelines CI/CD, ainsi que de créer des équipes de contributeurs avec des rôles spécifiques (mainteneurs, contributeurs, etc.).
+Sous le nom OptimCE (#link("https://github.com/OptimCE")), j'ai en effet rassemblé tous les dépôts liés au projet. Cette organisation permet de centraliser la gestion des secrets et des pipelines CI/CD, ainsi que de créer des équipes de contributeurs avec des rôles spécifiques (mainteneurs, contributeurs, etc.).
 === Choix de licence
-Le choix de la licence est une étape cruciale pour tout projet open-source, car elle définit les droits et les obligations des utilisateurs et des contributeurs. Après une analyse approfondie des différentes options, nous avons opté pour la licence Apache 2.0.
+Le choix de la licence est une étape cruciale pour tout projet open-source, car elle définit les droits et les obligations des utilisateurs et des contributeurs. Après analyse des différentes options, la licence Apache 2.0 a été retenue. Cette décision était nécessaire pour la publication publique du code source, c'est pourquoi j'ai poussé à un choix rapide.
 
 Cette licence offre un bon équilibre entre la permissivité et la protection juridique, permettant une utilisation commerciale tout en protégeant les contributeurs contre les litiges liés aux brevets. De plus, elle est largement reconnue et utilisée dans la communauté open-source, ce qui facilite l'adoption et la contribution au projet.
 
-Pour les outils développés par d'autres communautés et intégrés dans notre projet, nous avons veillé à ce qu'ils soient compatibles avec la licence Apache 2.0, afin d'assurer une cohérence juridique et de faciliter la réutilisation du code.
+Pour les outils développés par d'autres communautés et intégrés dans le projet, j'ai veillé à ce qu'ils soient compatibles avec la licence Apache 2.0, afin d'assurer une cohérence juridique et de faciliter la réutilisation du code.
 === Création d'une politique de contribution
-Le projet dispose désormais d'une politique de contribution concise. Les contributeurs peuvent proposer des modifications via des pull requests, qui sont ensuite examinées par les mainteneurs du projet. Nous encourageons les contributions de tous types, qu'il s'agisse de corrections de bugs, d'ajout de fonctionnalités ou d'améliorations de la documentation.
+Le projet dispose désormais d'une politique de contribution concise. Les contributeurs peuvent proposer des modifications via des pull requests, qui sont ensuite examinées par les mainteneurs du projet. Les contributions de tous types sont encouragées, qu'il s'agisse de corrections de bugs, d'ajout de fonctionnalités ou d'améliorations de la documentation.
 ==== Hiérarchie des contributeurs
 - *Mainteneurs* : responsables de la gestion globale du projet, de la validation des contributions et de la prise de décisions stratégiques.
 - *Contributeurs internes* : personnes travaillant directement sur le projet au sein de l'organisation, avec des droits d'accès étendus pour faciliter le développement.
 - *Contributeurs externes* : membres de la communauté qui proposent des contributions via des pull requests, avec des droits d'accès limités pour garantir la sécurité du projet.
 - *Utilisateurs* : personnes qui utilisent le projet. Ils peuvent signaler des bugs ou suggérer des améliorations via les issues, mais n'ont pas de droits d'accès au code.
 ==== Linting et formatage
-Pour garantir la qualité du code et faciliter les contributions, nous avons précisé que le code doit être formaté et linté selon les règles définies dans le README.md.
-- Nous avons intégré des outils de linting et de formatage dans les pipelines CI/CD pour automatiser ce processus et assurer une cohérence dans le code soumis par les contributeurs.
-- Nous avons également fourni des configurations de linting et de formatage dans les dépôts, ainsi que des scripts npm pour faciliter leur utilisation en local avant de soumettre une pull request.
-- Nous encourageons l'utilisation de hooks Git (ex. : lint-staged) pour exécuter automatiquement les vérifications de linting et de formatage avant chaque commit, afin de réduire les erreurs et d'améliorer la qualité du code dès le début du processus de contribution.
+Pour garantir la qualité du code et faciliter les contributions, j'ai précisé que le code doit être formaté et linté selon les règles définies dans le README.md.
+- J'ai intégré des outils de linting et de formatage dans les pipelines CI/CD pour automatiser ce processus et assurer une cohérence dans le code soumis par les contributeurs.
+- Des configurations de linting et de formatage ont également été fournies dans les dépôts, ainsi que des scripts npm pour faciliter leur utilisation en local avant de soumettre une pull request.
+- L'utilisation de hooks Git (ex. : lint-staged) est encouragée pour exécuter automatiquement les vérifications de linting et de formatage avant chaque commit, afin de réduire les erreurs et d'améliorer la qualité du code dès le début du processus de contribution.
 
-Nous utilisons donc les linters/formatters suivants selon les différentes technologies utilisées :
+Les linters/formatters suivants sont donc utilisés selon les différentes technologies :
 - *TypeScript* : ESLint et Prettier
 - *SQL* : SQLFluff
 - *Python* : ruff
 Des configurations encore plus spécifiques peuvent être définies selon les besoins de chaque composant.
 
-Nous fournissons également un fichier agents.md pour aider les contributeurs à utiliser des agents d'IA (ex. : GitHub Copilot) pour compléter leurs relectures de code, en fournissant des conseils sur les meilleures pratiques et en suggérant des améliorations potentielles. Celui-ci contient les recommandations de linting et de formatage.
+Un fichier agents.md est également fourni, faisant suite aux recherches sur les agents d'IA que j'ai menées dans le cadre de ce travail. Il aide les contributeurs à utiliser ces outils (ex. : GitHub Copilot) pour compléter leurs relectures de code, en fournissant des conseils sur les meilleures pratiques et en suggérant des améliorations potentielles. Celui-ci contient les recommandations de linting et de formatage.
 
 === Environnements de développement unifiés (DevContainers)
 
-Afin d'abaisser la barrière à l'entrée pour les nouveaux contributeurs et de garantir une reproductibilité parfaite des environnements de développement, nous avons intégré des configurations DevContainers au sein des différents dépôts de composants.
+Afin d'abaisser la barrière à l'entrée pour les nouveaux contributeurs et de garantir une reproductibilité parfaite des environnements de développement, j'ai intégré des configurations DevContainers au sein des différents dépôts de composants.
 
 Un DevContainer (Development Container) permet de définir un environnement de développement complet (outils, extensions de l'IDE, versions spécifiques des langages comme Node.js ou Python, et dépendances système) directement sous forme de code, comme illustré dans l'@annex:devcontainer-config. Ainsi, un contributeur souhaitant travailler sur un composant spécifique peut lancer un environnement préconfiguré et isolé via Docker, sans avoir à installer manuellement les prérequis sur sa machine hôte. Notons également que le montage de volumes spécifiques permet d'assurer le bon fonctionnement des outils de contrôle de version (tels que Git) au sein d'un espace de travail modulaire, l'utilisation de sous-modules ajoutant en effet une certaine complexité opérationnelle à cet égard.
 
@@ -633,16 +633,16 @@ Le workflow *docker-publish.yml* construit et publie les images Docker sur GitHu
 ==== Update documentation
 Le workflow *update-documentation.yml* génère et déploie la documentation OpenAPI sur GitHub Pages à chaque push sur la branche principale (en excluant les modifications du dossier `docs/` pour éviter les boucles). La génération utilise les commandes npm Swagger (voir @annex:swagger-npm-commands) produisant les formats YAML, Markdown et HTML. Le contenu du workflow est disponible en @annex:update-docs-workflow
 == Développement d'un monorepo de staging
-Pouvoir travailler sur chaque composant de manière indépendante constitue un avantage majeur pour la modularité et la maintenabilité du projet. Cela peut toutefois introduire des défis en termes de synchronisation et de coordination entre les différents composants. C'est pourquoi nous avons développé un monorepo de staging, qui sert de point central pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs.
+Pouvoir travailler sur chaque composant de manière indépendante constitue un avantage majeur pour la modularité et la maintenabilité du projet. Cela peut toutefois introduire des défis en termes de synchronisation et de coordination entre les différents composants. C'est pourquoi j'ai développé un monorepo de staging, qui sert de point central pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs.
 === Git submodules
-Nous avons utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est disponible en @annex:gitmodules-config
+J'ai utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est disponible en @annex:gitmodules-config
 Dans la syntaxe du fichier de configuration, on peut constater l'un des avantages de l'organisation GitHub : la possibilité d'utiliser des chemins relatifs pour les URL des submodules, ce qui facilite la gestion et la synchronisation des différents composants du projet.
 
 Cela permet aussi de télécharger l'ensemble du projet avec une seule commande `git clone --recurse-submodules`, ce qui est particulièrement utile pour les nouveaux contributeurs qui souhaitent se lancer dans le développement sans avoir à cloner chaque dépôt individuellement.
 
 Les différents IDE permettent aussi de gérer les versions de submodules de manière relativement simple, avec des interfaces graphiques pour synchroniser les submodules, vérifier les changements, etc.
 
-Nous avons principalement utilisé Visual Studio Code pour gérer les submodules.
+J'ai principalement utilisé Visual Studio Code pour gérer les submodules, et j'ai orienté l'équipe vers cet IDE pour sa bonne gestion des sous-modules.
 #figure(
   image("assets/vscode_submodules.png", height: 8cm),
   caption: [Gestion des submodules dans Visual Studio Code],
@@ -652,7 +652,7 @@ Cette capture d'écran présente l'interface de Visual Studio Code pour la gesti
 La possibilité d'isoler et de tester chaque branche de manière indépendante pour les divers composants s'avère particulièrement utile lors du développement et des tests, car elle permet de travailler sur des fonctionnalités spécifiques sans impacter les autres sous-projets.
 
 === Synchronisation automatique submodule vers monorepo
-Afin de faciliter la synchronisation entre les dépôts de composants et le monorepo de staging, nous avons mis en place un workflow GitHub Actions se déclenchant à chaque push sur les branches principales des dépôts de composants. Ce workflow utilise des scripts pour mettre à jour automatiquement les submodules dans le monorepo de staging, garantissant ainsi que celui-ci intègre toujours les dernières modifications apportées aux différents composants.
+Afin de faciliter la synchronisation entre les dépôts de composants et le monorepo de staging, j'ai mis en place un workflow GitHub Actions se déclenchant à chaque push sur les branches principales des dépôts de composants. Ce workflow utilise des scripts pour mettre à jour automatiquement les submodules dans le monorepo de staging, garantissant ainsi que celui-ci intègre toujours les dernières modifications apportées aux différents composants.
 
 Il est composé de deux éléments principaux :
 - Un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche principale, qui envoie un événement de type `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo. Voir le workflow en @annex:notify-monorepo-workflow
@@ -661,7 +661,7 @@ Ce workflow est déclenché par l'événement `repository_dispatch` envoyé par 
 
 Le token MONOREPO_TOKEN est généré sur demande par les mainteneurs du projet, et est stocké en tant que secret dans les paramètres de l'organisation, ce qui garantit sa sécurité tout en permettant une utilisation facile dans les workflows GitHub Actions.
 ==== Docker Compose de développement
-Pour faciliter le développement et les tests d'intégration, nous utilisons un fichier docker-compose dans le monorepo de staging qui permet de lancer l'ensemble de l'infrastructure du projet en local. Ce docker-compose intègre tous les composants du projet, ainsi que les services nécessaires pour leur fonctionnement.
+Pour faciliter le développement et les tests d'intégration, un fichier docker-compose est utilisé dans le monorepo de staging qui permet de lancer l'ensemble de l'infrastructure du projet en local. Ce docker-compose intègre tous les composants du projet, ainsi que les services nécessaires pour leur fonctionnement.
 
 Voici les principaux services définis dans le fichier docker-compose.dev.yml (voir @annex:docker-compose-dev), regroupés par catégorie :
 
@@ -684,23 +684,23 @@ Dans `docker-compose`, l'intégration repose surtout sur trois mécanismes : les
 
 Le mapping des ports permet de rendre accessible chaque service à l'extérieur du réseau Docker, ce qui est essentiel pour le développement. Les développeurs ont aussi accès à une liste des ports utilisés par chaque service dans la documentation du projet, afin de faciliter les tests et le débogage en local.
 
-Il est à noter que dans ce docker-compose, il y a beaucoup de *services de configuration*. Nous reviendrons sur ceux-ci plus tard dans la section dédiée à l'automatisation du déploiement, mais ils sont déjà utilisés dans le docker-compose de développement pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
+Il est à noter que dans ce docker-compose, il y a beaucoup de *services de configuration*. Ces points seront détaillés plus tard dans la section dédiée à l'automatisation du déploiement, mais ils sont déjà utilisés dans le docker-compose de développement pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
 
 ==== Test de staging
-Le monorepo de staging est utilisé pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs. En raison de leur temps d'exécution potentiellement très long, nous n'avons pas intégré de pipelines de tests d'intégration automatisés directement sur GitHub.
+Le monorepo de staging est utilisé pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs. En raison de leur temps d'exécution potentiellement très long, je n'ai pas intégré de pipelines de tests d'intégration automatisés directement sur GitHub.
 
-Néanmoins, nous avons conçu un script nommé `docker-stack.sh` permettant de déployer l'intégralité des composants du projet en environnement local via un fichier Docker Compose. Le docker-compose intégrant des health checks pour chaque service, nous pouvons facilement vérifier que tous les composants fonctionnent correctement ensemble avant de publier les changements dans les dépôts respectifs.
+Néanmoins, j'ai conçu un script nommé `docker-stack.sh` permettant de déployer l'intégralité des composants du projet en environnement local via un fichier Docker Compose. Le docker-compose intégrant des health checks pour chaque service, il est possible de vérifier facilement que tous les composants fonctionnent correctement ensemble avant de publier les changements dans les dépôts respectifs.
 
 Ce script permet également de réaliser des tests manuels d'intégration, ce qui est particulièrement utile pour les nouvelles fonctionnalités ou les changements majeurs pouvant avoir des impacts importants sur l'ensemble du projet.
 
 Un test complet de staging avec injection de données mockées peut en effet prendre plusieurs dizaines de minutes, car il reconstruit chaque image Docker, puis lance l'ensemble de l'infrastructure.
 
-L'utilisation des submodules prend tout son sens dans ce contexte, car elle nous permet de tester les différentes branches de chaque composant indépendamment, sans avoir à cloner chaque dépôt individuellement ou à gérer manuellement les différentes versions des composants et à les construire en une seule commande.
+L'utilisation des submodules prend tout son sens dans ce contexte, car elle permet de tester les différentes branches de chaque composant indépendamment, sans avoir à cloner chaque dépôt individuellement ou à gérer manuellement les différentes versions des composants et à les construire en une seule commande.
 
 Le code source du script est disponible dans le dépôt du monorepo, et est conçu pour être facilement modifiable en fonction des besoins spécifiques de chaque composant ou de l'infrastructure utilisée pour les tests. #cite(<monorepo72:online>)
 ==== Automatisation du déploiement
 
-L'automatisation du déploiement est une étape cruciale pour garantir la rapidité et la fiabilité des mises à jour du projet. Nous avons développé une série de services dédiés à la génération automatique des fichiers de configuration, qui s'intègrent directement dans le docker-compose de développement et de production :
+L'automatisation du déploiement est une étape cruciale pour garantir la rapidité et la fiabilité des mises à jour du projet. J'ai développé une série de services dédiés à la génération automatique des fichiers de configuration, qui s'intègrent directement dans le docker-compose de développement et de production :
 
 - *swagger-doc-gen* : ce service génère la documentation OpenAPI à partir du backend CRM. Les fichiers produits sont utilisés par le service suivant.
 - *krakend-config* : ce service génère la configuration de l'API Gateway KrakenD à partir des spécifications OpenAPI produites par le service précédent. Cela permet de maintenir la configuration de l'API Gateway à jour avec les dernières modifications du backend, sans nécessiter d'intervention manuelle.
@@ -711,7 +711,7 @@ L'automatisation du déploiement est une étape cruciale pour garantir la rapidi
 
 Chacun de ces services prend en entrée un template de configuration et les variables d'environnement nécessaires, et produit un fichier de configuration prêt à être utilisé par le service correspondant.
 == Développement d'une version Production
-Comme vu dans la section précédente, nous avons développé un script de déploiement qui permet de lancer l'ensemble de l'infrastructure du projet en local à l'aide d'un docker compose, ainsi qu'une série de scripts de configuration qui génèrent automatiquement les fichiers de configuration nécessaires.
+Comme vu dans la section précédente, j'ai développé un script de déploiement qui permet de lancer l'ensemble de l'infrastructure du projet en local à l'aide d'un docker compose, ainsi qu'une série de scripts de configuration qui génèrent automatiquement les fichiers de configuration nécessaires.
 
 Différence entre la version de développement et la version de production :
 - Retrait des montages de ports pour les services qui ne sont pas censés être exposés à l'extérieur du réseau Docker, afin de renforcer la sécurité et d'éviter les accès non autorisés.
@@ -725,11 +725,11 @@ Différence entre la version de développement et la version de production :
 - Téléchargement automatique des plugins Keycloak (kc-groupid-mapper) et du thème OptimCE lors de l'initialisation.
 === Registre d'images de conteneurs
 
-Nous avons choisi d'utiliser GitHub Container Registry pour héberger les images Docker de notre projet. Cette solution offre une intégration transparente avec GitHub Actions, ce qui facilite la construction et la publication des images à partir de nos pipelines CI/CD.
+J'ai choisi d'utiliser GitHub Container Registry pour héberger les images Docker du projet. Cette solution offre une intégration transparente avec GitHub Actions, ce qui facilite la construction et la publication des images à partir des pipelines CI/CD.
 
 La lecture du registre est publique pour permettre à quiconque de déployer le projet sans configuration d'authentification supplémentaire, tandis que l'écriture est strictement restreinte aux workflows CI/CD authentifiés.
 
-Cela permet un déploiement plus rapide car nous contrôlons entièrement le processus de build et de publication, et nous pouvons facilement mettre à jour les images en fonction des changements dans le code source.
+Cela permet un déploiement plus rapide car le processus de build et de publication est entièrement contrôlé, et les images peuvent être facilement mises à jour en fonction des changements dans le code source.
 
 De plus, GitHub Container Registry offre des fonctionnalités de sécurité avancées, telles que la signature d'images avec Cosign, ce qui renforce la confiance dans les images utilisées pour le déploiement.
 
@@ -740,11 +740,13 @@ La version de production est elle aussi faite en docker-compose (voir @annex:doc
 
 Un aspect notable de cette configuration est que l'ensemble du déploiement se pilote via un unique fichier `.env`. En complétant une dizaine de champs (identifiants, URLs, ports, secrets), l'utilisateur obtient une infrastructure entièrement fonctionnelle : du reverse proxy à la télémétrie, en passant par l'authentification Keycloak, le stockage MinIO et l'API Gateway KrakenD. Cette simplicité de configuration réduit considérablement la barrière à l'entrée pour les utilisateurs finaux souhaitant auto-héberger le projet.
 
-Cependant, nous pouvons aisément faire des traductions du docker compose vers d'autres orchestrateurs de conteneurs, notamment :
+Cependant, il est possible de faire aisément des traductions du docker compose vers d'autres orchestrateurs de conteneurs, notamment :
 - Docker Swarm#footnote[Orchestrateur de conteneurs natif Docker. Plus simple que Kubernetes mais moins flexible. Gère scaling, failover et load-balancing.] : 
-Docker Swarm est très proche de docker compose, et la plupart des fonctionnalités utilisées dans notre docker-compose sont compatibles avec Docker Swarm. Cela nous permet de déployer notre infrastructure sur un cluster Docker Swarm sans nécessiter de modifications majeures, en utilisant simplement le même fichier docker-compose avec quelques ajustements mineurs pour les spécificités de Swarm (ex. : utilisation de secrets, configuration des services en mode swarm, etc.).
+Docker Swarm est très proche de docker compose, et la plupart des fonctionnalités utilisées dans le docker-compose sont compatibles avec Docker Swarm. Cela permet de déployer l'infrastructure sur un cluster Docker Swarm sans nécessiter de modifications majeures, en utilisant simplement le même fichier docker-compose avec quelques ajustements mineurs pour les spécificités de Swarm (ex. : utilisation de secrets, configuration des services en mode swarm, etc.).
 - Kubernetes :
-En utilisant l'outil fourni par docker : *Docker Compose Bridge* #cite(<Usethede7:online>), qui permet de convertir un fichier docker-compose en une configuration compatible avec d'autres orchestrateurs de conteneurs. Cela nous offre une grande flexibilité pour déployer notre infrastructure sur différentes plateformes, en fonction des besoins spécifiques de chaque environnement (développement, staging, production).
+En utilisant l'outil fourni par docker : *Docker Compose Bridge* #cite(<Usethede7:online>), qui permet de convertir un fichier docker-compose en une configuration compatible avec d'autres orchestrateurs de conteneurs. Cela offre une grande flexibilité pour déployer l'infrastructure sur différentes plateformes, en fonction des besoins spécifiques de chaque environnement (développement, staging, production).
+
+Il est à noté que d'autres outils ont été testés pour la conversion vers Kubernetes, tels que Kompose#footnote[Outil de conversion de fichiers Docker Compose en manifests Kubernetes. Utile pour les projets souhaitant migrer vers Kubernetes sans réécrire leur configuration.]mais il s'est révélé plus complexe à utiliser même si plus performant, ce qui a conduit à privilégier Docker Compose Bridge pour sa compatibilité et sa simplicité d'utilisation. Mais Kompose reste une option intéressante pour les projets souhaitant migrer vers Kubernetes, notamment pour les projets plus complexes ou nécessitant des fonctionnalités spécifiques à Kubernetes.
 
 La version de production introduit plusieurs services absents du développement :
 - *optimce-migrator* : service de migration de base de données exécuté une seule fois pour appliquer les évolutions du schéma CRM. Il utilise un outil de migration Python (alembic) pour garantir la cohérence entre les versions du code et de la base de données.
@@ -754,13 +756,13 @@ La version de production introduit plusieurs services absents du développement 
 - *crm-database-backup* et *keycloak-db-backup* : services de backup exécutés sur demande (profil `backup`) qui exportent les bases de données via `pg_dump` dans un répertoire persistant.
 === Déploiement réel
 
-La version actuellement déployée est basée sur Docker Compose et hébergée sur un VPS#footnote[Virtual Private Server — serveur virtuel isolé au sein d'un serveur physique partagé.] chez Hostinger. Nous avons retenu cette solution pour trois raisons principales :
+La version actuellement déployée est basée sur Docker Compose et hébergée sur un VPS#footnote[Virtual Private Server — serveur virtuel isolé au sein d'un serveur physique partagé.] chez Hostinger. J'ai retenu cette solution pour trois raisons principales :
 - *La souveraineté des données* : l'hébergement en Europe garantit le respect du RGPD.
 - Le coût réduit, adapté au budget d'un projet de recherche.
-- La simplicité de l'interface de gestion, qui reflète le niveau de compétence technique attendu d'un utilisateur final auto-hébergeant le projet. Cette similarité nous permet d'évaluer de manière réaliste les défis de déploiement rencontrés par les utilisateurs finaux.
+- La simplicité de l'interface de gestion, qui reflète le niveau de compétence technique attendu d'un utilisateur final auto-hébergeant le projet. Cette similarité permet d'évaluer de manière réaliste les défis de déploiement rencontrés par les utilisateurs finaux.
 ==== Pourquoi ne pas faire un déploiement sur cluster Kubernetes ?
 
-Nous estimons que les communautés d'énergies renouvelables sont par nature décentralisées, et que les utilisateurs finaux ne sont pas nécessairement intéressés par des technologies d'orchestration complexes, mais plutôt par des solutions simples et accessibles répondant à leurs besoins spécifiques.
+J'estime que les communautés d'énergies renouvelables sont par nature décentralisées, et que les utilisateurs finaux ne sont pas nécessairement intéressés par des technologies d'orchestration complexes, mais plutôt par des solutions simples et accessibles répondant à leurs besoins spécifiques.
 
 Le tableau ci-dessous compare les besoins réels du projet OptimCE avec ce que Kubernetes offre :
 
@@ -781,16 +783,16 @@ Le tableau ci-dessous compare les besoins réels du projet OptimCE avec ce que K
 )
 _Tableau comparatif : Kubernetes vs Docker Compose à l'échelle d'OptimCE._
 
-Kubernetes est conçu pour résoudre des problèmes que nous n'avons pas : le scaling horizontal massif, la résilience multi-nœuds et le déploiement continu à haute fréquence. Pour un projet de ~15 conteneurs déployé sur un serveur unique avec une équipe réduite, Kubernetes introduirait une complexité disproportionnée par rapport aux bénéfices obtenus.
+Kubernetes est conçu pour résoudre des problèmes qui ne sont pas ceux du projet : le scaling horizontal massif, la résilience multi-nœuds et le déploiement continu à haute fréquence. Pour un projet de ~15 conteneurs déployé sur un serveur unique avec une équipe réduite, Kubernetes introduirait une complexité disproportionnée par rapport aux bénéfices obtenus.
 
-Afin de vérifier cette hypothèse, nous avons mené des expérimentations avec trois distributions Kubernetes légères :
-- *k3s*#footnote[Distribution Kubernetes légère (< 100 Mo) conçue pour l'IoT, le edge computing et les environnements à ressources limitées.] : bien que plus léger que Kubernetes standard, k3s nécessite tout de même un serveur avec au moins 2 Go de RAM dédiés au plan de contrôle, ce qui représente une part significative des ressources de notre VPS. De plus, la gestion des manifests et des Helm charts ajoute une couche de complexité non justifiée pour notre nombre de services.
+Afin de vérifier cette hypothèse, j'ai mené des expérimentations avec trois distributions Kubernetes légères :
+- *k3s*#footnote[Distribution Kubernetes légère (< 100 Mo) conçue pour l'IoT, le edge computing et les environnements à ressources limitées.] : bien que plus léger que Kubernetes standard, k3s nécessite tout de même un serveur avec au moins 2 Go de RAM dédiés au plan de contrôle, ce qui représente une part significative des ressources du VPS. De plus, la gestion des manifests et des Helm charts ajoute une couche de complexité non justifiée pour le nombre de services concerné.
 - *Minikube*#footnote[Outil permettant d'exécuter un cluster Kubernetes à nœud unique en local, principalement destiné au développement et aux tests.] : conçu pour le développement local, Minikube n'est pas adapté à un déploiement de production. Son modèle de gestion (VM ou conteneur unique) et son absence de mécanismes de persistance robustes en font un outil de test plutôt qu'une solution de production viable.
 - *Kind*#footnote[Outil permettant d'exécuter des clusters Kubernetes dans des conteneurs Docker, principalement utilisé pour les tests CI/CD et le développement.] : similaire à Minikube, Kind est orienté développement et CI/CD. Bien qu'il permette de créer rapidement des clusters éphémères, il n'offre pas les garanties de stabilité et de persistance nécessaires pour un déploiement de production.
 
 Ces expérimentations ont confirmé que même les distributions Kubernetes les plus légères introduisent une surcharge opérationnelle (gestion des manifests, des ConfigMaps, des Secrets, des Ingress, des PersistentVolumeClaims) disproportionnée par rapport aux besoins réels du projet.
 
-Nous avons cependant conservé la compatibilité avec un orchestrateur plus avancé. Si la demande émerge, par exemple pour une offre SaaS, la migration vers Kubernetes est prévue via l'outil Docker Compose Bridge.
+J'ai cependant conservé la compatibilité avec un orchestrateur plus avancé. Si la demande émerge, par exemple pour une offre SaaS, la migration vers Kubernetes est prévue via l'outil Docker Compose Bridge.
 === Conclusions
 Cette partie de la transition a été principalement faite par mes soins, avec une collaboration étroite avec Eric. Donc un vrai travail d'équipe, avec des échanges réguliers pour valider les choix d'architecture, les configurations de CI/CD, et les stratégies de déploiement.
 == Contributions connexes
@@ -820,7 +822,7 @@ L'approche JWT auto-contenu a été privilégiée pour sa performance, car elle 
 Le projet nécessite la transmission d'un identifiant de communauté (`group_id`) via le JWT, ce qui dépasse le scope standard d'OIDC. Plusieurs approches ont été évaluées :
 
 - *Claims personnalisés dans le JWT* : Ajouter directement le `group_id` dans le payload du jeton via un mapper Keycloak. Cette approche est simple à maintenir et supportée nativement par la majorité des clients OIDC. Cependant, elle produit des jetons plus volumineux, ce qui peut poser problème si un utilisateur appartient à un grand nombre de groupes (risque de dépassement des limites d'en-têtes HTTP).
-- *Middleware de groupes* : Ajouter un intermédiaire qui enrichit les requêtes authentifiées avec les informations de groupes. Cette approche n'apportait pas de bénéfice significatif dans notre architecture.
+- *Middleware de groupes* : Ajouter un intermédiaire qui enrichit les requêtes authentifiées avec les informations de groupes. Cette approche n'apportait pas de bénéfice significatif dans l'architecture.
 - *Gestion backend* : Chaque microservice gère indépendamment les permissions communautaires. Cette solution ajouterait de la complexité à chaque service sans réel avantage.
 
 L'approche des claims personnalisés via un plugin Keycloak (`kc-groupid-mapper`), téléchargé automatiquement lors de l'initialisation du conteneur, a finalement été retenue.
@@ -1012,7 +1014,7 @@ Des mécanismes de backup des bases de données ont été ajoutés pour garantir
 
 === Absence de benchmarks de performance
 
-La principale limite de ce travail est l'absence de benchmarks de performance formels. La version initiale du projet ne disposait pas d'instrumentation de télémétrie, et nous n'avons pas mis en place de suite de benchmarks avant/après le refactoring. Les améliorations de performance (réduction de la RAM, latence perçue) sont donc qualitatives plutôt que quantitatives. Une recommandation pour les développements futurs serait d'intégrer un outil de benchmarking (ex. : k6, Apache JMeter) dans les pipelines CI/CD.
+La principale limite de ce travail est l'absence de benchmarks de performance formels. La version initiale du projet ne disposait pas d'instrumentation de télémétrie et était extrêmement difficile à lancer, ce qui n'a pas permis de réaliser des benchmarks avant refactoring. Après la restructuration, je n'ai pas pu mettre en place de suite de benchmarks par manque de temps. Les améliorations de performance (réduction de la RAM, latence perçue) sont donc qualitatives plutôt que quantitatives. Une recommandation pour les développements futurs serait d'intégrer un outil de benchmarking (ex. : k6, Apache JMeter) dans les pipelines CI/CD.
 
 === Tests d'intégration non automatisés en CI
 
@@ -1112,7 +1114,7 @@ L'ajout de nouvelles fonctionnalités doit suivre une logique de micro-services 
 
 === Gestion de la consistance des données
 
-Le principal avantage d'une architecture monolithique réside dans la cohérence immédiate des données, au prix d'une mise à l'échelle (scaling) plus complexe. Dans notre contexte, si un fournisseur unique (wallon ou belge) vient à desservir plusieurs communautés avec un grand nombre d'utilisateurs concurrents, le modèle distribué reste pertinent malgré la complexité accrue liée à la gestion de cette cohérence. L'approche asynchrone par événements et la tolérance à la cohérence à terme (eventual consistency) offrent un compromis adéquat entre performances et résilience.
+Le principal avantage d'une architecture monolithique réside dans la cohérence immédiate des données, au prix d'une mise à l'échelle (scaling) plus complexe. Dans ce contexte, si un fournisseur unique (wallon ou belge) vient à desservir plusieurs communautés avec un grand nombre d'utilisateurs concurrents, le modèle distribué reste pertinent malgré la complexité accrue liée à la gestion de cette cohérence. L'approche asynchrone par événements et la tolérance à la cohérence à terme (eventual consistency) offrent un compromis adéquat entre performances et résilience.
 
 L'adoption d'une modularité stricte au sein du monolithe, reposant sur des couches de service bien définies, permet de limiter considérablement les risques de régressions et d'en faciliter la maintenance. En cas de besoin d'une scalabilité plus fine à l'avenir, une migration complète vers une architecture orientée micro-services pourrait être amorcée, en s'appuyant sur les patterns de gestion évoqués précédemment. De plus, cette modularité interne simplifierait grandement une telle transition. Toutefois, les besoins actuels du projet ne prévoient et ne justifient pas ce type d'évolution dans un futur proche.
 
@@ -1156,7 +1158,7 @@ Ces leçons, bien que spécifiques au contexte d'OptimCE, illustrent des défis 
 
 Ce mémoire a présenté la transition du projet OptimCE, composant clé du projet de recherche Locomotrice, vers une solution open-source pérenne et collaborative. Le travail réalisé s'est articulé autour de plusieurs axes majeurs.
 
-Sur le plan technique, nous avons procédé à une restructuration profonde de l'architecture du projet. L'analyse initiale a révélé un anti-pattern de monolithe distribué, caractérisé par une complexité opérationnelle excessive et des appels synchrones nombreux entre micro-services. La fusion des composants redondants (utilisateurs, communauté, opérations de partage) en un service CRM unifié, combinée à la suppression des services backend-db intermédiaires, a permis de réduire significativement cette complexité. Les résultats sont tangibles : la consommation mémoire est passée de 3 Go à 800 Mo à vide, et la maintenabilité du code s'en trouve considérablement améliorée.
+Sur le plan technique, j'ai procédé à une restructuration profonde de l'architecture du projet. L'analyse initiale a révélé un anti-pattern de monolithe distribué, caractérisé par une complexité opérationnelle excessive et des appels synchrones nombreux entre micro-services. La fusion des composants redondants (utilisateurs, communauté, opérations de partage) en un service CRM unifié, combinée à la suppression des services backend-db intermédiaires, a permis de réduire significativement cette complexité. Les résultats sont tangibles : la consommation mémoire est passée de 3 Go à 800 Mo à vide, et la maintenabilité du code s'en trouve considérablement améliorée.
 
 L'organisation du code source a également été repensée. La séparation en dépôts Git indépendants au sein d'une organisation GitHub dédiée offre une modularité et une réutilisabilité accrues, tout en facilitant la contribution externe. Chaque dépôt dispose désormais de pipelines CI/CD automatisés incluant tests unitaires, analyse de sécurité via CodeQL, mises à jour automatiques des dépendances avec Dependabot, et publication d'images Docker signées avec Cosign.
 
@@ -1168,7 +1170,7 @@ Sur le plan communautaire, les fondations ont été posées pour accueillir et f
 
 Notre participation s'est étendue au-delà du périmètre initial d'OptimCE, notamment avec le développement d'EcoArbiter, un algorithme de redistribution énergétique en temps réel écrit en Rust, conçu comme une alternative performante et équitable au projet proposé par l'ULiège dans le cadre du sous-projet EMS Global.
 
-Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, nous avons transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective : les trois piliers indispensables à sa pérennité.
+Les objectifs fixés en début de stage ont été atteints : le projet OptimCE est désormais stable, modulaire, documenté et prêt à être adopté par une communauté open-source. En résumé, j'ai transformé un prototype de recherche complexe et fragile en une solution robuste, simple à déployer et ouverte à la contribution collective : les trois piliers indispensables à sa pérennité.
 
 Les perspectives futures incluent l'élargissement de la communauté de contributeurs, l'évolution vers un déploiement Kubernetes si la demande le justifie (notamment pour une offre SaaS), et l'intégration continue des retours des utilisateurs finaux pour guider les développements futurs. La transition vers l'open-source n'est pas un aboutissement, mais le début d'un processus d'amélioration continue qui devra être entretenu par la communauté.
 
