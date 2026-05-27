@@ -99,7 +99,7 @@ L'approche combine :
 
 == Résultats
 
-Le refactoring a permis une réduction de 73 % de la consommation mémoire (de 3 Go à 800 Mo), une diminution significative des appels REST synchrones entre micro-services (diminuant par conséquent la latence du système), et la mise en place d'un pipeline CI/CD complet avec analyse de sécurité automatisée, mises à jour de dépendances et signature d'images Docker. Le projet est désormais structuré en architecture modulaire avec des dépôts Git indépendants, un monorepo de staging et un système de déploiement en une commande.
+Le refactoring a permis une réduction de 73 % de la consommation mémoire (de 3 Go à 800 Mo), une diminution significative des appels REST#footnote[Representational State Transfer — style d'architecture logicielle basé sur des appels HTTP sans état.] synchrones entre micro-services#footnote[Architecture décomposant une application en services indépendants communiquant via le réseau.] (diminuant par conséquent la latence du système), et la mise en place d'un pipeline CI/CD complet avec analyse de sécurité automatisée, mises à jour de dépendances et signature d'images Docker. Le projet est désormais structuré en architecture modulaire avec des dépôts Git indépendants, un monorepo de staging et un système de déploiement en une commande.
 
 == Conclusion
 
@@ -153,7 +153,7 @@ Le refactoring a permis une réduction de 73 % de la consommation mémoire (de 3
 
 Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE*, un composant clé du projet de recherche *Locomotrice*. Le projet Locomotrice est financé par l'appel à projets Win²Wal#footnote([Le programme Win²WAL finance, au sein des universités, hautes écoles et centres de recherche agréés, des projets de recherche industrielle qui permettront l'émergence d'un produit, d'un procédé ou d'un service (PPS).#cite(<Spw_2026_wallonie>)]) et inclut le CeCoTePe#footnote[Centre de Coopération Technique et Pédagogique, ASBL encadrant des formations professionnelles et de la recherche.], l'équipe BEMS de l'Université de Liège et Émission Zéro en tant que partenaire industriel. Son objectif est de faciliter la transition énergétique participative en développant une plateforme open-source pour les communautés d'énergie #cite(<locomotrice>). Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
 
-L'objectif principal d'OptimCE est de fournir une plateforme administrative de gestion de membres et d'informations spécifiques à la gestion d'une communauté d'énergie. L'entreprise repreneuse a comme seules exigences techniques l'utilisation de *Node.js* et de *Kubernetes*, sans exprimer de préférence particulière quant au système de gestion de bases de données. Ces décisions architecturales seront détaillées ultérieurement dans ce document.
+L'objectif principal d'OptimCE est de fournir une plateforme administrative de gestion de membres et d'informations spécifiques à la gestion d'une communauté d'énergie. L'entreprise repreneuse a comme seules exigences techniques l'utilisation de `Node.js` et de `Kubernetes`, sans exprimer de préférence particulière quant au système de gestion de bases de données. Ces décisions architecturales seront détaillées ultérieurement dans ce document.
 
 Le projet *OptimCE* atteint un niveau de maturité technologique (TRL#footnote[Technology Readiness Level : niveau de maturité technologique (1-9) indiquant la proximité d'un déploiement en production. Le niveau 7 signifie un système déjà testé et à faible risque.]) de 7 #cite(<Horizon_Europe_2026_gouv>). Ce niveau indique que le projet est proche d'un état opérationnel, prêt à être déployé en production. Initialement, ce développement était prévu pour être réalisé par un seul développeur dans le cadre interne de la Haute École de la Province de Liège (HEPL).
 
@@ -204,17 +204,17 @@ Cette section présente le cadre théorique et les références qui ont guidé l
 
 === Lois de l'évolution logicielle
 
-Dès 1980, Lehman a formulé un ensemble de lois décrivant l'évolution inéluctable des systèmes logiciels #cite(<Lehman_1980>). Parmi celles-ci, deux éclairent directement la problématique de ce mémoire : la loi d'*augmentation de la complexité* (loi 2), qui stipule que la complexité d'un système croît inévitablement au fil des modifications sauf si un travail explicite est mené pour la réduire, et la loi de *dégradation de la qualité* (loi 6), qui prévient que la qualité perçue du système décline sauf à maintenir une adaptation rigoureuse aux changements de l'environnement. Ces lois fournissent un cadre théorique pour comprendre pourquoi un projet de recherche, soumis à des évolutions fréquentes et exploratoires, tend naturellement vers une complexité croissante.
+Dès 1980, Meir M. Lehman, informaticien britannique spécialiste de l'évolution des logiciels, a formulé un ensemble de lois décrivant l'évolution inéluctable des systèmes logiciels #cite(<Lehman_1980>). Parmi celles-ci, deux éclairent directement la problématique de ce mémoire : la loi d'_augmentation de la complexité_ (loi 2), qui stipule que la complexité d'un système croît inévitablement au fil des modifications sauf si un travail explicite est mené pour la réduire, et la loi de _dégradation de la qualité_ (loi 6), qui prévient que la qualité perçue du système décline sauf à maintenir une adaptation rigoureuse aux changements de l'environnement. Ces lois fournissent un cadre théorique pour comprendre pourquoi un projet de recherche, soumis à des évolutions fréquentes et exploratoires, tend naturellement vers une complexité croissante.
 
 === Métaphore de la dette technique
 
-Ward Cunningham a popularisé la métaphore de la dette technique #cite(<Cunningham_1992>) pour décrire les conséquences des compromis techniques à court terme. Tout comme une dette financière, elle se compose d'un *principal* (le coût initial d'une solution sous-optimale choisie délibérément) et d'*intérêts* (le surcoût de maintenance accumulé à chaque modification ultérieure). Sans remboursement régulier par du refactoring, les intérêts composés finissent par paralyser l'évolution du projet.
+Ward Cunningham, informaticien américain connu pour avoir inventé le wiki et popularisé les patrons de conception, a introduit la métaphore de la dette technique #cite(<Cunningham_1992>) pour décrire les conséquences des compromis techniques à court terme. Tout comme une dette financière, elle se compose d'un _principal_ (le coût initial d'une solution sous-optimale choisie délibérément) et d'_intérêts_ (le surcoût de maintenance accumulé à chaque modification ultérieure). Sans remboursement régulier par du refactoring, les intérêts composés finissent par paralyser l'évolution du projet.
 
 Dans un contexte académique, cette dette est particulièrement insidieuse : les contraintes de délais, l'évolution rapide des besoins et la priorité donnée à la validation de concepts plutôt qu'à la perfection structurelle sont autant de facteurs légitimes qui l'alimentent. Pourtant, les projets de recherche doivent aussi garantir leur réutilisabilité et leur maintenabilité, surtout lorsqu'ils visent une transition vers l'open-source.
 
 === Dérive architecturale
 
-La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans ce projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un *monolithe distribué*, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
+La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans ce projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un _monolithe distribué_, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
 
 Ces concepts, lois de Lehman, dette technique et dérive architecturale, constituent le prisme théorique à travers lequel j'ai analysé l'état initial du projet OptimCE et les choix de refactoring opérés.
 
@@ -228,7 +228,7 @@ L'architecture monolithique regroupe l'ensemble des fonctionnalités dans une se
 
 #figure(
   image("assets/monolith-architecture.png", width: 60%),
-  caption: [Architecture monolithique, source : Thomas Morin #cite(<Morintd_2026_dev>)],
+  caption: [Architecture monolithique, source : Thomas Morin, ingénieur DevOps et auteur #cite(<Morintd_2026_dev>)],
 )
 
 === Architecture micro-services
@@ -258,7 +258,7 @@ Un bon candidat au statut de micro-service indépendant présente les caractéri
 
 === Domain-Driven Design (DDD) <ddd>
 
-Pour mener ce travail d'analyse, le Domain-Driven Design propose une méthode se basant sur la structure du domaine métier plutôt que sur des considérations purement techniques. Les concepts de *bounded contexts* et d'*ubiquitous language* permettent d'identifier les zones de cohérence sémantique où un service peut opérer de manière autonome.
+Pour mener ce travail d'analyse, le Domain-Driven Design propose une méthode se basant sur la structure du domaine métier plutôt que sur des considérations purement techniques. Les concepts de _bounded contexts_ et d'_ubiquitous language_ permettent d'identifier les zones de cohérence sémantique où un service peut opérer de manière autonome.
 
 Le principe fondamental du DDD est que chaque bounded context possède sa propre représentation des entités partagées. Prenons l'exemple d'un client :
 - Pour un service de livraison, c'est une adresse et un prix payé
@@ -281,7 +281,7 @@ La gouvernance définit les rôles (mainteneurs, contributeurs, utilisateurs), l
 
 Cette démarche exige également une communication transparente quant aux objectifs du projet, aux priorités de développement et aux critères d'acceptation des contributions. 
 
-Elle se traduit par la publication d'une feuille de route (*roadmap*), un suivi rigoureux des tickets (*issues*) et la mise en place de canaux d'échanges dédiés avec la communauté (forums, listes de diffusion, messagerie instantanée). Si ces pratiques peuvent sembler inhabituelles dans le cadre d'un projet de recherche traditionnel, elles s'avèrent indispensables à la pérennité et à l'adoption d'un projet open-source. En effet, au sein d'une communauté décentralisée, l'absence d'interactions informelles (les célèbres « discussions à la machine à café ») impose de formaliser et de documenter systématiquement les décisions et les orientations techniques, afin que l'ensemble des contributeurs puisse s'y référer sans ambiguïté.
+Elle se traduit par la publication d'une feuille de route (_roadmap_), un suivi rigoureux des tickets (_issues_) et la mise en place de canaux d'échanges dédiés avec la communauté (forums, listes de diffusion, messagerie instantanée). Si ces pratiques peuvent sembler inhabituelles dans le cadre d'un projet de recherche traditionnel, elles s'avèrent indispensables à la pérennité et à l'adoption d'un projet open-source. En effet, au sein d'une communauté décentralisée, l'absence d'interactions informelles (les célèbres « discussions à la machine à café ») impose de formaliser et de documenter systématiquement les décisions et les orientations techniques, afin que l'ensemble des contributeurs puisse s'y référer sans ambiguïté.
 
 === Qualité logicielle en open-source
 
@@ -312,7 +312,7 @@ L'infrastructure as code (IaC) permet de définir et versionner l'infrastructure
 == Suivi du projet
 Un suivi rigoureux du projet est essentiel pour garantir la transparence, la coordination et la documentation des décisions tout au long du développement. Un projet open-source, en particulier, nécessite une communication claire et une documentation accessible pour permettre à la communauté de comprendre les choix techniques et de contribuer efficacement.
 === Notion
-Le suivi du projet a été effectué via *Notion*, utilisé comme gestionnaire de tâches (Kanban) et comme support de documentation des décisions architecturales. Une partie significative de ce mémoire a été rédigée en se basant sur les recherches préalables aux différentes implémentations, documentées au fil du travail.
+Le suivi du projet a été effectué via _Notion_, utilisé comme gestionnaire de tâches (Kanban) et comme support de documentation des décisions architecturales. Une partie significative de ce mémoire a été rédigée en se basant sur les recherches préalables aux différentes implémentations, documentées au fil du travail.
 
 #figure(
   image("assets/Notion01.png"),
@@ -321,7 +321,7 @@ Le suivi du projet a été effectué via *Notion*, utilisé comme gestionnaire d
 
 L'adoption d'un tableau Kanban a offert une visualisation claire des tâches à accomplir, facilitant le suivi de l'avancement et l'identification rapide des goulots d'étranglement. Partagé avec l'ensemble des partenaires, cet outil est un très bon vecteur de transparence, centralisant l'information et fluidifiant la collaboration asynchrone.
 
-L'utilisation d'étiquettes (*tags*) a permis de catégoriser finement les tâches (ex. : *refactoring*, documentation, tests) et d'en prioriser le traitement en fonction de leur impact sur la qualité globale du projet. De plus, cette approche visuelle offre plusieurs avantages inhérents à la méthode Kanban : elle permet de limiter la quantité de travail en cours (*Work In Progress*), d'éviter la surcharge cognitive des développeurs et d'améliorer la prédictibilité des livraisons.
+L'utilisation d'étiquettes (_tags_) a permis de catégoriser finement les tâches (ex. : _refactoring_, documentation, tests) et d'en prioriser le traitement en fonction de leur impact sur la qualité globale du projet. De plus, cette approche visuelle offre plusieurs avantages inhérents à la méthode Kanban : elle permet de limiter la quantité de travail en cours (_Work In Progress_), d'éviter la surcharge cognitive des développeurs et d'améliorer la prédictibilité des livraisons.
 
 Cette approche structurée s'est avérée particulièrement bénéfique pour la gestion de la dette technique. Elle a permis de recenser les composants à optimiser et de planifier leur refonte de manière méthodique. Plus qu'un simple outil de gestion, ce tableau est devenu une base documentaire à part entière. Il a préservé l'historique de l'évolution du projet, la trace des décisions architecturales et leurs justifications, nourrissant ainsi les échanges lors des réunions de coordination avec l'Université de Liège.
 
@@ -336,11 +336,11 @@ Ce processus documentaire s'est révélé indispensable, non seulement pour rati
 
 === Alternatives libres et pérennité
 
-Il convient toutefois d'émettre quelques réserves quant à l'utilisation de Notion dans le cadre d'un projet open-source, particulièrement concernant la pérennité de la documentation. Notion étant une *plateforme propriétaire*, il existe un risque inhérent de perte de données ou de restriction d'accès à l'avenir. Il est donc indispensable de définir une stratégie de sauvegarde régulière, par exemple en exportant les pages aux formats Markdown ou PDF, pour en garantir la disponibilité à long terme. Une alternative plus en adéquation avec la philosophie du projet consisterait à migrer vers des solutions open-source éprouvées, telles qu'un wiki auto-hébergé couplé à une instance Kanban libre de droits.
+Il convient toutefois d'émettre quelques réserves quant à l'utilisation de Notion dans le cadre d'un projet open-source, particulièrement concernant la pérennité de la documentation. Notion étant une _plateforme propriétaire_, il existe un risque inhérent de perte de données ou de restriction d'accès à l'avenir. Il est donc indispensable de définir une stratégie de sauvegarde régulière, par exemple en exportant les pages aux formats Markdown ou PDF, pour en garantir la disponibilité à long terme. Une alternative plus en adéquation avec la philosophie du projet consisterait à migrer vers des solutions open-source éprouvées, telles qu'un wiki auto-hébergé couplé à une instance Kanban libre de droits.
 
 === Jira et Confluence
 
-Bien que Jira et Confluence soient des standards de l'industrie pour la gestion de projet et la documentation, leur adoption a été écartée ici. Ces plateformes, quoique très complètes, s'avèrent souvent complexes et surdimensionnées pour les besoins d'une équipe restreinte évoluant dans un cadre de recherche. Leur courbe d'apprentissage abrupte risque de constituer une barrière à l'entrée pour les contributeurs externes. À l'inverse, Notion offre une interface plus accessible et une souplesse parfaitement adaptée au contexte. Par ailleurs, l'expérience préalable du développeur principal avec cet outil en a grandement facilité l'intégration immédiate dans le flux de travail quotidien.
+Bien que Jira et Confluence soient des standards de l'industrie pour la gestion de projet et la documentation, leur adoption a été écartée ici. Ces plateformes, quoique très complètes, s'avèrent souvent complexes et surdimensionnées pour les besoins d'une équipe restreinte évoluant dans un cadre de recherche. Leur courbe d'apprentissage abrupte risque de constituer une barrière à l'entrée pour les contributeurs externes. À l'inverse, Notion offre une interface plus accessible et une souplesse parfaitement adaptée au contexte. Par ailleurs, l'expérience préalable de mon promoteur avec cet outil en a grandement facilité l'intégration immédiate dans le flux de travail quotidien.
 
 === Bilan sur le système de suivi
 
@@ -363,7 +363,7 @@ Lors de la division initiale, théoriquement, le code paraissait assez simple à
   image("assets/architecture_simple.png"),
   caption: [Architecture initialement prévue],
 )
-Or cette division relève d'un domaine de recherche à part entière : le *DDD*, tel que détaillé dans la section sur les architectures logicielles au @ddd. Son objectif est d'étudier l'interaction et la définition des objets au sein de l'ensemble du code source d'un produit.
+Or cette division relève d'un domaine de recherche à part entière : le _DDD_, tel que détaillé dans la section sur les architectures logicielles au @ddd. Son objectif est d'étudier l'interaction et la définition des objets au sein de l'ensemble du code source d'un produit.
 
 L'intérêt du micro-service apparaît principalement lorsque les services manipulent les mêmes objets de façon totalement différente et ne les définissent même pas de la même manière, permettant ainsi une communication asynchrone où les données sont partiellement copiées et adaptées via un bus de communication.
 
@@ -380,9 +380,7 @@ Le monolithe distribué est un anti-pattern où les services sont physiquement s
 )
 
 Dans le projet initial, l'utilisation intensive d'appels synchrones REST entre services créait exactement ce scénario : chaque service dépendait fortement des autres pour fonctionner, formant un réseau de dépendances où la défaillance d'un composant pouvait impacter l'ensemble du système.
-Le projet était tombé dans cet anti-pattern.
-
-Combinant les désavantages du monolithe et des microservices. #cite(<Morintd_2026_dev>). Des parties du projet étaient trop proches au niveau du domaine d'analyse et nécessitaient techniquement trop d'appels synchrones.
+Le projet était tombé dans cet anti-pattern, combinant les désavantages du monolithe et des micro-services #cite(<Morintd_2026_dev>). Des parties du projet étaient trop proches au niveau du domaine d'analyse et nécessitaient techniquement trop d'appels synchrones.
 
 Ces appels synchrones rendaient les micro-services très interdépendants et nécessitaient la modification de nombreuses parties de code dans différents composants pour chaque fonctionnalité.
 
@@ -437,9 +435,9 @@ Certains composants, tels que l'API Gateway, le service d'identité ou le stocka
 
 En effet, certains outils avaient été développés en interne pour répondre à des besoins spécifiques, mais leur maintenance et leur évolution représentaient une charge importante. En adoptant des solutions tierces, il a été possible de se concentrer sur les fonctionnalités métier du projet tout en bénéficiant de la robustesse et de la communauté de support associée à ces outils.
 
-L'architecture a donc été adaptée et les interfaces de communication ont été définies et que les données soient correctement synchronisées entre les différents composants du système.
+L'architecture a donc été adaptée et les interfaces de communication ont été définies pour assurer la synchronisation correcte des données entre les différents composants du système.
 === Justification du maintien de certains micro-services
-On pourrait se demander pourquoi ne pas fusionner l'ensemble dans l'application centrale.
+Une question se pose : pourquoi ne pas fusionner l'ensemble dans l'application centrale ?
 
 L'architecture micro-services présente cependant certains avantages non négligeables dans des scénarios rencontrés au cours du projet :
 
@@ -499,26 +497,26 @@ Les objets de transfert de données (DTO) structurent les informations retourné
 ==== Architecture complète
 Cette approche permet une séparation claire des différentes couches, ce qui est essentiel pour le principe de séparation des responsabilités #cite(<Separati80:online>).
 
-On retrouve ainsi une arborescence de fichiers organisée de la manière suivante pour chaque module (voir @annex:file-architecture) :
+L'arborescence des fichiers s'organise de la manière suivante pour chaque module (voir @annex:file-architecture) :
 - Couche API (Présentation)
-  - *community.controller.ts* : gère les requêtes et réponses HTTP et délègue le traitement aux services.
-  - *community.dtos.ts* : définit les DTO (Data Transfer Objects) pour la validation des requêtes et des réponses.
-  - *community.routes.ts* : associe les URLs aux méthodes du contrôleur (Express.js).
-  - *community.swagger.ts* : ajoute la documentation Swagger/OpenAPI pour les points d'accès.
+  - `community.controller.ts` : gère les requêtes et réponses HTTP et délègue le traitement aux services.
+  - `community.dtos.ts` : définit les DTO (Data Transfer Objects) pour la validation des requêtes et des réponses.
+  - `community.routes.ts` : associe les URLs aux méthodes du contrôleur (Express.js).
+  - `community.swagger.ts` : ajoute la documentation Swagger/OpenAPI pour les points d'accès.
 
 - Couche Domaine (Logique métier)
-  - *community.models.ts* : définit les modèles métier (ex. : `Community`, `CommunityUser`).
-  - *i-community.repository.ts* : interface pour les opérations de base de données (ex. : `findAll`, `save`).
-  - *i-community.services.ts* : interface pour la logique métier (ex. : `getAllPublicCommunities`).
+  - `community.models.ts` : définit les modèles métier (ex. : `Community`, `CommunityUser`).
+  - `i-community.repository.ts` : interface pour les opérations de base de données (ex. : `findAll`, `save`).
+  - `i-community.services.ts` : interface pour la logique métier (ex. : `getAllPublicCommunities`).
 
 - Couche Infrastructure (Implémentation)
-  - *community.repository.ts* : implémente `ICommunityRepository` avec TypeORM.
-  - *community.service.ts* : implémente `ICommunityService` avec la logique métier et les appels au dépôt (repository).
+  - `community.repository.ts` : implémente `ICommunityRepository` avec TypeORM.
+  - `community.service.ts` : implémente `ICommunityService` avec la logique métier et les appels au dépôt (repository).
 
 - Couche Partagée (Utilitaires)
-  - *community.error.ts* : définit les erreurs personnalisées (ex. : `CommunityNotFoundError`).
-  - *to_dto.ts* : convertit les modèles métier vers les DTO pour les réponses API.
-  - *to_model.ts* : convertit les DTO vers les modèles métier pour la logique métier.
+  - `community.error.ts` : définit les erreurs personnalisées (ex. : `CommunityNotFoundError`).
+  - `to_dto.ts` : convertit les modèles métier vers les DTO pour les réponses API.
+  - `to_model.ts` : convertit les DTO vers les modèles métier pour la logique métier.
 === Fusion de services
 
 La seconde partie de la refonte a concerné la fusion des composants users, community et opérations de partage dans le composant CRM. L'objectif a été de remplacer les nombreux appels REST entre ces composants par une gestion orientée objets de ces informations.
@@ -531,7 +529,7 @@ Cette fusion a nécessité une réorganisation significative du code :
 === Conclusion
 Ce changement a permis une réduction significative du nombre d'appels synchrones REST entre les micro-services. La diminution de la complexité est notable et a permis d'itérer plus rapidement.
 
-Ces modifications ont principalement été implémentées par Éric Paques. J'ai eu l'occasion de participer à la revue de code et à la validation des choix techniques, ainsi qu'à l'utilisation de ce nouveau modèle dans l'ajout de certaines fonctionnalités.
+Ces modifications ont principalement été implémentées par mon promoteur. J'ai eu l'occasion de participer à la revue de code et à la validation des choix techniques, ainsi qu'à l'utilisation de ce nouveau modèle dans l'ajout de certaines fonctionnalités.
 == Mise en open-source
 === Réorganisation du code en sous-dépôts
 L'ancienne organisation des fichiers dans le code source était fonctionnelle mais complexe, avec de nombreux sous-dossiers. L'inconvénient principal était qu'un seul dépôt Git gérait l'entièreté du code source, ce qui augmentait fortement le nombre de fichiers à suivre.
@@ -591,13 +589,13 @@ Bien que cette fonctionnalité demeure optionnelle pour les contributeurs, son u
 Chaque dépôt est configuré avec des pipelines CI/CD sur GitHub Actions, ce qui permet d'automatiser les processus de tests, de construction (build) et de déploiement. Ces pipelines sont conçus pour garantir la qualité continue du code et faciliter la contribution.
 
 ==== Principes de fonctionnement des pipelines
-Un workflow GitHub Actions est défini au sein d'un fichier YAML placé dans le répertoire `.github/workflows/` de chaque dépôt. Ces flux d'automatisation sont déclenchés par des événements spécifiques (par exemple, un `push` ou une `pull request`) et se décomposent en une série d'étapes (*jobs*) exécutées de manière séquentielle ou parallèle sur des *runners*.
+Un workflow GitHub Actions est défini au sein d'un fichier YAML placé dans le répertoire `.github/workflows/` de chaque dépôt. Ces flux d'automatisation sont déclenchés par des événements spécifiques (par exemple, un `push` ou une `pull request`) et se décomposent en une série d'étapes (_jobs_) exécutées de manière séquentielle ou parallèle sur des _runners_.
 
-Un *runner* est une machine virtuelle ou un conteneur chargé d'exécuter les étapes du workflow. GitHub propose des environnements hébergés dans le cloud (Ubuntu, Windows, macOS). Les étapes peuvent inclure l'appel à des actions prédéfinies (par exemple, `actions/setup-node` pour configurer l'environnement Node.js) ou l'exécution de scripts personnalisés. L'ensemble des résultats est ensuite restitué dans l'interface de GitHub, assorti de journaux d'exécution détaillés (*logs*) indispensables au débogage en cas d'échec.
+Un _runner_ est une machine virtuelle ou un conteneur chargé d'exécuter les étapes du workflow. GitHub propose des environnements hébergés dans le cloud (Ubuntu, Windows, macOS). Les étapes peuvent inclure l'appel à des actions prédéfinies (par exemple, `actions/setup-node` pour configurer l'environnement Node.js) ou l'exécution de scripts personnalisés. L'ensemble des résultats est ensuite restitué dans l'interface de GitHub, assorti de journaux d'exécution détaillés (_logs_) indispensables au débogage en cas d'échec.
 
 Par ailleurs, certaines fonctionnalités avancées possèdent leurs propres fichiers de configuration directement situés à la racine du répertoire `.github/`. C'est le cas des outils d'analyse de sécurité (tels que CodeQL) ou de gestion automatisée des dépendances (comme Dependabot), qui sont nativement interprétés par GitHub pour enclencher les processus de vérification correspondants.
 ==== Exemple de pipeline CI/CD
-On peut voir ci-dessous un exemple de l'arborescence des fichiers d'un dépôt (voir @annex:cicd-file-tree), avec les différents workflows CI/CD configurés pour les tests, la publication Docker, la notification de mise à jour du monorepo et la mise à jour de la documentation.
+La figure ci-dessous présente un exemple de l'arborescence des fichiers d'un dépôt (voir @annex:cicd-file-tree), avec les différents workflows CI/CD configurés pour les tests, la publication Docker, la notification de mise à jour du monorepo et la mise à jour de la documentation.
 Chacun de ces workflows sera détaillé dans les sections suivantes.
 
 #figure(
@@ -606,7 +604,7 @@ Chacun de ces workflows sera détaillé dans les sections suivantes.
 )
 
 ==== Test
-Le workflow *test.yml* est déclenché à chaque pull request et push sur la branche principale. Il installe Node.js 22, les dépendances via `npm ci`, et exécute l'ensemble des tests unitaires et d'intégration (`npm run test-all`). Le contenu complet est disponible en @annex:test-workflow
+Le workflow `test.yml` est déclenché à chaque pull request et push sur la branche principale. Il installe Node.js 22, les dépendances via `npm ci`, et exécute l'ensemble des tests unitaires et d'intégration (`npm run test-all`). Le contenu complet est disponible en @annex:test-workflow
 
 ==== Sécurité
 Plusieurs mécanismes assurent la sécurité du projet :
@@ -628,15 +626,15 @@ Plusieurs mécanismes assurent la sécurité du projet :
 )
 
 ==== Docker build and publish
-Le workflow *docker-publish.yml* construit et publie les images Docker sur GitHub Container Registry à chaque push sur la branche principale. Il utilise Docker Buildx pour la construction multi-plateforme et Cosign pour la signature des images (détails de signature dans la section Résultats). La publication n'est effective que pour les pushes directs (non pull requests), mais les tests de construction sont exécutés pour toutes les contributions. Le contenu complet est disponible en @annex:docker-build-publish
+Le workflow `docker-publish.yml` construit et publie les images Docker sur GitHub Container Registry à chaque push sur la branche principale. Il utilise Docker Buildx pour la construction multi-plateforme et Cosign pour la signature des images (détails de signature dans la section Résultats). La publication n'est effective que pour les pushes directs (non pull requests), mais les tests de construction sont exécutés pour toutes les contributions. Le contenu complet est disponible en @annex:docker-build-publish
 
 ==== Update documentation
-Le workflow *update-documentation.yml* génère et déploie la documentation OpenAPI sur GitHub Pages à chaque push sur la branche principale (en excluant les modifications du dossier `docs/` pour éviter les boucles). La génération utilise les commandes npm Swagger (voir @annex:swagger-npm-commands) produisant les formats YAML, Markdown et HTML. Le contenu du workflow est disponible en @annex:update-docs-workflow
+Le workflow `update-documentation.yml` génère et déploie la documentation OpenAPI sur GitHub Pages à chaque push sur la branche principale (en excluant les modifications du dossier `docs/` pour éviter les boucles). La génération utilise les commandes npm Swagger (voir @annex:swagger-npm-commands) produisant les formats YAML, Markdown et HTML. Le contenu du workflow est disponible en @annex:update-docs-workflow
 == Développement d'un monorepo de staging
 Pouvoir travailler sur chaque composant de manière indépendante constitue un avantage majeur pour la modularité et la maintenabilité du projet. Cela peut toutefois introduire des défis en termes de synchronisation et de coordination entre les différents composants. C'est pourquoi j'ai développé un monorepo de staging, qui sert de point central pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs.
 === Git submodules
 J'ai utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est disponible en @annex:gitmodules-config
-Dans la syntaxe du fichier de configuration, on peut constater l'un des avantages de l'organisation GitHub : la possibilité d'utiliser des chemins relatifs pour les URL des submodules, ce qui facilite la gestion et la synchronisation des différents composants du projet.
+La syntaxe du fichier de configuration illustre l'un des avantages de l'organisation GitHub : la possibilité d'utiliser des chemins relatifs pour les URL des submodules, ce qui facilite la gestion et la synchronisation des différents composants du projet.
 
 Cela permet aussi de télécharger l'ensemble du projet avec une seule commande `git clone --recurse-submodules`, ce qui est particulièrement utile pour les nouveaux contributeurs qui souhaitent se lancer dans le développement sans avoir à cloner chaque dépôt individuellement.
 
@@ -655,9 +653,8 @@ La possibilité d'isoler et de tester chaque branche de manière indépendante p
 Afin de faciliter la synchronisation entre les dépôts de composants et le monorepo de staging, j'ai mis en place un workflow GitHub Actions se déclenchant à chaque push sur les branches principales des dépôts de composants. Ce workflow utilise des scripts pour mettre à jour automatiquement les submodules dans le monorepo de staging, garantissant ainsi que celui-ci intègre toujours les dernières modifications apportées aux différents composants.
 
 Il est composé de deux éléments principaux :
-- Un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche principale, qui envoie un événement de type `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo. Voir le workflow en @annex:notify-monorepo-workflow
-Ce workflow est déclenché par les pushes vers la branche `main` de chaque dépôt de composant. Il utilise la commande `curl` pour envoyer une requête POST à l'API GitHub, déclenchant ainsi un événement de type `repository_dispatch` dans le dépôt du monorepo. Le payload de l'événement contient des informations sur le dépôt qui a été mis à jour, ce qui permet au monorepo d'identifier le submodule à synchroniser. Voir le workflow de mise à jour en @annex:update-submodules-workflow
-Ce workflow est déclenché par l'événement `repository_dispatch` envoyé par les workflows des dépôts de composants. Il met à jour le submodule correspondant au dépôt qui a été modifié, puis commit et push les changements dans la branche principale du monorepo. Si aucun changement n'est détecté (par exemple, si le submodule est déjà à jour), le workflow s'arrête sans faire de commit.
+- **Workflow de notification** : un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche `main`, qui envoie un événement `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo via l'API GitHub. Le payload contient les informations nécessaires pour identifier le submodule à synchroniser (voir @annex:notify-monorepo-workflow).
+- **Workflow de mise à jour** : un workflow dans le dépôt du monorepo, déclenché par l'événement `repository_dispatch`, qui met à jour le submodule correspondant, puis commit et push les changements. Si aucun changement n'est détecté, le workflow s'arrête sans commit (voir @annex:update-submodules-workflow).
 
 Le token MONOREPO_TOKEN est généré sur demande par les mainteneurs du projet, et est stocké en tant que secret dans les paramètres de l'organisation, ce qui garantit sa sécurité tout en permettant une utilisation facile dans les workflows GitHub Actions.
 ==== Docker Compose de développement
@@ -684,7 +681,7 @@ Dans `docker-compose`, l'intégration repose surtout sur trois mécanismes : les
 
 Le mapping des ports permet de rendre accessible chaque service à l'extérieur du réseau Docker, ce qui est essentiel pour le développement. Les développeurs ont aussi accès à une liste des ports utilisés par chaque service dans la documentation du projet, afin de faciliter les tests et le débogage en local.
 
-Il est à noter que dans ce docker-compose, il y a beaucoup de *services de configuration*. Ces points seront détaillés plus tard dans la section dédiée à l'automatisation du déploiement, mais ils sont déjà utilisés dans le docker-compose de développement pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
+Il est à noter que dans ce docker-compose, il y a beaucoup de _services de configuration_. Ces points seront détaillés plus tard dans la section dédiée à l'automatisation du déploiement, mais ils sont déjà utilisés dans le docker-compose de développement pour préparer les fichiers de configuration nécessaires au bon fonctionnement de l'infrastructure en local.
 
 ==== Test de staging
 Le monorepo de staging est utilisé pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs. En raison de leur temps d'exécution potentiellement très long, je n'ai pas intégré de pipelines de tests d'intégration automatisés directement sur GitHub.
@@ -744,9 +741,9 @@ Cependant, il est possible de faire aisément des traductions du docker compose 
 - Docker Swarm#footnote[Orchestrateur de conteneurs natif Docker. Plus simple que Kubernetes mais moins flexible. Gère scaling, failover et load-balancing.] : 
 Docker Swarm est très proche de docker compose, et la plupart des fonctionnalités utilisées dans le docker-compose sont compatibles avec Docker Swarm. Cela permet de déployer l'infrastructure sur un cluster Docker Swarm sans nécessiter de modifications majeures, en utilisant simplement le même fichier docker-compose avec quelques ajustements mineurs pour les spécificités de Swarm (ex. : utilisation de secrets, configuration des services en mode swarm, etc.).
 - Kubernetes :
-En utilisant l'outil fourni par docker : *Docker Compose Bridge* #cite(<Usethede7:online>), qui permet de convertir un fichier docker-compose en une configuration compatible avec d'autres orchestrateurs de conteneurs. Cela offre une grande flexibilité pour déployer l'infrastructure sur différentes plateformes, en fonction des besoins spécifiques de chaque environnement (développement, staging, production).
+En utilisant l'outil fourni par docker : `Docker Compose Bridge` #cite(<Usethede7:online>), qui permet de convertir un fichier docker-compose en une configuration compatible avec d'autres orchestrateurs de conteneurs. Cela offre une grande flexibilité pour déployer l'infrastructure sur différentes plateformes, en fonction des besoins spécifiques de chaque environnement (développement, staging, production).
 
-Il est à noté que d'autres outils ont été testés pour la conversion vers Kubernetes, tels que Kompose#footnote[Outil de conversion de fichiers Docker Compose en manifests Kubernetes. Utile pour les projets souhaitant migrer vers Kubernetes sans réécrire leur configuration.]mais il s'est révélé plus complexe à utiliser même si plus performant, ce qui a conduit à privilégier Docker Compose Bridge pour sa compatibilité et sa simplicité d'utilisation. Mais Kompose reste une option intéressante pour les projets souhaitant migrer vers Kubernetes, notamment pour les projets plus complexes ou nécessitant des fonctionnalités spécifiques à Kubernetes.
+Il est à noter que d'autres outils ont été testés pour la conversion vers Kubernetes, tels que Kompose#footnote[Outil de conversion de fichiers Docker Compose en manifests Kubernetes. Utile pour les projets souhaitant migrer vers Kubernetes sans réécrire leur configuration.]mais il s'est révélé plus complexe à utiliser même si plus performant, ce qui a conduit à privilégier Docker Compose Bridge pour sa compatibilité et sa simplicité d'utilisation. Mais Kompose reste une option intéressante pour les projets souhaitant migrer vers Kubernetes, notamment pour les projets plus complexes ou nécessitant des fonctionnalités spécifiques à Kubernetes.
 
 La version de production introduit plusieurs services absents du développement :
 - *optimce-migrator* : service de migration de base de données exécuté une seule fois pour appliquer les évolutions du schéma CRM. Il utilise un outil de migration Python (alembic) pour garantir la cohérence entre les versions du code et de la base de données.
@@ -794,7 +791,7 @@ Ces expérimentations ont confirmé que même les distributions Kubernetes les p
 
 J'ai cependant conservé la compatibilité avec un orchestrateur plus avancé. Si la demande émerge, par exemple pour une offre SaaS, la migration vers Kubernetes est prévue via l'outil Docker Compose Bridge.
 === Conclusions
-Cette partie de la transition a été principalement faite par mes soins, avec une collaboration étroite avec Eric. Donc un vrai travail d'équipe, avec des échanges réguliers pour valider les choix d'architecture, les configurations de CI/CD, et les stratégies de déploiement.
+Cette transition a été réalisée en étroite collaboration avec mon promoteur, grâce à des échanges réguliers pour valider les choix d'architecture, les configurations de CI/CD et les stratégies de déploiement. Il s'agit d'un véritable travail d'équipe.
 == Contributions connexes
 
 En plus du travail principal sur l'architecture et l'infrastructure d'OptimCE, plusieurs tâches et contributions connexes ont été accomplies de manière autonome :
@@ -864,7 +861,7 @@ L'approche par thèmes personnalisés a été retenue, offrant le meilleur équi
 ==== Unification de thèmes Frontend et Keycloak
 Les thèmes Keycloak ont été unifiés avec celui du frontend afin d'offrir une identité visuelle cohérente à l'ensemble du projet. L'outil Keycloakify a été utilisé pour réaliser ce travail.
 
-Car de base Keycloak utilise le moteur de templating FreeMarker, qui est relativement basique et nécessite de réécrire l'ensemble des pages d'authentification (login, registration, account management, etc.) pour appliquer une personnalisation visuelle. Keycloakify permet de générer automatiquement les templates FreeMarker à partir d'un projet React, ce qui facilite grandement la maintenance du thème personnalisé. Et ce rapproche plus des pratiques du reste du projet, qui est lui aussi en React (Angular pour le frontend, mais la logique de composants et de styles est similaire).
+En effet, Keycloak utilise nativement le moteur de templating FreeMarker, qui est relativement basique et nécessite de réécrire l'ensemble des pages d'authentification (login, registration, account management, etc.) pour appliquer une personnalisation visuelle. Keycloakify permet de générer automatiquement les templates FreeMarker à partir d'un projet React, ce qui facilite grandement la maintenance du thème personnalisé. Cette approche se rapproche des pratiques de composants et de styles utilisées dans le reste du projet (Angular pour le frontend), bien que le framework soit différent.
 ==== Intégration de la configuration de Keycloak dans le docker-compose
 Une configuration de développement de Keycloak, comprenant un realm, des clients, des rôles et des utilisateurs de test, a été exportée dans un fichier JSON. 
 
@@ -1140,7 +1137,7 @@ Plusieurs axes d'amélioration ont été identifiés pour les développements fu
 
 Ce travail a confirmé une conviction forte : il n’existe pas de silver bullet en ingénierie. Il n’y a que des bonnes réponses, adaptées à leur contexte. Voici les enseignements clés tirés de l’expérience OptimCE, qui illustrent cette réalité :
 
-- *Domain-Driven Design* : n'est pas optionnel dès qu'on dépasse deux services. L'absence d'une analyse DDD initiale a conduit à un monolithe distribué. Quelques jours de modélisation du domaine en amont auraient évité des semaines de refactoring.
+- *Domain-Driven Design* : n'est pas optionnel dès que l'on dépasse deux services. L'absence d'une analyse DDD initiale a conduit à un monolithe distribué. Quelques jours de modélisation du domaine en amont auraient évité des semaines de refactoring.
 
 - *Kubernetes* : n'est pas la réponse à tout. Pour ~15 conteneurs sur un VPS unique, Docker Compose offre un meilleur rapport simplicité-efficacité. La tentation d'adopter Kubernetes « parce que c'est le standard » doit être pondérée par les besoins réels du projet.
 
