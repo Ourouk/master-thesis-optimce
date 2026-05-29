@@ -56,14 +56,14 @@ The challenges addressed include:
 The approach combines:
 - *Architectural Audit*: Identifying anti-patterns (e.g., Distributed Monolith).
 - *Refactoring*: Merging redundant components (e.g., Backend Database and Backend).
-- *DevOps*: Integrating CI/CD#footnote[Continuous Integration / Continuous Deployment — pratiques d'intégration et de déploiement continus du code.] and automation.
+- *DevOps*: Integrating CI/CD#footnote[Continuous Integration / Continuous Deployment — continuous code integration and deployment practices.] and automation.
 - *Tooling*: Developing solutions for deployment and collaboration.
 - *Benchmarking*: Studying best practices from established open-source projects.
 - *Communication Tools*: Using available tools to facilitate collaboration.
 
 == Results
 
-The refactoring resulted in a 73% reduction in memory consumption (3 GB to 800 MB), a significant decrease in synchronous REST#footnote[Representational State Transfer — style d'architecture logicielle basé sur des appels HTTP sans état.] calls between micro-services#footnote[Architecture décomposant une application en services indépendants communiquant via le réseau.] (leading to reduced system latency), and the implementation of a complete CI/CD pipeline with automated security scanning, dependency updates, and signed Docker images. The project is now structured as a modular architecture with independent Git repositories, a staging monorepo, and a one-command deployment system.
+The refactoring resulted in a 73% reduction in memory consumption (3 GB to 800 MB), a significant decrease in synchronous REST#footnote[Representational State Transfer — software architectural style based on stateless HTTP calls.] calls between micro-services#footnote[Architecture that breaks down an application into independent services communicating over a network.] (leading to reduced system latency), and the implementation of a complete CI/CD pipeline with automated security scanning, dependency updates, and signed Docker images. The project is now structured as a modular architecture with independent Git repositories, a staging monorepo, and a one-command deployment system.
 
 == Conclusion
 
