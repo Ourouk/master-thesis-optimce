@@ -1143,7 +1143,7 @@ Plusieurs axes d'amélioration ont été identifiés pour les développements fu
 
 == Retour d'expérience
 
-Ce travail a confirmé une conviction forte : il n’existe pas de silver bullet en ingénierie. Il n’y a que des bonnes réponses, adaptées à leur contexte. Voici les enseignements clés tirés de l’expérience OptimCE, qui illustrent cette réalité :
+Ce travail a confirmé une conviction forte : il n’existe pas de _silver bullet_#footnote[Expression désignant une solution miracle ou universelle à un problème complexe, popularisée en ingénierie logicielle par l'essai fondateur "No Silver Bullet" de Fred Brooks (1986). #cite(<wiki_silver_bullet>)] en ingénierie. Il n’y a que des bonnes réponses, adaptées à leur contexte. Voici les enseignements clés tirés de l’expérience OptimCE, qui illustrent cette réalité :
 
 - *Domain-Driven Design* : n'est pas optionnel dès que l'on dépasse deux services. L'absence d'une analyse DDD initiale a conduit à un monolithe distribué. Quelques jours de modélisation du domaine en amont auraient évité des semaines de refactoring.
 
