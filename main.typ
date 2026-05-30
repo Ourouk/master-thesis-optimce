@@ -31,6 +31,8 @@ Mes remerciements s'adressent également à l'équipe éducative de l'ISIL, qui 
 
 J'adresse une mention particulière à Guillain Ernotte pour m'avoir fourni le template Typst#footnote([Typst est un langage de composition de documents concurrent de TeX/LaTeX]) utilisé pour la rédaction de ce mémoire, ce qui en a grandement facilité la mise en forme et l'organisation.
 
+Je remercie également Martin Van Den Bossche pour sa relecture attentive et l'aide à la correction de nombreux petits détails.
+
 Enfin, je remercie chaleureusement ma famille et mes amis pour leur présence et leur soutien inconditionnel au cours de ce parcours exigeant.
 
 #pagebreak()
@@ -151,7 +153,11 @@ Le refactoring a permis une réduction de 73 % de la consommation mémoire (de 3
 #pagebreak()
 = Introduction
 
-Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE*, un composant clé du projet de recherche *Locomotrice*. Le projet Locomotrice est financé par l'appel à projets Win²Wal#footnote([Le programme Win²WAL finance, au sein des universités, hautes écoles et centres de recherche agréés, des projets de recherche industrielle qui permettront l'émergence d'un produit, d'un procédé ou d'un service (PPS).#cite(<Spw_2026_wallonie>)]) et inclut le CeCoTePe#footnote[Centre de Coopération Technique et Pédagogique, ASBL encadrant des formations professionnelles et de la recherche.], l'équipe BEMS de l'Université de Liège et Émission Zéro en tant que partenaire industriel. Son objectif est de faciliter la transition énergétique participative en développant une plateforme open-source pour les communautés d'énergie #cite(<locomotrice>). Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
+Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE*, un composant clé du projet de recherche *Locomotrice*. Le projet Locomotrice est financé par l'appel à projets Win²Wal#footnote([Le programme Win²WAL finance, au sein des universités, hautes écoles et centres de recherche agréés, des projets de recherche industrielle qui permettront l'émergence d'un produit, d'un procédé ou d'un service (PPS).#cite(<Spw_2026_wallonie>)]) et inclut le CeCoTePe#footnote[Centre de Coopération Technique et Pédagogique, ASBL encadrant des formations professionnelles et de la recherche.], l'équipe BEMS de l'Université de Liège et Émission Zéro en tant que partenaire industriel. Son objectif est de faciliter la transition énergétique participative en développant une plateforme open-source pour les communautés d'énergie #cite(<locomotrice>).
+
+Introduites par les cadres réglementaires européens récents, les communautés énergétiques sont des entités juridiques fondées sur une participation volontaire et ouverte. Elles regroupent des citoyens, des PME ou des autorités locales qui s'associent pour produire, consommer, partager et gérer collectivement l'énergie renouvelable. Contrairement aux acteurs traditionnels du marché, leur objectif principal n'est pas la maximisation des profits, mais la création de valeur environnementale, économique et sociale pour leurs membres : réduction des coûts, mutualisation des ressources et indépendance énergétique. Il en existe deux modèles principaux : les Communautés Énergétiques Citoyennes (CEC), à la portée structurelle plus large, et les Communautés d'Énergie Renouvelable (CER), davantage ancrées sur la production et le partage au niveau local #cite(<Enjoyelec_2026>).
+
+Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
 
 L'objectif principal d'OptimCE est de fournir une plateforme administrative de gestion de membres et d'informations spécifiques à la gestion d'une communauté d'énergie. L'entreprise repreneuse a comme seules exigences techniques l'utilisation de `Node.js` et de `Kubernetes`, sans exprimer de préférence particulière quant au système de gestion de bases de données. Ces décisions architecturales seront détaillées ultérieurement dans ce document.
 
@@ -250,9 +256,9 @@ Face au dilemme monolithe vs micro-services, une troisième voie existe : regrou
 
 Un bon candidat au statut de micro-service indépendant présente les caractéristiques suivantes :
 
-  - Des besoins de scaling différents du reste de l'architecture (ex. : génération de documents, traitement de tâches lourdes)
-  - Une technologie ou un langage spécifique justifiant une isolation
-  - Une faible dépendance aux données des autres services
+  - Des besoins de scaling différents du reste de l'architecture (ex. : génération de documents, traitement de tâches lourdes).
+  - Une technologie ou un langage spécifique justifiant une isolation.
+  - Une faible dépendance aux données des autres services.
 
 À l'inverse, un module intensivement dépendant des données d'autres services, qui scale de manière identique et n'effectue pas de tâches asynchrones lourdes, a tout intérêt à être intégré au monolithe.
 
@@ -261,9 +267,9 @@ Un bon candidat au statut de micro-service indépendant présente les caractéri
 Pour mener ce travail d'analyse, le Domain-Driven Design propose une méthode se basant sur la structure du domaine métier plutôt que sur des considérations purement techniques. Les concepts de _bounded contexts_ et d'_ubiquitous language_ permettent d'identifier les zones de cohérence sémantique où un service peut opérer de manière autonome.
 
 Le principe fondamental du DDD est que chaque bounded context possède sa propre représentation des entités partagées. Prenons l'exemple d'un client :
-- Pour un service de livraison, c'est une adresse et un prix payé
-- Pour la gestion de compte, c'est un identifiant et un mot de passe
-- Pour le service client, c'est un numéro de téléphone
+- Pour un service de livraison, c'est une adresse et un prix payé.
+- Pour la gestion de compte, c'est un identifiant et un mot de passe.
+- Pour le service client, c'est un numéro de téléphone.
 
 Chaque contexte ne conserve que les données qui lui sont pertinentes, évitant ainsi le couplage fort. Si deux services parlent d'un objet de la même manière, le DDD suggère qu'il n'y a pas de raison valable de les séparer.
 
@@ -286,10 +292,10 @@ Elle se traduit par la publication d'une feuille de route (_roadmap_), un suivi 
 === Qualité logicielle en open-source
 
 Les projets open-source matures intègrent systématiquement :
-- Des pipelines CI/CD pour valider chaque contribution
-- Des analyseurs statiques (CodeQL, SonarQube) pour détecter les vulnérabilités
-- Des gestionnaires de dépendances automatisés (Dependabot, Renovate)
-- Une documentation accessible et à jour
+- Des pipelines CI/CD pour valider chaque contribution.
+- Des analyseurs statiques (CodeQL, SonarQube) pour détecter les vulnérabilités.
+- Des gestionnaires de dépendances automatisés (Dependabot, Renovate).
+- Une documentation accessible et à jour.
 
 == DevOps et intégration continue
 
@@ -420,9 +426,9 @@ Initialement, une série de services avait pour rôle de transcrire les appels v
 
 === Fusion de composants
 J'ai donc proposé la fusion des micro-services en raison d'appels synchrones trop fréquents et de leur impact négatif sur les performances :
-- Opérations de partage
-- Communauté
-- Membres
+- Opérations de partage.
+- Communauté.
+- Membres.
 
 Ces fonctionnalités ont été regroupées vers un service unifié : le CRM (Customer Relationship Management).
 
@@ -653,8 +659,8 @@ La possibilité d'isoler et de tester chaque branche de manière indépendante p
 Afin de faciliter la synchronisation entre les dépôts de composants et le monorepo de staging, j'ai mis en place un workflow GitHub Actions se déclenchant à chaque push sur les branches principales des dépôts de composants. Ce workflow utilise des scripts pour mettre à jour automatiquement les submodules dans le monorepo de staging, garantissant ainsi que celui-ci intègre toujours les dernières modifications apportées aux différents composants.
 
 Il est composé de deux éléments principaux :
-- **Workflow de notification** : un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche `main`, qui envoie un événement `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo via l'API GitHub. Le payload contient les informations nécessaires pour identifier le submodule à synchroniser (voir @annex:notify-monorepo-workflow).
-- **Workflow de mise à jour** : un workflow dans le dépôt du monorepo, déclenché par l'événement `repository_dispatch`, qui met à jour le submodule correspondant, puis commit et push les changements. Si aucun changement n'est détecté, le workflow s'arrête sans commit (voir @annex:update-submodules-workflow).
+- *Workflow de notification* : un workflow dans chaque dépôt de composant, déclenché à chaque push sur la branche `main`, qui envoie un événement `repository_dispatch`#footnote[Événement GitHub permettant de déclencher un workflow dans un autre dépôt via l'API, avec des données personnalisées. Utile pour la synchronisation entre dépôts.] au dépôt du monorepo via l'API GitHub. Le payload contient les informations nécessaires pour identifier le submodule à synchroniser (voir @annex:notify-monorepo-workflow).
+- *Workflow de mise à jour* : un workflow dans le dépôt du monorepo, déclenché par l'événement `repository_dispatch`, qui met à jour le submodule correspondant, puis commit et push les changements. Si aucun changement n'est détecté, le workflow s'arrête sans commit (voir @annex:update-submodules-workflow).
 
 Le token MONOREPO_TOKEN est généré sur demande par les mainteneurs du projet, et est stocké en tant que secret dans les paramètres de l'organisation, ce qui garantit sa sécurité tout en permettant une utilisation facile dans les workflows GitHub Actions.
 ==== Docker Compose de développement
