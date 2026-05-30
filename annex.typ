@@ -2362,3 +2362,23 @@ graph TB
 	// "remoteUser": "root"
 }
 ```
+
+#pagebreak()
+= Liens avec les Objectifs de Développement Durable (ODD)
+
+Ce mémoire et le projet Locomotrice s'inscrivent directement dans la réalisation de plusieurs Objectifs de Développement Durable (ODD) définis par l'Organisation des Nations Unies, visant à relever les défis de la transition énergétique, de la résilience communautaire et de l'innovation technologique.
+
+== ODD 7 : Énergie propre et d'un coût abordable
+La plateforme *OptimCE* est conçue pour faciliter la gestion et le développement des communautés d'énergie (CEC et CER). Ces entités permettent aux citoyens, PME et autorités locales de produire, consommer et s'échanger de l'énergie renouvelable localement. En mutualisant les ressources, elles rendent l'énergie propre beaucoup plus accessible et abordable, tout en réduisant la dépendance vis-à-vis des acteurs traditionnels du marché.
+
+== ODD 9 : Industrie, innovation et infrastructure
+La refonte architecturale abordée dans ce travail (passage d'un monolithe distribué vers une approche modulaire stable, mise en place de l'outillage DevOps, pipelines CI/CD) crée une infrastructure logicielle résiliente et pérenne. Par ailleurs, la démarche même du projet, soit le passage vers un modèle logiciel collaboratif et *open-source*, favorise l'innovation partagée où différentes entreprises et institutions peuvent baser leur développement sur une fondation commune et optimisée (baisse de consommation mémoire drastique).
+
+== ODD 11 : Villes et communautés durables
+Les communautés d'énergie transforment le modèle énergétique des villes et des villages en créant des structures énergétiques participatives réparties. En rapprochant la production de la consommation, les réseaux de distribution locaux sont moins sujets aux pertes liées au transport. De ce fait, elles contribuent directement à impliquer les citoyens dans un environnement de vie solidaire et plus durable.
+
+== ODD 12 : Consommation et production responsables
+Le projet Locomotrice, qui intègre les volets d'OptimCE et l'EMS de l'ULiège (Energy Management System), encourage une production mesurée et un suivi intelligent de la consommation. Les gestionnaires de clefs de répartition permettent de distribuer l'énergie au moment de l'offre locale maximale, incitant ainsi les membres à adapter ou automatiser leur consommation énergétique en fonction de la production d'énergie verte.
+
+== ODD 13 : Mesures relatives à la lutte contre les changements climatiques
+En promouvant de nouveaux acteurs coopératifs entièrement dédiés aux énergies renouvelables et exempts de la pression à la rentabilité typique des acteurs traditionnels, l'infrastructure soutient les vastes stratégies de l'Union européenne visant la décarbonisation. Elle joue donc un rôle direct et technique de lutte continue face à l'urgence climatique mondiale.
