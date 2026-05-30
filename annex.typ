@@ -2364,7 +2364,7 @@ graph TB
 ```
 
 #pagebreak()
-= Liens avec les Objectifs de Développement Durable (ODD)
+= Liens avec les Objectifs de Développement Durable (ODD) <annexe-odd>
 
 Ce mémoire et le projet Locomotrice s'inscrivent directement dans la réalisation de plusieurs Objectifs de Développement Durable (ODD) définis par l'Organisation des Nations Unies, visant à relever les défis de la transition énergétique, de la résilience communautaire et de l'innovation technologique.
 
