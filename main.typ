@@ -31,7 +31,7 @@ Mes remerciements s'adressent également à l'équipe éducative de l'ISIL, qui 
 
 J'adresse une mention particulière à Guillain Ernotte pour m'avoir fourni le template Typst#footnote([Typst est un langage de composition de documents concurrent de TeX/LaTeX]) utilisé pour la rédaction de ce mémoire, ce qui en a grandement facilité la mise en forme et l'organisation.
 
-Je remercie également Martin Van Den Bossche pour sa relecture attentive et l'aide à la correction de nombreux petits détails.
+Je remercie également Martin Van den Bossche pour sa relecture attentive et l'aide à la correction de nombreux petits détails.
 
 Enfin, je remercie chaleureusement ma famille et mes amis pour leur présence et leur soutien inconditionnel au cours de ce parcours exigeant.
 
