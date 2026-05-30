@@ -19,6 +19,11 @@ jobs:
         with:
           typst-version: 0.14.2
 
+      - name: Install fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto fonts-firacode fonts-stix
+
       - name: Compile TFE
         run: typst compile main.typ TFE.pdf
 
