@@ -770,7 +770,7 @@ La version actuellement déployée est basée sur Docker Compose et hébergée s
 J'estime que les communautés d'énergies renouvelables sont par nature décentralisées, et que les utilisateurs finaux ne sont pas nécessairement intéressés par des technologies d'orchestration complexes, mais plutôt par des solutions simples et accessibles répondant à leurs besoins spécifiques.
 
 Le tableau ci-dessous compare les besoins réels du projet OptimCE avec ce que Kubernetes offre :
-
+ #pagebreak()
 #table(
   columns: (auto, auto, auto),
   inset: 0.5em,
