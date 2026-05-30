@@ -157,7 +157,7 @@ Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE
 
 Introduites par les cadres réglementaires européens récents, les communautés énergétiques sont des entités juridiques fondées sur une participation volontaire et ouverte. Elles regroupent des citoyens, des PME ou des autorités locales qui s'associent pour produire, consommer, partager et gérer collectivement l'énergie renouvelable. Contrairement aux acteurs traditionnels du marché, leur objectif principal n'est pas la maximisation des profits, mais la création de valeur environnementale, économique et sociale pour leurs membres : réduction des coûts, mutualisation des ressources et indépendance énergétique. Il en existe deux modèles principaux : les Communautés Énergétiques Citoyennes (CEC), à la portée structurelle plus large, et les Communautés d'Énergie Renouvelable (CER), davantage ancrées sur la production et le partage au niveau local #cite(<Enjoyelec_2026>).
 
-La mission du projet Locomotrice, et celle de ces communautés, s'inscrit par ailleurs directement dans la poursuite de plusieurs Objectifs de Développement Durable (ODD) définis par l'ONU, abordés plus en détail au sein de l'@annexe-odd.
+La mission du projet Locomotrice, et celle de ces communautés, s'inscrit par ailleurs directement dans la poursuite de plusieurs Objectifs de Développement Durable (ODD) définis par l'ONU, abordés plus en détail au sein de l'@annex:odd.
 
 Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
 
