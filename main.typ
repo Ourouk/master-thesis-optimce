@@ -19,7 +19,7 @@
 #set text(lang: "fr")
 = Remerciements
 
-Je tiens à remercier Éric Paque, mon promoteur au sein du CeCoTePe, pour son encadrement, sa confiance et ses conseils avisés tout au long de ce travail.
+Je tiens à remercier Eric Paque, mon promoteur au sein du CeCoTePe, pour son encadrement, sa confiance et ses conseils avisés tout au long de ce travail.
 
 Je remercie également les membres de l'équipe BEMS de l'Université de Liège pour leur collaboration et leurs retours constructifs lors des réunions de coordination hebdomadaires.
 
@@ -165,7 +165,7 @@ L'objectif principal d'OptimCE est de fournir une plateforme administrative de g
 
 Le projet *OptimCE* atteint un niveau de maturité technologique (TRL#footnote[Technology Readiness Level : niveau de maturité technologique (1-9) indiquant la proximité d'un déploiement en production. Le niveau 7 signifie un système déjà testé et à faible risque.]) de 7 #cite(<Horizon_Europe_2026_gouv>). Ce niveau indique que le projet est proche d'un état opérationnel, prêt à être déployé en production. Initialement, ce développement était prévu pour être réalisé par un seul développeur dans le cadre interne de la Haute École de la Province de Liège (HEPL).
 
-Ce travail a été réalisé au sein des locaux de l'ISIL (Institut Supérieur Industriel de Liège) sur une période de 8 mois, d'octobre à mai, sous l'encadrement d'Éric Paque. Des réunions hebdomadaires de coordination avec l'Université de Liège ont également été organisées pour assurer la synchronisation entre les volets OptimCE et EMS du projet.
+Ce travail a été réalisé au sein des locaux de l'ISIL (Institut Supérieur Industriel de Liège) sur une période de 8 mois, d'octobre à mai, sous l'encadrement d'Eric Paque. Des réunions hebdomadaires de coordination avec l'Université de Liège ont également été organisées pour assurer la synchronisation entre les volets OptimCE et EMS du projet.
 
 == Contexte du projet Locomotrice
 
@@ -216,7 +216,7 @@ Dès 1980, Meir M. Lehman, informaticien britannique spécialiste de l'évolutio
 
 === Métaphore de la dette technique
 
-Ward Cunningham, informaticien américain connu pour avoir inventé le wiki et popularisé les patrons de conception, a introduit la métaphore de la dette technique #cite(<Cunningham_1992>) pour décrire les conséquences des compromis techniques à court terme. Tout comme une dette financière, elle se compose d'un _principal_ (le coût initial d'une solution sous-optimale choisie délibérément) et d'_intérêts_ (le surcoût de maintenance accumulé à chaque modification ultérieure). Sans remboursement régulier par du refactoring, les intérêts composés finissent par paralyser l'évolution du projet.
+Ward Cunningham, informaticien amEricain connu pour avoir inventé le wiki et popularisé les patrons de conception, a introduit la métaphore de la dette technique #cite(<Cunningham_1992>) pour décrire les conséquences des compromis techniques à court terme. Tout comme une dette financière, elle se compose d'un _principal_ (le coût initial d'une solution sous-optimale choisie délibérément) et d'_intérêts_ (le surcoût de maintenance accumulé à chaque modification ultérieure). Sans remboursement régulier par du refactoring, les intérêts composés finissent par paralyser l'évolution du projet.
 
 Dans un contexte académique, cette dette est particulièrement insidieuse : les contraintes de délais, l'évolution rapide des besoins et la priorité donnée à la validation de concepts plutôt qu'à la perfection structurelle sont autant de facteurs légitimes qui l'alimentent. Pourtant, les projets de recherche doivent aussi garantir leur réutilisabilité et leur maintenabilité, surtout lorsqu'ils visent une transition vers l'open-source.
 
