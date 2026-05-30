@@ -157,7 +157,7 @@ Ce mémoire s'inscrit dans le cadre de la mise en open-source du projet *OptimCE
 
 Introduites par les cadres réglementaires européens récents, les communautés énergétiques sont des entités juridiques fondées sur une participation volontaire et ouverte. Elles regroupent des citoyens, des PME ou des autorités locales qui s'associent pour produire, consommer, partager et gérer collectivement l'énergie renouvelable. Contrairement aux acteurs traditionnels du marché, leur objectif principal n'est pas la maximisation des profits, mais la création de valeur environnementale, économique et sociale pour leurs membres : réduction des coûts, mutualisation des ressources et indépendance énergétique. Il en existe deux modèles principaux : les Communautés Énergétiques Citoyennes (CEC), à la portée structurelle plus large, et les Communautés d'Énergie Renouvelable (CER), davantage ancrées sur la production et le partage au niveau local #cite(<Enjoyelec_2026>).
 
-La mission du projet Locomotrice, et celle de ces communautés, s'inscrit par ailleurs directement dans la poursuite de plusieurs Objectifs de Développement Durable (ODD) définis par l'ONU, abordés plus en détail au sein de l'@annex:odd.
+La mission du projet Locomotrice, et celle de ces communautés, s'inscrit par ailleurs directement dans la poursuite de plusieurs Objectifs de Développement Durable (ODD) définis par l'ONU, abordés plus en détail à l'@annex:odd.
 
 Le projet se divise en deux volets : OptimCE, plateforme administrative de gestion de membres et d'informations pour les communautés d'énergie, réalisé par le CeCoTePe, et EMS (Energy Management System), sous-projet domotique de contrôle de la consommation électrique, géré par l'ULiège.
 
@@ -222,7 +222,7 @@ Dans un contexte académique, cette dette est particulièrement insidieuse : les
 
 === Dérive architecturale
 
-La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans ce projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un _monolithe distribué_, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans la section @ddd.
+La dérive architecturale est une forme spécifique de dette technique où l'architecture initiale devient progressivement inadaptée face à l'évolution des besoins. Dans ce projet, elle s'est manifestée par la transition d'une architecture micro-services théoriquement claire vers un _monolithe distribué_, un anti-pattern combinant les inconvénients du monolithe (couplage fort) et des micro-services (complexité opérationnelle), comme détaillé dans le @ddd.
 
 Ces concepts, lois de Lehman, dette technique et dérive architecturale, constituent le prisme théorique à travers lequel j'ai analysé l'état initial du projet OptimCE et les choix de refactoring opérés.
 
@@ -492,16 +492,16 @@ Une librairie ORM permet de :
 - Établir des relations entre les entités (ex. : une communauté peut avoir plusieurs utilisateurs, et chaque utilisateur peut appartenir à plusieurs communautés).
 - Gérer les champs spécifiques (identifiants uniques, URLs, descriptions, etc.) et leurs contraintes (unicité, nullabilité, etc.).
 
-Extrait de code disponible en @annex:community-entity
+Un extrait de code est fourni à l'@annex:community-entity.
 ==== Services
 Un ensemble de services est responsable des tâches suivantes :
 - Récupérer les données depuis la base de données en fonction des requêtes (ex. : lister toutes les communautés publiques).
 - Traiter les données avant de les retourner (ex. : générer des URLs temporaires pour les logos des communautés).
 - Gérer les erreurs (ex. : journaliser les échecs de génération d'URL pour les logos).
 - Paginer les résultats.
-Exemple de service disponible en @annex:getAllPublicCommunities
+Un exemple de service est fourni à l'@annex:getAllPublicCommunities.
 === DTO
-Les objets de transfert de données (DTO) structurent les informations retournées au client. Voir un exemple en @annex:public-community-dto
+Les objets de transfert de données (DTO) structurent les informations retournées au client. Un exemple est fourni à l'@annex:public-community-dto.
 ==== Architecture complète
 Cette approche permet une séparation claire des différentes couches, ce qui est essentiel pour le principe de séparation des responsabilités #cite(<Separati80:online>).
 
@@ -542,7 +542,7 @@ Ces modifications ont principalement été implémentées par mon promoteur. J'a
 === Réorganisation du code en sous-dépôts
 L'ancienne organisation des fichiers dans le code source était fonctionnelle mais complexe, avec de nombreux sous-dossiers. L'inconvénient principal était qu'un seul dépôt Git gérait l'entièreté du code source, ce qui augmentait fortement le nombre de fichiers à suivre.
 
-En conséquence, même des opérations basiques comme les commits et les fetch devenaient progressivement plus lentes. La structure complète de l'ancien projet est disponible en @annex:old-directory-structure
+En conséquence, même des opérations basiques comme les commits et les fetch devenaient progressivement plus lentes. La structure complète de l'ancien projet est détaillée à l'@annex:old-directory-structure.
 J'ai donc décidé de séparer chaque composant dans son propre dépôt Git. Cette approche présente plusieurs avantages majeurs pour un projet open-source :
 
 - *Modularité et indépendance* : Chaque composant peut être développé, testé et déployé indépendamment, permettant aux contributeurs de se concentrer sur un seul module sans impacter les autres.
@@ -586,7 +586,7 @@ Un fichier agents.md est également fourni, faisant suite aux recherches sur les
 
 Afin d'abaisser la barrière à l'entrée pour les nouveaux contributeurs et de garantir une reproductibilité parfaite des environnements de développement, j'ai intégré des configurations DevContainers au sein des différents dépôts de composants.
 
-Un DevContainer (Development Container) permet de définir un environnement de développement complet (outils, extensions de l'IDE, versions spécifiques des langages comme Node.js ou Python, et dépendances système) directement sous forme de code, comme illustré dans l'@annex:devcontainer-config. Ainsi, un contributeur souhaitant travailler sur un composant spécifique peut lancer un environnement préconfiguré et isolé via Docker, sans avoir à installer manuellement les prérequis sur sa machine hôte. Notons également que le montage de volumes spécifiques permet d'assurer le bon fonctionnement des outils de contrôle de version (tels que Git) au sein d'un espace de travail modulaire, l'utilisation de sous-modules ajoutant en effet une certaine complexité opérationnelle à cet égard.
+Un DevContainer (Development Container) permet de définir un environnement de développement complet (outils, extensions de l'IDE, versions spécifiques des langages comme Node.js ou Python, et dépendances système) directement sous forme de code, comme illustré à l'@annex:devcontainer-config. Ainsi, un contributeur souhaitant travailler sur un composant spécifique peut lancer un environnement préconfiguré et isolé via Docker, sans avoir à installer manuellement les prérequis sur sa machine hôte. Notons également que le montage de volumes spécifiques permet d'assurer le bon fonctionnement des outils de contrôle de version (tels que Git) au sein d'un espace de travail modulaire, l'utilisation de sous-modules ajoutant en effet une certaine complexité opérationnelle à cet égard.
 
 Cette standardisation élimine le classique syndrome du « ça marche sur ma machine » et assure que tous les développeurs, qu'ils utilisent Windows, macOS ou Linux, bénéficient exactement du même outillage, incluant d'office les configurations de linting et de formatage ainsi que les plugins recommandés mentionnés précédemment.
 
@@ -608,11 +608,11 @@ Chacun de ces workflows sera détaillé dans les sections suivantes.
 
 #figure(
   image("assets/cicd-pipeline-mermaid.png", width: 100%),
-  caption: [Vue d'ensemble des pipelines CI/CD GitHub Actions du projet OptimCE @annex:cicd-pipeline],
+  caption: [Vue d'ensemble des pipelines CI/CD GitHub Actions du projet OptimCE (voir @annex:cicd-pipeline)],
 )
 
 ==== Test
-Le workflow `test.yml` est déclenché à chaque pull request et push sur la branche principale. Il installe Node.js 22, les dépendances via `npm ci`, et exécute l'ensemble des tests unitaires et d'intégration (`npm run test-all`). Le contenu complet est disponible en @annex:test-workflow
+Le workflow `test.yml` est déclenché à chaque pull request et push sur la branche principale. Il installe Node.js 22, les dépendances via `npm ci`, et exécute l'ensemble des tests unitaires et d'intégration (`npm run test-all`). Ce workflow est fourni à l'@annex:test-workflow.
 
 ==== Sécurité
 Plusieurs mécanismes assurent la sécurité du projet :
@@ -627,21 +627,21 @@ Plusieurs mécanismes assurent la sécurité du projet :
   caption: [Permissions et workflow de sécurité],
 )
 
-- *Dependabot* : Le fichier *dependabot.yml* configure la surveillance automatique des dépendances (npm, Docker, GitHub Actions, DevContainers). Des pull requests sont créées automatiquement pour les mises à jour de sécurité, avec une vérification hebdomadaire. La configuration complète est disponible en @annex:dependabot-config
+- *Dependabot* : Le fichier *dependabot.yml* configure la surveillance automatique des dépendances (npm, Docker, GitHub Actions, DevContainers). Des pull requests sont créées automatiquement pour les mises à jour de sécurité, avec une vérification hebdomadaire. La configuration complète est détaillée à l'@annex:dependabot-config.
 #figure(
   image("assets/dependabot.png"),
   caption: [Exemple de Pull Request générée par Dependabot],
 )
 
 ==== Docker build and publish
-Le workflow `docker-publish.yml` construit et publie les images Docker sur GitHub Container Registry à chaque push sur la branche principale. Il utilise Docker Buildx pour la construction multi-plateforme et Cosign pour la signature des images (détails de signature dans la section Résultats). La publication n'est effective que pour les pushes directs (non pull requests), mais les tests de construction sont exécutés pour toutes les contributions. Le contenu complet est disponible en @annex:docker-build-publish
+Le workflow `docker-publish.yml` construit et publie les images Docker sur GitHub Container Registry à chaque push sur la branche principale. Il utilise Docker Buildx pour la construction multi-plateforme et Cosign pour la signature des images (détails de signature dans la section Résultats). La publication n'est effective que pour les pushes directs (non pull requests), mais les tests de construction sont exécutés pour toutes les contributions. Ce workflow est fourni à l'@annex:docker-build-publish.
 
 ==== Update documentation
-Le workflow `update-documentation.yml` génère et déploie la documentation OpenAPI sur GitHub Pages à chaque push sur la branche principale (en excluant les modifications du dossier `docs/` pour éviter les boucles). La génération utilise les commandes npm Swagger (voir @annex:swagger-npm-commands) produisant les formats YAML, Markdown et HTML. Le contenu du workflow est disponible en @annex:update-docs-workflow
+Le workflow `update-documentation.yml` génère et déploie la documentation OpenAPI sur GitHub Pages à chaque push sur la branche principale (en excluant les modifications du dossier `docs/` pour éviter les boucles). La génération utilise les commandes npm Swagger (voir @annex:swagger-npm-commands) produisant les formats YAML, Markdown et HTML. Le contenu de ce workflow est fourni à l'@annex:update-docs-workflow.
 == Développement d'un monorepo de staging
 Pouvoir travailler sur chaque composant de manière indépendante constitue un avantage majeur pour la modularité et la maintenabilité du projet. Cela peut toutefois introduire des défis en termes de synchronisation et de coordination entre les différents composants. C'est pourquoi j'ai développé un monorepo de staging, qui sert de point central pour intégrer et tester les différentes parties du projet avant de les publier dans leurs dépôts respectifs.
 === Git submodules
-J'ai utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est disponible en @annex:gitmodules-config
+J'ai utilisé la fonctionnalité de Git submodules#footnote[Fonctionnalité Git permettant d'inclure d'autres dépôts comme sous-répertoires, chacun conservant son historique et ses branches propres. Utile pour les monorepos.] pour intégrer les différents dépôts de composants dans le monorepo de staging. Chaque composant est ajouté en tant que sous-module, ce qui permet de maintenir une séparation claire entre les différents projets tout en facilitant la synchronisation et l'intégration. La configuration des submodules est détaillée à l'@annex:gitmodules-config.
 La syntaxe du fichier de configuration illustre l'un des avantages de l'organisation GitHub : la possibilité d'utiliser des chemins relatifs pour les URL des submodules, ce qui facilite la gestion et la synchronisation des différents composants du projet.
 
 Cela permet aussi de télécharger l'ensemble du projet avec une seule commande `git clone --recurse-submodules`, ce qui est particulièrement utile pour les nouveaux contributeurs qui souhaitent se lancer dans le développement sans avoir à cloner chaque dépôt individuellement.
@@ -681,7 +681,7 @@ Voici les principaux services définis dans le fichier docker-compose.dev.yml (v
 
 #figure(
   image("assets/docker-compose-dev-mermaid.png"),
-  caption: [Diagramme : docker-compose de développement @annex:docker-compose-dev-architecture],
+  caption: [Diagramme : docker-compose de développement (voir @annex:docker-compose-dev-architecture)],
 )
 
 
@@ -882,12 +882,12 @@ Cette approche permet de fournir une configuration prête à l'emploi dès le la
 
 Certains services ont nécessité le développement de petits outils pour préparer leurs fichiers, ou l'utilisation de sidecars.
 
-- *Swagger2Krakend* : outil développé pour automatiser la génération des configurations de l'API Gateway KrakenD à partir de spécifications OpenAPI. Intégré au monorepo, ce projet open-source est utilisé dans les pipelines de développement et de production pour maintenir ces configurations à jour. Développé en Python, il permet de spécifier, via un fichier de configuration YAML, les différentes règles à appliquer aux spécifications des API définies au format OpenAPI. Un exemple de ces règles est disponible en @annex:swagger-to-krakend-config. Par exemple, il est possible de sécuriser une API en imposant la vérification du JWT pour toutes les connexions entrantes sur un endpoint donné, ou encore d'appliquer du rate-limiting. Si cet outil a été initialement conçu dans un souci de gain de temps, il a grandement facilité l'évolution et la sécurisation rapide de l'infrastructure.
+- *Swagger2Krakend* : outil développé pour automatiser la génération des configurations de l'API Gateway KrakenD à partir de spécifications OpenAPI. Intégré au monorepo, ce projet open-source est utilisé dans les pipelines de développement et de production pour maintenir ces configurations à jour. Développé en Python, il permet de spécifier, via un fichier de configuration YAML, les différentes règles à appliquer aux spécifications des API définies au format OpenAPI. Un exemple de ces règles est fourni à l'@annex:swagger-to-krakend-config. Par exemple, il est possible de sécuriser une API en imposant la vérification du JWT pour toutes les connexions entrantes sur un endpoint donné, ou encore d'appliquer du rate-limiting. Si cet outil a été initialement conçu dans un souci de gain de temps, il a grandement facilité l'évolution et la sécurisation rapide de l'infrastructure.
 
 - *Génération de fichiers de configuration à partir de templates* : Kubernetes dispose d'une solution native pour ce problème (ConfigMap), mais celle-ci n'existe pas dans l'écosystème Docker. Des fichiers templates ont par conséquent été créés pour chaque configuration à modifier automatiquement. L'utilitaire Unix `envsubst` (fourni par le paquet `gettext`) a été utilisé pour remplacer les variables d'environnement par leurs valeurs actuelles et produire le fichier de configuration final. Ce fichier est ensuite monté dans le conteneur correspondant. Une image OCI minimale contenant cet utilitaire a de plus été assemblée (voir @annex:envsubstub-dockerfile).
 #figure(
   image("assets/config-generation-flow-mermaid.png", height: 8cm),
-  caption: [Exemple de template de configuration avec `envsubst` @annex:general-config-generation-logic],
+  caption: [Exemple de template de configuration avec `envsubst` (voir @annex:general-config-generation-logic)],
 )
 - *Vérification des healthchecks* : Docker Compose propose une fonctionnalité de healthcheck, mais elle repose sur l'exécution de scripts à l'intérieur du conteneur cible. Des sidecars dédiés ont été mis en place pour vérifier l'état des services en utilisant un conteneur minimal ne contenant que `curl`.
 === Ajout de fonctionnalités
