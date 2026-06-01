@@ -246,36 +246,10 @@
 
   // ── Title Page ────────────────────────────────────────────
   if fullTitlePage {
-    let authors-content = authors.map(author => [
-      #author.first-name #smallcaps(author.last-name)  \
-      #author.cursus \
-      #if "specialty" in author [#author.specialty] \
-      \
-    ])
     page(
-      margin: (x: 2.5cm, top: 2cm, bottom: 2cm),
-      background: [
-        #place(top + left, dx: -1.5cm, dy: -1cm, rotate(15deg, polygon.regular(fill: HEPLColors.bleu-hepl, size: 5cm, vertices: 6)))
-        #place(top + left, dx: 3cm, dy: 25cm, rotate(-10deg, circle(radius: 1.5cm, fill: HEPLColors.rouge-prv)))
-        #place(top + right, dx: -1cm, dy: 0pt, rotate(20deg, polygon.regular(fill: HEPLColors.jaune-prv, size: 3cm, vertices: 5)))
-        #place(bottom + left, dx: 0pt, dy: 1cm, rotate(-15deg, circle(radius: 2cm, fill: HEPLColors.bleu-clair-hepl)))
-        #place(bottom + right, dx: -1.5cm, dy: 1cm, rotate(10deg, polygon.regular(fill: HEPLColors.bleu-fonce-hepl, size: 2.8cm, vertices: 4)))
-        #place(bottom + right, dx: 2.5cm, dy: 0pt, rotate(-5deg, circle(radius: 1.2cm, fill: HEPLColors.rouge-prv.lighten(30%))))
-      ]
+      margin: (x: 0cm, top: 0cm, bottom: 0cm),
     )[
-      #align(center + top)[
-        #v(1cm)
-        #image("figures/g2.svg", height: 3cm)
-        #v(0.8em)
-        #let this_year = date.year()
-        #text(size: 0.9em, fill: HEPLColors.bleu-fonce-hepl)[Année Académique #{this_year - 1} -- #this_year]
-        #v(2cm)
-        #text(size: 2em, fill: HEPLColors.bleu-fonce-hepl, weight: "bold")[#main-title]
-        #v(0.3em)
-        #text(size: 1.5em, fill: HEPLColors.bleu-clair-darker-hepl, weight: "medium")[#sub-title]
-        #v(10cm)
-        #stack(dir: ttb, ..authors-content)
-      ]
+      #image("../document.pdf", width: 100%, height: 100%)
     ]
     pagebreak()
   } else {
