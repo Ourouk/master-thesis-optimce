@@ -181,14 +181,15 @@
   // ── Paragraph Formatting ──────────────────────────────────
   // Character-level justification for professional typography.
   set par(
-    leading: 0.8em,
-    first-line-indent: 1.8em,
+    leading: 0.75em,
+    // first-line-indent: 1.8em,
+    spacing: 1.2em,
     justify: true,
     justification-limits: (
       tracking: (min: -0.012em, max: 0.012em),
       spacing: (min: 75%, max: 120%),
     ),
-    linebreaks: "optimized",
+    //linebreaks: "optimized",
   )
 
   // ── Headings ──────────────────────────────────────────────
@@ -197,10 +198,13 @@
   show heading: rest => {
     if rest.level == 1 {
       text(size: 1.10em, weight: "semibold")[#rest]
+      v(0.2em)
     } else if rest.level == 2 {
       text(size: 1.05em, weight: "semibold")[#rest]
+      v(0.2em)
     } else if rest.level == 3 {
       text(size: 1.03em, weight: "regular")[#rest]
+      v(0.2em)
     } else {
       // Level 4: small standalone heading
       text(font: sans-font, fill: Uliege.TealDark, weight: "semibold", size: 0.9em)[#rest]
